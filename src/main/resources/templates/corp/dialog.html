@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<!--suppress ThymeleafVariablesResolveInspection -->
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<div class="easyui-navpanel gridlist">
+    <div id="top_form">
+        <form id="corpForm" th:action="@{saveCorpInfo}" th:object="${billCorpInfo}" method="post">
+            <fieldset class=" x-fieldset ">
+                <legend class="x-fieldset-header" style="user-select: none;">基本信息</legend>
+                <table cellspacing="0" cellPadding="0" class="addTable" style="margin-left: 0px;">
+                    <tr>
+                        <td class="rightTd" style="width:100px;">状态：</td>
+                        <td colspan="3" class="leftTd">
+                            <input class="easyui-switchbutton" th:checked="${billCorpInfo.status==1?1:0}"
+                                   style="height:28px;"
+                                   data-options="onText:'启用',offText:'停用',
+                        onChange:function(checked){
+                        if(checked){
+                        $('#status').val(1);
+                        } else{
+                        $('#status').val(0);
+                        }
+                        }">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="rightTd" style="width:100px;">客商类型：</td>
+                        <td class="leftTd">
+                            <select name="corpType" class="easyui-combobox"
+                                    data-options="panelMaxHeight:200,editable:false"
+                                    style="width:240px;;height:28px">
+                                <option th:each="item:${corpType}"
+                                        th:value="${item.values}"
+                                        th:selected="${billCorpInfo.corpType eq item.values}"
+                                        th:text="${item.name}"></option>
+                            </select>
+                        </td>
+                        <td class="rightTd" style="width:100px;">客商编号：</td>
+                        <td class="leftTd">
+                            <input name="corpBM" class="easyui-textbox" data-options="required:true,missingMessage:null"
+                                   style="width:240px;;height:28px;"
+                                   th:value="*{corpBM}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="rightTd" style="width:100px;">客商名称：</td>
+                        <td class="leftTd">
+                            <input name="corpMC" style="width:240px;;height:28px;" class="easyui-textbox"
+                                   data-options="required:true,missingMessage:null" th:value="*{corpMC}"/>
+                        </td>
+                        <td class="rightTd" style="width:100px;">纳税人识别号：</td>
+                        <td class="leftTd">
+                            <input name="nsrNum" class="easyui-textbox" style="width:240px;;height:28px"
+                                   th:value="*{nsrNum}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="rightTd" style="width:100px;">联系地址：</td>
+                        <td class="leftTd">
+                            <input name="dz" class="easyui-textbox" style="width:240px;;height:28px;" th:value="*{dz}"/>
+                        </td>
+                        <td class="rightTd" style="width:100px;">联系电话：</td>
+                        <td class="leftTd">
+                            <input name="lxdh" class="easyui-textbox" style="width:240px;;height:28px;"
+                                   th:value="*{lxdh}"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="rightTd" style="width:100px;">备注：</td>
+                        <td colspan="3" class="leftTd">
+                            <input name="remark" class="easyui-textbox" style="width:100%;height:28px;"
+                                   th:value="*{remark}"/>
+                        </td>
+                    </tr>
+                </table>
+                <input hidden="true" name="id" id="id" th:value="*{id}"/>
+                <input hidden="true" name="status" id="status" th:value="*{status}"/>
+                <input hidden="true" name="bankAccount" id="bankAccount"/>
+            </fieldset>
+        </form>
+    </div>
+    <div style="width: 100%;height: 190px;">
+        <table id="corpBankGrid"></table>
+    </div>
+
+    <div id="bank_menu" style="height: 30px;">
+        <div class="m-toolbar">
+            <div class="m-left" style="padding-top: 5px;padding-left: 10px;">银行信息</div>
+            <div class="m-right">
+                <span class="datagrid-btn-separator"
+                      style="vertical-align: middle;display:inline-block;float:none"></span>
+                <button onclick="addCorpBank();" class="easyui-linkbutton "
+                        data-options="plain:true,height:25,iconCls: 'e-icon1 fa fa-plus-square fa-1g blue'">
+                    添加
+                </button>
+                <span class="datagrid-btn-separator"
+                      style="vertical-align: middle;display:inline-block;float:none"></span>
+                <button onclick="editCorpBank();" class="easyui-linkbutton "
+                        data-options="plain:true,height:25,iconCls: 'e-icon1 fa fa-edit fa-1g blue'">
+                    编辑
+                </button>
+                <span class="datagrid-btn-separator"
+                      style="vertical-align: middle;display:inline-block;float:none"></span>
+                <button onclick="deleteCorpBank();" class="easyui-linkbutton "
+                        data-options="plain:true,height:25,iconCls: 'e-icon1 fa fa-trash fa-1g blue'">
+                    删除
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script type="text/javascript" th:inline="none">
+    var editIndex = undefined;
+    $(function () {
+        $("#corpBankGrid").datagrid({
+            url: 'findBankAccountInfo',
+            queryParams: {
+                corpId: $("#id").val()
+            },
+            showHeader: true,
+            loadMsg: false,
+            rownumbers: true,
+            border: true,
+            singleSelect: true,
+            toolbar: '#bank_menu',
+            fit: true,
+            fitColumns: true,
+            columns: [[
+                {field: 'khyh', title: '开户银行', width: 350},
+                {field: 'yhzh', title: '银行账号', width: 250},
+                {
+                    field: 'ztbz', title: '状态', width: 50, align: 'center', formatter: function (value, row) {
+                        return is_eq("T", value) ? "<i class='fa fa-check fa-fw green '></i>" : "<i class='fa fa-close fa-fw red '></i>";
+                    }
+                },
+                {field: 'corpId', title: '客商ID', width: 80, hidden: true},
+                {field: 'id', title: 'id', width: 80, hidden: true}
+            ]],
+        })
+    })
+
+    //添加
+    function addCorpBank() {
+        editIndex = undefined;
+        var row = {
+            corpId: $("#id").val()
+        };
+        altCorpBankDialog(row);
+    }
+
+    //编辑
+    function editCorpBank(row) {
+        var row = $('#corpBankGrid').datagrid('getSelected');
+        if (empty(row)) {
+            LG.alert("question", "嗯？<br>没有选择数据...");
+            return false;
+        }
+        editIndex = $('#corpBankGrid').datagrid('getRowIndex', row);
+        altCorpBankDialog(row);
+    }
+
+    //dialog
+    function altCorpBankDialog(row) {
+        var _id, _corpId, _khyh, _yhzh, _ztbz,_moren;
+        if (!empty(row)) {
+            _id = row.id;
+            _corpId = row.corpId;
+            _khyh = row.khyh;
+            _yhzh = row.yhzh;
+            _ztbz = row.ztbz;
+            _moren=row.moren;
+        }
+        var title = empty(id) ? "新增银行信息" : "编辑银行信息";
+        $("body").append("<div id='corpBankContent' Style='display: none;padding: 5px;'></div>");
+        $('#corpBankContent').dialog({
+            title: title,
+            iconCls: 'fa fa-ellipsis-v',
+            loadingMessage: '数据加载中,请稍等...',
+            modal: true,
+            height: 230,
+            width: 450,
+            top: '20%',
+            left: '30%',
+            inline: true,
+            border: 'thin',
+            cls: 'c3',
+            constrain: true,
+            href: 'corpBankdialog',
+            queryParams: {
+                id: _id,
+                corpId: _corpId,
+                khyh: _khyh,
+                yhzh: _yhzh,
+                ztbz: _ztbz,
+                moren:_moren
+            },
+            onClose: function () {
+                $(this).dialog("destroy").remove();
+            },
+            buttons: [{
+                iconCls: 'e-icon1 fa fa-floppy-o red',
+                text: '保存',
+                handler: function () {
+                    if (!$("#corpBankForm").form('enableValidation').form('validate'))
+                        return false;
+                    var actiform = $("#corpBankForm");
+                    var data = {};
+                    var t = $(actiform).serializeArray();
+                    $.each(t, function () {
+                        data[this.name] = this.value;
+                    });
+                    if (empty(data.corpId)) {
+                        if (editIndex != undefined) {
+                            $('#corpBankGrid').datagrid('updateRow', {
+                                index: editIndex,
+                                row: data
+                            }).datagrid('acceptChanges').datalist("unselectAll");
+                            editIndex = undefined;
+                        } else {
+                            $('#corpBankGrid').datagrid('appendRow', data).datagrid('acceptChanges').datalist("unselectAll");
+                            editIndex = undefined;
+                        }
+                        $('#corpBankContent').dialog('close');
+                    } else {
+                        LG.ajaxSubmitForm(actiform, function (data) {
+                            if (data.code == 1) {
+                                editIndex = undefined;
+                                $('#corpBankGrid').datagrid('reload');
+                                $('#corpBankContent').dialog('close');
+                            } else {
+                                LG.alert("error", data.message);
+                            }
+                        })
+                    }
+                }
+            }, {
+                iconCls: 'icon1 fa fa-reply red',
+                text: '取消',
+                handler: function () {
+                    $('#corpBankContent').dialog('close');
+                }
+            }]
+        });
+    }
+
+    //删除
+    function deleteCorpBank() {
+        var row = $('#corpBankGrid').datagrid('getSelected');
+        if (empty(row)) {
+            LG.alert("question", "嗯？<br>没有选择数据...");
+            return false;
+        }
+        $.messager.confirm({
+            msg: '是否删除所选记录！',
+            title: '提示',
+            top: '20%',
+            fn: function (r) {
+                if (r) {
+                    if (empty(row.id)) {
+                        var index = $('#corpBankGrid').datagrid('getRowIndex', row);
+                        $('#corpBankGrid').datagrid('deleteRow', index);
+                    } else {
+                        LG.ajax({
+                            url: 'deleteCorpBank',
+                            data: {
+                                id: row.id
+                            },
+                            success: function (data) {
+                                if (data.code == 1) {
+                                    $('#corpBankGrid').datagrid('reload');
+                                } else {
+                                    LG.alert("error", data.message);
+                                }
+                            },
+                            error: function (message) {
+                                LG.tip('error', message);
+                            }
+                        });
+
+                    }
+
+                }
+            }
+        });
+    }
+</script>
+
+</html>

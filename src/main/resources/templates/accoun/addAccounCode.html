@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<form method="post" class="easyui-form" id="accounCodeForm" th:object="${accounCodeDto}" action="saveAccounCode">
+    <table cellspacing="0" cellPadding="0" class="addTable">
+        <tr>
+            <td class="rightTd" width="80px">
+                编号类型：
+            </td>
+            <td colspan="3">
+                <select id="codeType" name="codeType" th:disabled="${edit}" class="easyui-combobox" data-options="
+                panelMaxHeight:200,editable:false"  style="width:150px;height:26px;">
+                    <option th:each="item:${codeType}"
+                            th:value="${item.id}"
+                            th:selected="${accounCodeDto.codeType eq item.id}"
+                            th:text="${item.name}"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="rightTd" width="80px">
+                前缀一：
+            </td>
+            <td>
+                <select id="prefixOne" name="prefixOne" class="easyui-combobox" data-options="
+                panelMaxHeight:200,editable:false,
+                           onChange:function(){
+                             onChangeprefix(this);
+                           },
+                           onLoadSuccess:function(){
+                            onLoadSuccess(this);
+                           }"
+                        style="width:150px;height:26px;">
+                    <option th:each="item:${documentNumber}"
+                            th:value="${item.id}"
+                            th:selected="${accounCodeDto.prefixOne eq item.id}"
+                            th:text="${item.name}"></option>
+                </select>
+            </td>
+
+            <td><input th:value="*{prefixOneCode}" id="prefixOneCode" name="prefixOneCode" class="easyui-textbox"
+                       style="width:150px;height:26px;"/></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td class="rightTd" width="80px">
+                前缀二：
+            </td>
+            <td>
+                <select id="prefixTwo" name="prefixTwo" class="easyui-combobox" data-options="
+                 panelMaxHeight:200,editable:false,
+                onChange:function(){
+                           onChangeprefix(this);
+                           },onLoadSuccess:function(){ onLoadSuccess(this);}"
+                        style="width:150px;height:26px;">
+                    <option th:each="item:${documentNumber}"
+                            th:value="${item.id}"
+                            th:selected="${accounCodeDto.prefixTwo eq item.id}"
+                            th:text="${item.name}"></option>
+                </select>
+            </td>
+            <td><input id="prefixTwoCode" th:value="*{prefixTwoCode}" name="prefixTwoCode" class="easyui-textbox" style="width:150px;height:26px;"/></td>
+        </tr>
+        <tr>
+            <td class="rightTd" width="80px">
+                前缀三：
+            </td>
+            <td>
+                <select id="prefixThree" name="prefixThree" class="easyui-combobox" data-options="
+                panelMaxHeight:200,editable:false,
+                onChange:function(){
+                                      onChangeprefix(this);
+                           },onLoadSuccess:function(){ onLoadSuccess(this);}"
+                        style="width:150px;height:26px;">
+                    <option th:each="item:${documentNumber}"
+                            th:value="${item.id}"
+                            th:selected="${accounCodeDto.prefixThree eq item.id}"
+                            th:text="${item.name}"></option>
+                </select>
+            </td>
+            <td>
+                <input id="prefixThreeCode" th:value="*{prefixThreeCode}" name="prefixThreeCode" class="easyui-textbox" style="width:150px;height:26px;"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="rightTd" width="80px">
+                前缀四：
+            </td>
+            <td>
+                <select id="prefixFour" name="prefixFour" class="easyui-combobox" data-options="
+                panelMaxHeight:200,editable:false,
+                onChange:function(){
+                                      onChangeprefix(this);
+                           },onLoadSuccess:function(){ onLoadSuccess(this);}"
+                        style="width:150px;height:26px;">
+                    <option th:each="item:${documentNumber}"
+                            th:value="${item.id}"
+                            th:selected="${accounCodeDto.prefixFour eq item.id}"
+                            th:text="${item.name}"></option>
+                </select>
+            </td>
+            <td>
+                <input id="prefixFourCode" th:value="*{prefixFourCode}" name="prefixFourCode" class="easyui-textbox" style="width:150px;height:26px;"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="rightTd" width="80px">
+                流水号长度：
+            </td>
+            <td>
+                <input id="jhSerialLength"  name="jhSerialLength" th:value="*{jhSerialLength}" class="easyui-textbox" style="width:150px;height:26px;"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="rightTd" width="80px">
+                分隔符：
+            </td>
+            <td>
+                <select id="separator" name="separator" class="easyui-combobox"
+                        data-options="panelMaxHeight:200,editable:false"
+                        style="width:150px;height:28px">
+                    <option th:each="item:${separator}"
+                            th:value="${item.id}"
+                            th:selected="${accounCodeDto.separator eq item.id}"
+                            th:text="${item.name}"></option>
+                </select>
+            </td>
+        </tr>
+        <input hidden="true" name="id" id="id" th:value="*{id}"/>
+        <input hidden="true" name="bookSet" id="bookSet" th:value="*{bookSet}"/>
+    </table>
+</form>
+<div id="dateContent" Style="display: none;">
+    <ul id="dl" class="easyui-datalist"
+        data-options=" fit:true,border: false, checkbox: true,lines: true,url: 'getDateFormat',textField:'name',valueField:'values',"
+        style="width:400px;height:250px">
+
+    </ul>
+</div>
+<script type="text/javascript" th:inline="none">
+    function onChangeprefix(obj) {
+        var id = "#" + obj.id;
+        var code = id + "Code";
+        var str = $(id).combobox("getText");
+        if (is_eq("部门编号", str) || is_eq("客户编号", str)|| is_eq("流水号", str)|| is_eq("无", str)) {
+            $(code).textbox("clear").textbox("disable").textbox({
+                icons: []
+            });
+        } else {
+            if (is_eq("单据日期", str)) {
+                $(code).textbox("clear").textbox("enable").textbox({
+                    editable: false,
+                    icons: [{
+                        iconCls: 'e-icon6 fa fa-ellipsis-h fa-1x',
+                        handler: function (e) {
+                            dialogDate(code);
+                        }
+                    }]
+                });
+
+            } else {
+                $(code).textbox("clear").textbox("enable").textbox({
+                    editable: true,
+                    icons: []
+                });
+            }
+        }
+    }
+
+    function dialogDate(id) {
+        $('#dateContent').dialog({
+            title: '请选择...',
+            iconCls: 'fa fa-check-square-o red',
+            loadingMessage: '数据加载中,请稍等...',
+            modal: true,
+            height: 300,
+            width: 300,
+            border: true,
+            buttons: [{
+                iconCls: 'fa fa-floppy-o red',
+                text: '选择',
+                handler: function () {
+                    var row = $('#dl').datalist('getSelected');
+                    if (row != null) {
+                        $(id).textbox('setValue', row.values);
+                        $('#dl').datalist('uncheckAll');
+                        $('#dateContent').dialog('close');
+                    } else {
+                        LG.alert("info", "请选择数据，然后继续操作！");
+                    }
+                }
+            }, {
+                iconCls: 'fa fa-reply red',
+                text: '取消',
+                handler: function () {
+                    $('#dateContent').dialog('close');
+                }
+            }]
+        });
+    }
+
+    function onLoadSuccess(obj) {
+        var id = "#" + obj.id;
+        var code = id + "Code";
+        var str = $(id).combobox("getText");
+        if (is_eq("仓库编号", str) || is_eq("往来单位编号", str)) {
+            $(code).textbox("disable").textbox({
+                icons: []
+            });
+        } else {
+            if (is_eq("单据日期", str)) {
+                $(code).textbox("enable").textbox({
+                    editable: false,
+                    icons: [{
+                        iconCls: 'e-icon6 fa fa-ellipsis-h fa-1x',
+                        handler: function (e) {
+                            dialogDate(code);
+                        }
+                    }]
+                });
+
+            } else {
+                $(code).textbox("enable").textbox({
+                    editable: true,
+                    icons: []
+                });
+            }
+        }
+    }
+</script>
+</body>
+</html>

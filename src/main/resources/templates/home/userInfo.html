@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<div class="easyui-navpanel" style="margin:0; padding:10px;" align="center">
+    <table cellspacing="0" cellPadding="0" class="addTable">
+            <tr>
+                <td width="100"  class="rightTd title">用户名称:</td>
+                <td><input style="width: 250px;" th:value="${session.user.userName}" class="easyui-textbox" data-options="readonly:true"/></td>
+                <td width="100"  class="rightTd title ">用户编号:</td>
+                <td><input style="width: 250px;" th:value="${session.user.account}" class="easyui-textbox" data-options="readonly:true"/></td>
+            </tr>
+            <tr>
+                <td width="100"  class="rightTd title">管理部门:</td>
+                <td colspan="3"><input  th:value="${session.user.manageDept}" class="easyui-textbox" data-options="readonly:true,multiline:true,width:'100%',height:90"/></td>
+            </tr>
+            <tr>
+                <td width="100"  class="rightTd title">结算部门:</td>
+                <td colspan="3"><input  th:value="${session.user.balanceDept}" class="easyui-textbox" data-options="readonly:true,multiline:true,width:'100%',height:90"/></td>
+            </tr>
+            <tr>
+                <td width="100"  class="rightTd title">上次登录时间:</td>
+                <td><input style="width: 250px;" th:value="${session.user.endTime}" class="easyui-textbox" data-options="readonly:true"/></td>
+                <td width="100"  class="rightTd title ">上次登录IP:</td>
+                <td><input style="width: 250px;" th:value="${session.user.endAddress}" class="easyui-textbox" data-options="readonly:true"/></td>
+            </tr>
+            <tr>
+                <td width="100"  class="rightTd title">本次登录时间:</td>
+                <td><input style="width: 250px;" th:value="${session.user.loginTime}" class="easyui-textbox" data-options="readonly:true"/></td>
+                <td width="100"  class="rightTd title ">本次登录IP:</td>
+                <td><input style="width: 250px;" th:value="${session.user.loginAddress}" class="easyui-textbox" data-options="readonly:true"/></td>
+            </tr>
+        </table>
+</div>
+</html>

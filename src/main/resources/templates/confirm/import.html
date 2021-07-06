@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<!--suppress ThymeleafVariablesResolveInspection -->
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<div class="easyui-navpanel">
+    <header>
+        <div style="height: 85px;">
+            <div class="m-toolbar">
+                <div class="m-left">
+                    <form id="importForm" th:action="@{importUpload}" enctype="multipart/form-data" method="post">
+                        <table cellspacing="0" cellPadding="0" class="addTable">
+                            <tr>
+                                <td class="rightTd" width="80">表头行：</td>
+                                <td class="leftTd"><input class="easyui-numberbox" name="headerRows " value="1"
+                                                          data-options="required:true,missingMessage:null,precision:0,width:50,height:28"></input>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="rightTd" width="80">模板文件：</td>
+                                <td class="leftTd"><input class="easyui-filebox" name="file"
+                                                          data-options="required:true,missingMessage:null,buttonText: '选择...',accept: '.xlsx,.xls'"
+                                                          style="width:200px;height: 28px;"></input>
+                                    <a id="importBtn" href="javascript:;" class="easyui-linkbutton"
+                                       onclick="importExcel();"
+                                       data-options="plain:false,disabled:false,height:28,iconCls: 'e-icon fa fa-cloud-upload fa-1g'">上传模板</a></td>
+                            </tr>
+                        </table>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </header>
+    <table id="importGrid"></table>
+    <div id="Itools">
+        <div class="m-toolbar" style="height: 36px;">
+            <div class="m-right e-icon5 " style="right: 20px">
+                <button onclick="downloadExcel();" class="easyui-linkbutton "
+                        data-options="plain:true,disabled:false,height:28,iconCls: 'e-icon1 fa  fa-cloud-download fa-1g'">
+                    下载模板
+                </button>
+                <span class="datagrid-btn-separator"
+                      style="vertical-align: middle;display:inline-block;float:none"></span>
+                <button class="easyui-linkbutton" onclick="batchsaveExcel();"
+                        data-options="plain:true,disabled:false,height:28,iconCls:'e-icon1 fa fa-floppy-o fa-1g'">保存
+                </button>
+                <span class="datagrid-btn-separator"
+                      style="vertical-align: middle;display:inline-block;float:none"></span>
+                <button class="easyui-linkbutton" onclick="batchdeleteExcel();"
+                        data-options="plain:true,disabled:false,height:28,iconCls:'e-icon1 fa fa-times fa-1g'">批量删除
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" th:inline="none">
+    $(function () {
+        $("#importGrid").datagrid({
+            loadMsg: "正在加载中,请稍候...",
+            singleSelect: false,
+            checkOnSelect: false,
+            selectOnCheck: false,
+            collapsible: true,
+            fit: true,
+            maximized: true,
+            rownumbers: true,
+            onClickCell: onClickCell,
+            toolbar: "#Itools",
+            rowStyler: function (index, row) {
+                if (is_eq("F", row.checkStr)) {
+                    return 'background-color:#FFFFCC;color#333;';
+                }
+            },
+            border: false,
+            columns: [[
+                {
+                    field: 'id',
+                    checkbox: true
+                }, {
+                    field: 'applyDeptBH',
+                    title: '申请部门',
+                    width: 100,
+                    editor: {
+                        type: 'textbox'
+                    }
+                }, {
+                    field: 'setllDeptBH',
+                    title: '结算部门',
+                    width: 100,
+                    editor: {
+                        type: 'textbox'
+                    }
+                }, {
+                    field: 'saleCorpName',
+                    title: '销方名称',
+                    width: 150,
+                    editor: {
+                        type: 'textbox'
+                    }
+                }, {
+                    field: 'buyerCorpName',
+                    title: '购方名称',
+                    width: 150,
+                    editor: {
+                        type: 'textbox'
+                    }
+                }, {
+                    field: 'billTypeName',
+                    title: '发票类型',
+                    width: 100,
+                    editor: {
+                        type: 'textbox'
+                    }
+                }, {
+                    field: 'billCode',
+                    title: '发票代码',
+                    width: 100,
+                    editor: {
+                        type: 'textbox'
+                    }
+                }, {
+                    field: 'billNumber',
+                    title: '发票号码',
+                    width: 100,
+                    editor: {
+                        type: 'textbox'
+                    }
+                }, {
+                    field: 'billMoney',
+                    title: '开票金额',
+                    width: 100,
+                    editor: {
+                        type: 'textbox'
+                    }
+                },{
+                    field: 'taxRate',
+                    title: '税率(%)',
+                    width: 100,
+                    editor: {
+                        type: 'textbox'
+                    }
+                },{
+                    field: 'taxMoney',
+                    title: '税额',
+                    width: 100,
+                    editor: {
+                        type: 'textbox'
+                    }
+                },{
+                    field: 'amountMoney',
+                    title: '不含税金额',
+                    width: 100,
+                    editor: {
+                        type: 'textbox'
+                    }
+                },{
+                    field: 'remarks',
+                    title: '备注',
+                    width: 100,
+                    editor: {
+                        type: 'textbox'
+                    }
+                },{
+                    field: 'describe',
+                    width: 200,
+                    title: '描述'
+                }
+            ]]
+        });
+
+    })
+
+
+    var editIndex = undefined;
+
+    function endEditing() {
+        if (editIndex == undefined) {
+            return true
+        }
+        if ($('#importGrid').datagrid('validateRow', editIndex)) {
+            $('#importGrid').datagrid('endEdit', editIndex);
+            editIndex = undefined;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    //编辑模板
+    function onClickCell(index, field) {
+        if (endEditing()) {
+            $('#importGrid').datagrid('selectRow', index)
+                .datagrid('editCell', {index: index, field: field});
+            editIndex = index;
+        }
+    }
+
+    //上传模板
+    function importExcel() {
+        if (!$("#importForm").form('enableValidation').form('validate'))
+            return false;
+        var actiform = $("#importForm");
+        LG.ajaxSubmitForm(actiform, function (data) {
+            if (data.code == 1) {
+                $('#importGrid').datagrid('loadData', {"rows": data.data});
+            } else {
+                LG.alert("error", data.message);
+            }
+        })
+
+    }
+
+    //下载模板
+    function downloadExcel() {
+        document.location.href = "downloadExcel";
+    }
+
+    //检测并保存
+    function batchsaveExcel() {
+        if (endEditing()) {
+            var rows = $('#importGrid').datagrid('getRows');
+            if (rows != null && rows.length > 0) {
+                var vo = base64_encode(JSON.stringify(rows));
+                LG.ajax({
+                    url: 'batchsaveExcel',
+                    data: {
+                        rows: vo
+                    },
+                    success: function (data) {
+                        if (data.code == 1) {
+                            $('#importGrid').datagrid('loadData', {"rows": data.data});
+                        } else {
+                            LG.alert(data.message);
+                        }
+                    },
+                    error: function (message) {
+                        LG.tip('error', message);
+                    }
+                });
+            }
+        }
+        return false;
+    }
+    //批量删除
+    function batchdeleteExcel() {
+        if (endEditing()) {
+            var rows = $('#importGrid').datagrid("getChecked");
+            if (rows.length > 0) {
+                $.messager.confirm({
+                    msg: '是否删除所选记录！',
+                    title: '提示',
+                    top: '20%',
+                    fn: function (r) {
+                        if (r) {
+                            for (var i = 0; i < rows.length; i++) {
+                                var rowIndex = $('#importGrid').datagrid('getRowIndex', rows[i]);
+                                $('#importGrid').datagrid('deleteRow', rowIndex);
+                            }
+                            $('#importGrid').datagrid('uncheckAll');
+                        }
+                    }
+                })
+            } else {
+                return false;
+            }
+        }
+    }
+</script>
+</html>

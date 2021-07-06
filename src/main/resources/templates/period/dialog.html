@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<form id="periodFrom" th:action="@{saveAccounPeriodDto}" th:object="${accounPeriodDto}" method="post">
+    <table cellspacing="0" cellPadding="0" class="addTable">
+        <tr>
+            <td class="rightTd" style="width:100px;">会计期间：</td>
+            <td>
+                <input name="month" class="easyui-textbox" data-options="required:true,missingMessage:null"
+                       style="width:150px;height:28px;" th:value="*{month}"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="rightTd" style="width:100px;">起始日期：</td>
+            <td>
+                <input name="startTime" class="easyui-datebox" data-options="editable:false,required:true,missingMessage:null"
+                       style="width:150px;height:28px;" th:value="*{startTime}"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="rightTd" style="width:100px;">结束日期：</td>
+            <td>
+                <input name="endTime" class="easyui-datebox" data-options="editable:false,required:true,missingMessage:null"
+                       style="width:150px;height:28px;" th:value="*{endTime}"/>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="rightTd" style="width:100px;">状态标识：</td>
+            <td>
+                <input class="easyui-switchbutton" th:checked="${accounPeriodDto.ztbz=='T'?1:0}"
+                       style="height:28px;"
+                       data-options="onText:'启用',offText:'停用',
+                        onChange:function(checked){
+                        if(checked){
+                        $('#ztbz').val('T');
+                        } else{
+                        $('#ztbz').val('F');
+                        }
+                        }">
+            </td>
+        </tr>
+    </table>
+    <input hidden="true" name="ztbz" id="ztbz" th:value="*{ztbz}"/>
+    <input hidden="true" name="id" id="id" th:value="*{id}"/>
+</form>
+</body>
+</html>

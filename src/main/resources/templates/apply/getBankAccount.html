@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<!--suppress ThymeleafVariablesResolveInspection -->
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<div class="easyui-navpanel">
+    <table id="bankAccountDG">
+        <thead>
+        <tr>
+            <th data-options="field:'handle',width:400">银行账号</th>
+         </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${bankAccountListDtoList}">
+            <td th:utext="${item.handle}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<script th:inline="javascript">var _bankAccountAction = [[${bankAccountValue}]];</script>
+<script type="text/javascript" th:inline="none">
+    $(function () {
+        $("#bankAccountDG").datagrid({
+            showHeader:false,
+            border: false,
+            singleSelect: true,
+            fitColumns:true,
+            fit: true
+        }).datagrid('getPanel').addClass("lines-no");
+    })
+    //选择确认退出窗口
+    function getBankAccountKhyhAndYhzh(khyh,yhzh) {
+        if(is_eq("buy",_bankAccountAction)){
+            $("#buyYhzh").searchbox("setValue",yhzh);
+            $("#buyKhyh").val(khyh);
+        }else if(is_eq("sale",_bankAccountAction)){
+            $("#saleYhzh").searchbox("setValue",yhzh);
+            $("#saleKhyh").val(khyh);
+        }
+        $('#cashBankListContent').dialog('close');
+    }
+</script>
+
+</html>

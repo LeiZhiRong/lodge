@@ -1,0 +1,255 @@
+08:58:25.319 logback [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 6.0.13.Final
+08:58:25.425 logback [main] INFO  com.shgs.lodge.LodgeApplication - Starting LodgeApplication using Java 1.8.0_271 on DESKTOP-UDV8UQ1 with PID 18512 (D:\IdeaProjects\lodge\target\classes started by yglei in D:\IdeaProjects\lodge)
+08:58:25.426 logback [main] INFO  com.shgs.lodge.LodgeApplication - No active profile set, falling back to default profiles: default
+08:58:27.118 logback [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+08:58:27.197 logback [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 38 ms. Found 0 JPA repository interfaces.
+08:58:28.118 logback [main] INFO  c.u.j.c.EnableEncryptablePropertiesBeanFactoryPostProcessor - Post-processing PropertySource instances
+08:58:28.218 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource configurationProperties [org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertySource] to AOP Proxy
+08:58:28.219 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource servletConfigInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+08:58:28.219 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource servletContextInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+08:58:28.219 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource systemProperties [org.springframework.core.env.PropertiesPropertySource] to EncryptableMapPropertySourceWrapper
+08:58:28.219 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource systemEnvironment [org.springframework.boot.env.SystemEnvironmentPropertySourceEnvironmentPostProcessor$OriginAwareSystemEnvironmentPropertySource] to EncryptableMapPropertySourceWrapper
+08:58:28.220 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource random [org.springframework.boot.env.RandomValuePropertySource] to EncryptablePropertySourceWrapper
+08:58:28.220 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource Config resource 'classpath:/application.yml' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+08:58:28.220 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource Config resource 'classpath:/application.properties' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+08:58:28.320 logback [main] INFO  c.u.j.f.DefaultLazyPropertyFilter - Property Filter custom Bean not found with name 'encryptablePropertyFilter'. Initializing Default Property Filter
+08:58:28.553 logback [main] INFO  c.u.j.r.DefaultLazyPropertyResolver - Property Resolver custom Bean not found with name 'encryptablePropertyResolver'. Initializing Default Property Resolver
+08:58:28.554 logback [main] INFO  c.u.j.d.DefaultLazyPropertyDetector - Property Detector custom Bean not found with name 'encryptablePropertyDetector'. Initializing Default Property Detector
+08:58:28.910 logback [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+08:58:28.943 logback [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+08:58:28.944 logback [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+08:58:28.945 logback [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.39]
+08:58:29.331 logback [main] INFO  o.a.c.c.C.[.[localhost].[/lodge] - Initializing Spring embedded WebApplicationContext
+08:58:29.331 logback [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3435 ms
+08:58:29.752 logback [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: primaryPersistenceUnit]
+08:58:29.891 logback [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.23.Final
+08:58:30.233 logback [main] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+08:58:30.433 logback [main] INFO  com.zaxxer.hikari.HikariDataSource - LodgePool - Starting...
+08:58:30.594 logback [main] INFO  com.zaxxer.hikari.HikariDataSource - LodgePool - Start completed.
+08:58:30.620 logback [main] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.SQLServer2008Dialect
+08:59:54.971 logback [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+08:59:55.012 logback [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'primaryPersistenceUnit'
+08:59:55.131 logback [main] INFO  com.shgs.lodge.config.MvcConfig - 注册拦截器[listenerRegist]成功
+08:59:55.937 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.algorithm, using default value: PBEWithMD5AndDES
+08:59:55.938 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.keyObtentionIterations, using default value: 1000
+08:59:55.938 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.poolSize, using default value: 1
+08:59:55.938 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.providerName, using default value: null
+08:59:55.938 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.saltGeneratorClassname, using default value: org.jasypt.salt.RandomSaltGenerator
+08:59:55.941 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.stringOutputType, using default value: base64
+08:59:56.466 logback [main] INFO  o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+08:59:56.774 logback [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page template: index
+08:59:57.176 logback [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+08:59:57.233 logback [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path '/lodge'
+08:59:57.248 logback [main] INFO  com.shgs.lodge.LodgeApplication - Started LodgeApplication in 93.001 seconds (JVM running for 97.964)
+09:00:22.398 logback [SpringContextShutdownHook] INFO  o.s.s.c.ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
+09:00:22.414 logback [SpringContextShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'primaryPersistenceUnit'
+09:00:22.417 logback [SpringContextShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - LodgePool - Shutdown initiated...
+09:00:22.421 logback [SpringContextShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - LodgePool - Shutdown completed.
+09:00:29.916 logback [main] INFO  com.shgs.lodge.LodgeApplication - Starting LodgeApplication using Java 1.8.0_271 on DESKTOP-UDV8UQ1 with PID 20216 (D:\IdeaProjects\lodge\target\classes started by yglei in D:\IdeaProjects\lodge)
+09:00:29.909 logback [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 6.0.13.Final
+09:00:29.917 logback [main] INFO  com.shgs.lodge.LodgeApplication - No active profile set, falling back to default profiles: default
+09:00:30.998 logback [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+09:00:31.018 logback [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 11 ms. Found 0 JPA repository interfaces.
+09:00:31.316 logback [main] INFO  c.u.j.c.EnableEncryptablePropertiesBeanFactoryPostProcessor - Post-processing PropertySource instances
+09:00:31.367 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource configurationProperties [org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertySource] to AOP Proxy
+09:00:31.367 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource servletConfigInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+09:00:31.368 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource servletContextInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+09:00:31.368 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource systemProperties [org.springframework.core.env.PropertiesPropertySource] to EncryptableMapPropertySourceWrapper
+09:00:31.368 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource systemEnvironment [org.springframework.boot.env.SystemEnvironmentPropertySourceEnvironmentPostProcessor$OriginAwareSystemEnvironmentPropertySource] to EncryptableMapPropertySourceWrapper
+09:00:31.368 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource random [org.springframework.boot.env.RandomValuePropertySource] to EncryptablePropertySourceWrapper
+09:00:31.369 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource Config resource 'classpath:/application.yml' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+09:00:31.369 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource Config resource 'classpath:/application.properties' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+09:00:31.436 logback [main] INFO  c.u.j.f.DefaultLazyPropertyFilter - Property Filter custom Bean not found with name 'encryptablePropertyFilter'. Initializing Default Property Filter
+09:00:31.581 logback [main] INFO  c.u.j.r.DefaultLazyPropertyResolver - Property Resolver custom Bean not found with name 'encryptablePropertyResolver'. Initializing Default Property Resolver
+09:00:31.582 logback [main] INFO  c.u.j.d.DefaultLazyPropertyDetector - Property Detector custom Bean not found with name 'encryptablePropertyDetector'. Initializing Default Property Detector
+09:00:31.866 logback [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+09:00:31.877 logback [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+09:00:31.877 logback [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+09:00:31.878 logback [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.39]
+09:00:32.067 logback [main] INFO  o.a.c.c.C.[.[localhost].[/lodge] - Initializing Spring embedded WebApplicationContext
+09:00:32.067 logback [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1840 ms
+09:00:32.325 logback [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: primaryPersistenceUnit]
+09:00:32.404 logback [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.23.Final
+09:00:32.590 logback [main] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+09:00:32.733 logback [main] INFO  com.zaxxer.hikari.HikariDataSource - LodgePool - Starting...
+09:00:33.225 logback [main] INFO  com.zaxxer.hikari.HikariDataSource - LodgePool - Start completed.
+09:00:33.243 logback [main] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.SQLServer2008Dialect
+09:00:47.299 logback [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+09:00:47.308 logback [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'primaryPersistenceUnit'
+09:00:47.346 logback [main] INFO  com.shgs.lodge.config.MvcConfig - 注册拦截器[listenerRegist]成功
+09:00:47.770 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.algorithm, using default value: PBEWithMD5AndDES
+09:00:47.770 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.keyObtentionIterations, using default value: 1000
+09:00:47.770 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.poolSize, using default value: 1
+09:00:47.770 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.providerName, using default value: null
+09:00:47.771 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.saltGeneratorClassname, using default value: org.jasypt.salt.RandomSaltGenerator
+09:00:47.771 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.stringOutputType, using default value: base64
+09:00:47.964 logback [main] INFO  o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+09:00:48.100 logback [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page template: index
+09:00:48.255 logback [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+09:00:48.277 logback [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path '/lodge'
+09:00:48.287 logback [main] INFO  com.shgs.lodge.LodgeApplication - Started LodgeApplication in 18.969 seconds (JVM running for 20.343)
+09:01:01.220 logback [http-nio-8080-exec-2] INFO  o.a.c.c.C.[.[localhost].[/lodge] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+09:01:01.220 logback [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+09:01:01.221 logback [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+09:01:01.248 logback [http-nio-8080-exec-2] INFO  c.s.lodge.servlet.CmsSessionListener - addSession[4B701BC3A70A278D8FB8C5CE3ADD9488]
+09:01:56.237 logback [SpringContextShutdownHook] INFO  c.s.lodge.servlet.CmsSessionListener - removeSession[4B701BC3A70A278D8FB8C5CE3ADD9488]
+09:01:56.287 logback [SpringContextShutdownHook] INFO  o.s.s.c.ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
+09:01:56.289 logback [SpringContextShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'primaryPersistenceUnit'
+09:01:56.289 logback [SpringContextShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - LodgePool - Shutdown initiated...
+09:01:56.292 logback [SpringContextShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - LodgePool - Shutdown completed.
+09:02:13.707 logback [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 6.0.13.Final
+09:02:13.867 logback [main] INFO  com.shgs.lodge.LodgeApplication - Starting LodgeApplication using Java 1.8.0_271 on DESKTOP-UDV8UQ1 with PID 19380 (D:\IdeaProjects\lodge\target\classes started by yglei in D:\IdeaProjects\lodge)
+09:02:13.868 logback [main] INFO  com.shgs.lodge.LodgeApplication - No active profile set, falling back to default profiles: default
+09:02:15.144 logback [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+09:02:15.193 logback [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 32 ms. Found 0 JPA repository interfaces.
+09:02:15.778 logback [main] INFO  c.u.j.c.EnableEncryptablePropertiesBeanFactoryPostProcessor - Post-processing PropertySource instances
+09:02:15.866 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource configurationProperties [org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertySource] to AOP Proxy
+09:02:15.866 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource servletConfigInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+09:02:15.867 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource servletContextInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+09:02:15.867 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource systemProperties [org.springframework.core.env.PropertiesPropertySource] to EncryptableMapPropertySourceWrapper
+09:02:15.867 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource systemEnvironment [org.springframework.boot.env.SystemEnvironmentPropertySourceEnvironmentPostProcessor$OriginAwareSystemEnvironmentPropertySource] to EncryptableMapPropertySourceWrapper
+09:02:15.867 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource random [org.springframework.boot.env.RandomValuePropertySource] to EncryptablePropertySourceWrapper
+09:02:15.868 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource Config resource 'classpath:/application.yml' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+09:02:15.868 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource Config resource 'classpath:/application.properties' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+09:02:15.964 logback [main] INFO  c.u.j.f.DefaultLazyPropertyFilter - Property Filter custom Bean not found with name 'encryptablePropertyFilter'. Initializing Default Property Filter
+09:02:16.153 logback [main] INFO  c.u.j.r.DefaultLazyPropertyResolver - Property Resolver custom Bean not found with name 'encryptablePropertyResolver'. Initializing Default Property Resolver
+09:02:16.155 logback [main] INFO  c.u.j.d.DefaultLazyPropertyDetector - Property Detector custom Bean not found with name 'encryptablePropertyDetector'. Initializing Default Property Detector
+09:02:16.456 logback [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+09:02:16.488 logback [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+09:02:16.490 logback [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+09:02:16.490 logback [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.39]
+09:02:16.676 logback [main] INFO  o.a.c.c.C.[.[localhost].[/lodge] - Initializing Spring embedded WebApplicationContext
+09:02:16.677 logback [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2483 ms
+09:02:17.016 logback [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: primaryPersistenceUnit]
+09:02:17.073 logback [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.23.Final
+09:02:17.255 logback [main] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+09:02:17.386 logback [main] INFO  com.zaxxer.hikari.HikariDataSource - LodgePool - Starting...
+09:02:17.531 logback [main] INFO  com.zaxxer.hikari.HikariDataSource - LodgePool - Start completed.
+09:02:17.549 logback [main] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.SQLServer2008Dialect
+09:02:27.479 logback [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+09:02:27.508 logback [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'primaryPersistenceUnit'
+09:02:27.579 logback [main] INFO  com.shgs.lodge.config.MvcConfig - 注册拦截器[listenerRegist]成功
+09:02:28.231 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.algorithm, using default value: PBEWithMD5AndDES
+09:02:28.232 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.keyObtentionIterations, using default value: 1000
+09:02:28.232 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.poolSize, using default value: 1
+09:02:28.232 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.providerName, using default value: null
+09:02:28.232 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.saltGeneratorClassname, using default value: org.jasypt.salt.RandomSaltGenerator
+09:02:28.234 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.stringOutputType, using default value: base64
+09:02:28.514 logback [main] INFO  o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+09:02:28.683 logback [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page template: index
+09:02:28.931 logback [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+09:02:28.974 logback [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path '/lodge'
+09:02:28.986 logback [main] INFO  com.shgs.lodge.LodgeApplication - Started LodgeApplication in 16.009 seconds (JVM running for 19.989)
+09:02:34.429 logback [http-nio-8080-exec-1] INFO  o.a.c.c.C.[.[localhost].[/lodge] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+09:02:34.429 logback [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+09:02:34.431 logback [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+09:02:34.477 logback [http-nio-8080-exec-1] INFO  c.s.lodge.servlet.CmsSessionListener - addSession[697A90C8AC5CBC5B73D2CF9015A6865E]
+09:03:59.992 logback [SpringContextShutdownHook] INFO  c.s.lodge.servlet.CmsSessionListener - removeSession[697A90C8AC5CBC5B73D2CF9015A6865E]
+09:04:00.041 logback [SpringContextShutdownHook] INFO  o.s.s.c.ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
+09:04:00.049 logback [SpringContextShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'primaryPersistenceUnit'
+09:04:00.050 logback [SpringContextShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - LodgePool - Shutdown initiated...
+09:04:00.054 logback [SpringContextShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - LodgePool - Shutdown completed.
+09:08:46.734 logback [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 6.0.13.Final
+09:08:46.789 logback [main] INFO  com.shgs.lodge.LodgeApplication - Starting LodgeApplication using Java 1.8.0_271 on DESKTOP-UDV8UQ1 with PID 11384 (D:\IdeaProjects\lodge\target\classes started by yglei in D:\IdeaProjects\lodge)
+09:08:46.791 logback [main] INFO  com.shgs.lodge.LodgeApplication - No active profile set, falling back to default profiles: default
+09:08:47.994 logback [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+09:08:48.026 logback [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 18 ms. Found 0 JPA repository interfaces.
+09:08:48.625 logback [main] INFO  c.u.j.c.EnableEncryptablePropertiesBeanFactoryPostProcessor - Post-processing PropertySource instances
+09:08:48.710 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource configurationProperties [org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertySource] to AOP Proxy
+09:08:48.711 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource servletConfigInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+09:08:48.711 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource servletContextInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+09:08:48.712 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource systemProperties [org.springframework.core.env.PropertiesPropertySource] to EncryptableMapPropertySourceWrapper
+09:08:48.712 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource systemEnvironment [org.springframework.boot.env.SystemEnvironmentPropertySourceEnvironmentPostProcessor$OriginAwareSystemEnvironmentPropertySource] to EncryptableMapPropertySourceWrapper
+09:08:48.712 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource random [org.springframework.boot.env.RandomValuePropertySource] to EncryptablePropertySourceWrapper
+09:08:48.712 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource Config resource 'classpath:/application.yml' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+09:08:48.712 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource Config resource 'classpath:/application.properties' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+09:08:48.808 logback [main] INFO  c.u.j.f.DefaultLazyPropertyFilter - Property Filter custom Bean not found with name 'encryptablePropertyFilter'. Initializing Default Property Filter
+09:08:48.998 logback [main] INFO  c.u.j.r.DefaultLazyPropertyResolver - Property Resolver custom Bean not found with name 'encryptablePropertyResolver'. Initializing Default Property Resolver
+09:08:48.999 logback [main] INFO  c.u.j.d.DefaultLazyPropertyDetector - Property Detector custom Bean not found with name 'encryptablePropertyDetector'. Initializing Default Property Detector
+09:08:49.368 logback [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+09:08:49.381 logback [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+09:08:49.382 logback [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+09:08:49.382 logback [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.39]
+09:08:49.585 logback [main] INFO  o.a.c.c.C.[.[localhost].[/lodge] - Initializing Spring embedded WebApplicationContext
+09:08:49.585 logback [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 2463 ms
+09:08:49.950 logback [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: primaryPersistenceUnit]
+09:08:50.010 logback [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.23.Final
+09:08:50.189 logback [main] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+09:08:50.314 logback [main] INFO  com.zaxxer.hikari.HikariDataSource - LodgePool - Starting...
+09:08:50.455 logback [main] INFO  com.zaxxer.hikari.HikariDataSource - LodgePool - Start completed.
+09:08:50.472 logback [main] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.SQLServer2008Dialect
+09:08:53.146 logback [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+09:08:53.163 logback [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'primaryPersistenceUnit'
+09:08:53.237 logback [main] INFO  com.shgs.lodge.config.MvcConfig - 注册拦截器[listenerRegist]成功
+09:08:53.851 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.algorithm, using default value: PBEWithMD5AndDES
+09:08:53.852 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.keyObtentionIterations, using default value: 1000
+09:08:53.852 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.poolSize, using default value: 1
+09:08:53.852 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.providerName, using default value: null
+09:08:53.852 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.saltGeneratorClassname, using default value: org.jasypt.salt.RandomSaltGenerator
+09:08:53.853 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.stringOutputType, using default value: base64
+09:08:54.138 logback [main] INFO  o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+09:08:54.322 logback [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page template: index
+09:08:54.575 logback [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+09:08:54.615 logback [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path '/lodge'
+09:08:54.626 logback [main] INFO  com.shgs.lodge.LodgeApplication - Started LodgeApplication in 8.612 seconds (JVM running for 12.538)
+09:09:06.192 logback [http-nio-8080-exec-1] INFO  o.a.c.c.C.[.[localhost].[/lodge] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+09:09:06.193 logback [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+09:09:06.194 logback [http-nio-8080-exec-1] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+09:09:06.227 logback [http-nio-8080-exec-1] INFO  c.s.lodge.servlet.CmsSessionListener - addSession[64353451630518639962D1BBAFFE470C]
+09:13:05.871 logback [SpringContextShutdownHook] INFO  c.s.lodge.servlet.CmsSessionListener - removeSession[64353451630518639962D1BBAFFE470C]
+09:13:05.907 logback [SpringContextShutdownHook] INFO  o.s.s.c.ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
+09:13:05.914 logback [SpringContextShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'primaryPersistenceUnit'
+09:13:05.915 logback [SpringContextShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - LodgePool - Shutdown initiated...
+09:13:05.918 logback [SpringContextShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - LodgePool - Shutdown completed.
+13:40:36.011 logback [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 6.0.13.Final
+13:40:36.121 logback [main] INFO  com.shgs.lodge.LodgeApplication - Starting LodgeApplication using Java 1.8.0_271 on DESKTOP-UDV8UQ1 with PID 21408 (D:\IdeaProjects\lodge\target\classes started by yglei in D:\IdeaProjects\lodge)
+13:40:36.122 logback [main] INFO  com.shgs.lodge.LodgeApplication - No active profile set, falling back to default profiles: default
+13:40:38.501 logback [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+13:40:38.535 logback [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 20 ms. Found 0 JPA repository interfaces.
+13:40:39.380 logback [main] INFO  c.u.j.c.EnableEncryptablePropertiesBeanFactoryPostProcessor - Post-processing PropertySource instances
+13:40:39.481 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource configurationProperties [org.springframework.boot.context.properties.source.ConfigurationPropertySourcesPropertySource] to AOP Proxy
+13:40:39.481 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource servletConfigInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+13:40:39.482 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource servletContextInitParams [org.springframework.core.env.PropertySource$StubPropertySource] to EncryptablePropertySourceWrapper
+13:40:39.482 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource systemProperties [org.springframework.core.env.PropertiesPropertySource] to EncryptableMapPropertySourceWrapper
+13:40:39.482 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource systemEnvironment [org.springframework.boot.env.SystemEnvironmentPropertySourceEnvironmentPostProcessor$OriginAwareSystemEnvironmentPropertySource] to EncryptableMapPropertySourceWrapper
+13:40:39.482 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource random [org.springframework.boot.env.RandomValuePropertySource] to EncryptablePropertySourceWrapper
+13:40:39.482 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource Config resource 'classpath:/application.yml' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+13:40:39.483 logback [main] INFO  c.u.j.EncryptablePropertySourceConverter - Converting PropertySource Config resource 'classpath:/application.properties' via location 'optional:classpath:/' [org.springframework.boot.env.OriginTrackedMapPropertySource] to EncryptableMapPropertySourceWrapper
+13:40:39.690 logback [main] INFO  c.u.j.f.DefaultLazyPropertyFilter - Property Filter custom Bean not found with name 'encryptablePropertyFilter'. Initializing Default Property Filter
+13:40:39.942 logback [main] INFO  c.u.j.r.DefaultLazyPropertyResolver - Property Resolver custom Bean not found with name 'encryptablePropertyResolver'. Initializing Default Property Resolver
+13:40:39.945 logback [main] INFO  c.u.j.d.DefaultLazyPropertyDetector - Property Detector custom Bean not found with name 'encryptablePropertyDetector'. Initializing Default Property Detector
+13:40:40.368 logback [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port(s): 8080 (http)
+13:40:40.387 logback [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+13:40:40.388 logback [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+13:40:40.388 logback [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/9.0.39]
+13:40:40.667 logback [main] INFO  o.a.c.c.C.[.[localhost].[/lodge] - Initializing Spring embedded WebApplicationContext
+13:40:40.667 logback [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 3974 ms
+13:40:41.023 logback [main] INFO  o.h.jpa.internal.util.LogHelper - HHH000204: Processing PersistenceUnitInfo [name: primaryPersistenceUnit]
+13:40:41.128 logback [main] INFO  org.hibernate.Version - HHH000412: Hibernate ORM core version 5.4.23.Final
+13:40:41.367 logback [main] INFO  o.h.annotations.common.Version - HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+13:40:41.548 logback [main] INFO  com.zaxxer.hikari.HikariDataSource - LodgePool - Starting...
+13:40:41.739 logback [main] INFO  com.zaxxer.hikari.HikariDataSource - LodgePool - Start completed.
+13:40:41.764 logback [main] INFO  org.hibernate.dialect.Dialect - HHH000400: Using dialect: org.hibernate.dialect.SQLServer2008Dialect
+13:40:44.915 logback [main] INFO  o.h.e.t.j.p.i.JtaPlatformInitiator - HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+13:40:44.936 logback [main] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Initialized JPA EntityManagerFactory for persistence unit 'primaryPersistenceUnit'
+13:40:45.016 logback [main] INFO  com.shgs.lodge.config.MvcConfig - 注册拦截器[listenerRegist]成功
+13:40:45.728 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.algorithm, using default value: PBEWithMD5AndDES
+13:40:45.729 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.keyObtentionIterations, using default value: 1000
+13:40:45.729 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.poolSize, using default value: 1
+13:40:45.729 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.providerName, using default value: null
+13:40:45.729 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.saltGeneratorClassname, using default value: org.jasypt.salt.RandomSaltGenerator
+13:40:45.731 logback [main] INFO  c.s.l.util.MyJasyptStringEncryptor - Encryptor config not found for property jasypt.encryptor.stringOutputType, using default value: base64
+13:40:46.081 logback [main] INFO  o.s.s.c.ThreadPoolTaskExecutor - Initializing ExecutorService 'applicationTaskExecutor'
+13:40:46.321 logback [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page template: index
+13:40:46.580 logback [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+13:40:46.628 logback [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port(s): 8080 (http) with context path '/lodge'
+13:40:46.641 logback [main] INFO  com.shgs.lodge.LodgeApplication - Started LodgeApplication in 11.664 seconds (JVM running for 18.659)
+13:41:14.639 logback [http-nio-8080-exec-2] INFO  o.a.c.c.C.[.[localhost].[/lodge] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+13:41:14.639 logback [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+13:41:14.640 logback [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 1 ms
+13:41:14.675 logback [http-nio-8080-exec-2] INFO  c.s.lodge.servlet.CmsSessionListener - addSession[F5271C2064B1EB69BC2C90063599F9F7]
+13:41:42.729 logback [SpringContextShutdownHook] INFO  c.s.lodge.servlet.CmsSessionListener - removeSession[F5271C2064B1EB69BC2C90063599F9F7]
+13:41:42.778 logback [SpringContextShutdownHook] INFO  o.s.s.c.ThreadPoolTaskExecutor - Shutting down ExecutorService 'applicationTaskExecutor'
+13:41:42.782 logback [SpringContextShutdownHook] INFO  o.s.o.j.LocalContainerEntityManagerFactoryBean - Closing JPA EntityManagerFactory for persistence unit 'primaryPersistenceUnit'
+13:41:42.784 logback [SpringContextShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - LodgePool - Shutdown initiated...
+13:41:42.786 logback [SpringContextShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - LodgePool - Shutdown completed.

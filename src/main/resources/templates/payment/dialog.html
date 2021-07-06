@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <form id="paymentFrom" th:action="@{save}" th:object="${paymentMethod}" method="post">
+            <table cellspacing="0" cellPadding="0" class="addTable">
+                <tr>
+                    <td class="rightTd" width="100px">编号：</td>
+                    <td>
+                        <input name="paymentBh" class="easyui-textbox"  style="width:200px;height:28px;"
+                               th:value="*{paymentBh}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" width="100px">名称：</td>
+                    <td>
+                        <input name="paymentName" class="easyui-textbox" data-options="required:true,missingMessage:null" style="width:200px;height:28px;" th:value="*{paymentName}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" width="100px">所属分类：</td>
+                    <td>
+                        <input id="pid" name="pid" class="easyui-combotree" th:value="${pid!='all'?pid:''}"
+                               th:disabled="${disabled}" style="width:200px;height:30px;"
+                               data-options="prompt:'请选择...', editable:true,panelMaxHeight : 200,panelWidth : 300,url:'listParent',onLoadSuccess:function (row,data) {
+                }"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" width="100px">是否启用：</td>
+                    <td>
+                        <input class="easyui-switchbutton" th:checked="${paymentMethod.ztbz=='T'?1:0}"
+                               style="height:28px;"
+                               data-options="onText:'启用',offText:'停用',
+                        onChange:function(checked){
+                        if(checked){
+                        $('#ztbz').val('T');
+                        } else{
+                        $('#ztbz').val('F');
+                        }
+                        }">
+                    </td>
+                </tr>
+            </table>
+            <input hidden="true" name="ztbz" id="ztbz" th:value="*{ztbz}"/>
+            <input hidden="true" name="id" id="id" th:value="*{id}"/>
+            <input hidden="true" name="contents" id="contents" th:value="*{contents}"/>
+            <script th:inline="javascript">
+
+            </script>
+        </form>
+    </body>
+</html>

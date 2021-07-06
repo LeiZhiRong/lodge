@@ -1,0 +1,138 @@
+body,
+html {
+  height: 100%;
+  background-color: #f1f1f1;
+}
+.oaNav-page a:hover {
+  text-decoration: none;
+}
+.oaNav-page .my {
+  background-color: white;
+}
+.oaNav-page .my ul {
+  display: -webkit-box;
+  display: flex;
+  -webkit-display: flex;
+  -moz-display: flex;
+  -ms-display: flex;
+  -o-display: flex;
+  align-items: center;
+  -webkit-align-items: center;
+  -webkit-box-pack: justify;
+  justify-content: space-around;
+  -webkit-justify-content: space-around;
+  -moz-justify-content: space-around;
+  -ms-justify-content: space-around;
+  -o-justify-content: space-around;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+}
+.oaNav-page .my ul li {
+  padding: .52rem 0;
+}
+.oaNav-page .my ul li > a {
+  display: block;
+}
+.oaNav-page .my ul li > a .icon {
+  height: 1.04rem;
+  padding-top: .186667rem;
+  box-sizing: border-box;
+  text-align: center;
+  font-size: 0;
+}
+.oaNav-page .my ul li > a .icon > div {
+  position: relative;
+  display: inline-block;
+}
+.oaNav-page .my ul li > a .icon > div img {
+  height: .853333rem;
+  display: block;
+  margin: auto;
+}
+.oaNav-page .my ul li > a .icon > div .radius {
+  position: absolute;
+  right: -0.266667rem;
+  top: -0.266667rem;
+  width: .533333rem;
+  height: .533333rem;
+  border-radius: 50%;
+  background-color: #fc2c2c;
+  color: white;
+  text-align: center;
+  font-size: .32rem;
+  display: -webkit-box;
+  display: flex;
+  -webkit-display: flex;
+  -moz-display: flex;
+  -ms-display: flex;
+  -o-display: flex;
+  align-items: center;
+  -webkit-align-items: center;
+  -webkit-box-pack: justify;
+  -webkit-flex-wrap: wrap;
+  flex-wrap: wrap;
+  justify-content: center;
+  -webkit-justify-content: center;
+  -moz-justify-content: center;
+  -ms-justify-content: center;
+  -o-justify-content: center;
+}
+.oaNav-page .my ul li > a .modTitle {
+  font-size: .373333rem;
+  color: #333333;
+  padding-top: .4rem;
+  text-align: center;
+}
+.oaNav-page .mod-group {
+  margin-top: .346667rem;
+  background-color: #fff;
+  padding: .4rem .426667rem .533333rem;
+}
+.oaNav-page .mod-group .mod-title {
+  font-size: 14px;
+  color: #5a5a5a;
+  font-weight: bold;
+}
+.oaNav-page .mod-group .mod-list {
+  padding-top: .533333rem;
+}
+.oaNav-page .mod-group .mod-list ul {
+  overflow: hidden;
+  margin: -0.8rem 0 0 -1.1rem;
+}
+.oaNav-page .mod-group .mod-list ul li {
+  float: left;
+  margin: 0.8rem 0 0 1.10rem;
+  text-align: center;
+}
+.oaNav-page .mod-group .mod-list ul li > a {
+  display: block;
+}
+.oaNav-page .mod-group .mod-list ul li > a .icon {
+  width: 1.28rem;
+  height: 1.28rem;
+  margin: 0 auto;
+  background-color: #2d8cf0;
+  border-radius: .133333rem;
+}
+.oaNav-page .mod-group .mod-list ul li > a .icon img {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.oaNav-page .mod-group .mod-list ul li > a .green {
+  background-color: #01bd84;
+}
+.oaNav-page .mod-group .mod-list ul li > a .yellow {
+  background-color: #fcb644;
+}
+.oaNav-page .mod-group .mod-list ul li > a .orange {
+  background-color: #fa7d4d;
+}
+.oaNav-page .mod-group .mod-list ul li > a .cyan {
+  background-color: #0fc3c5;
+}
+.oaNav-page .mod-group .mod-list ul li > a .modTitle {
+  color: #333333;
+  padding-top: .333333rem;
+}

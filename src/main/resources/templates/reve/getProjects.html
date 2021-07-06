@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<!--suppress ThymeleafVariablesResolveInspection -->
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<div class="easyui-navpanel">
+    <div id="projects-toolbar" style="height: 40px;padding-top: 5px;padding-left: 5px;">
+        <div class="m-toolbar">
+            <div class="m-left">
+                快速查询：<input id="projectsValue" class=" easyui-searchbox"
+                            data-options="prompt:'输入关键字过滤',searcher:f_searchProjects,icons:[{
+				iconCls:'icon-clear',
+				handler: function(e){
+					 $(e.data.target).textbox('setValue','');
+				}
+			}]"
+                            style="width:200px;height: 28px;">
+            </div>
+        </div>
+    </div>
+    <table id="projectsDG"></table>
+    <div id="projects-ftools" style="border-bottom: 0;border-left:0;border-right:0;padding: 5px 10px;text-align:right;">
+        <button id="upProjectsPageBtn" onclick="upProjectsPage();" class="easyui-linkbutton"
+                data-options="plain:true,disabled:true,height:25,iconCls: 'e-icon1 fa fa-level-up fa-1g blue'">返回上级
+        </button>
+        <button id="goProjectsPageHomeBtn" onclick="goProjectsPageHome();" class="easyui-linkbutton"
+                data-options="plain:true,disabled:true,height:25,iconCls: 'e-icon1 fa fa-home fa-1g blue'">返回首页
+        </button>
+        <span class="datagrid-btn-separator"
+              style="vertical-align: middle;display:inline-block;float:none"></span>
+        <button id="closeProjectsBtn" onclick="closeDialog();" class="easyui-linkbutton"
+                data-options="plain:true,height:25,iconCls: 'e-icon1 fa fa-sign-out fa-1g blue'">关闭
+        </button>
+    </div>
+    <input type="hidden" id="projectType" th:value="${projectType}">
+</div>
+<script type="text/javascript" th:inline="none">
+    var projects_id = [];
+    $(function () {
+          let eu = $("#projectsDG").datagrid({
+            url: 'findProjects',
+              queryParams: {
+                  t_id: $("#projectType").val()
+              },
+            showHeader:false,
+            loadMsg: false,
+            border: false,
+            singleSelect: true,
+            fitColumns:true,
+            toolbar: '#projects-toolbar',
+            footer:'#projects-ftools',
+            fit: true,
+            //scrollbarSize:0,
+            onLoadSuccess: function () {
+                if(projects_id.length>0) {
+                    $('#upProjectsPageBtn').linkbutton('enable');
+                    $('#goProjectsPageHomeBtn').linkbutton('enable');
+                }else{
+                    $('#upProjectsPageBtn').linkbutton('disable');
+                    $('#goProjectsPageHomeBtn').linkbutton('disable');
+                }
+            },
+            columns: [[
+                {field: 'projectsName', title: '项目名称', width: 250,
+                    formatter: function(value,row,index){
+                      return "<div style='padding-left: 10px;'>"+value+"</div>"
+                    }
+                },
+                {field: 'handle', title: '选择', align:'right', width: 80 }
+            ]]
+        }).datagrid('columnMoving').datagrid('getPanel').addClass("lines-no");
+    })
+    function f_search(value) {
+        $("#projectsDG").datagrid("search", value);
+    }
+
+    // 目录跳转
+    function findProjects(id,pid) {
+        projects_id.push(pid);
+        var queryparams = {
+            pid: id,
+            t_id: $("#projectType").val()
+        };
+        $('#projectsDG').datagrid('options').queryParams = queryparams;
+        $('#projectsDG').datagrid('reload');
+
+    }
+    //选择确认退出窗口
+    function getCashBnkIdAndBh(str) {
+        $("#"+$("#projectType").val()).searchbox("setValue",str);
+        $('#projectsListContent').dialog('close');
+
+    }
+    //返回上一级
+    function upProjectsPage() {
+        if(projects_id.length>0){
+            var id=projects_id[projects_id.length-1];
+             var queryparams = {
+                 pid: id,
+                 t_id: $("#projectType").val()
+            };
+            $('#projectsDG').datagrid('options').queryParams = queryparams;
+            $('#projectsDG').datagrid('reload');
+
+            var new_projects_id=[];
+            for(var i=0;i<projects_id.length-1;i++){
+                if(!is_eq(id,projects_id[i])){
+                    new_projects_id.push(projects_id[i])
+                }
+            }
+            projects_id=new_projects_id;
+         }
+    }
+
+    //返回首页
+    function goProjectsPageHome() {
+        projects_id=[];
+        var queryparams = {
+            pid: null,
+            t_id: $("#projectType").val()
+        };
+        $('#projectsDG').datagrid('options').queryParams = queryparams;
+        $('#projectsDG').datagrid('reload');
+    }
+
+    //关闭
+    function closeDialog() {
+        $('#projectsListContent').dialog('close');
+    }
+
+    //过滤查询
+    function f_searchProjects(value) {
+        projects_id=[];
+        var queryparams = {
+            pid: null,
+            keyword: value,
+            t_id: $("#projectType").val()
+        };
+        $('#projectsDG').datagrid('options').queryParams = queryparams;
+        $('#projectsDG').datagrid('reload');
+    }
+
+</script>
+
+</html>

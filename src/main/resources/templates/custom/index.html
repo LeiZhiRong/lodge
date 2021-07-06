@@ -1,0 +1,70 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout/header}">
+<head>
+    <style type="text/css">
+        .datagrid-row-selected {
+            background: #eee;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="easyui-layout" fit="true">
+        <div data-options="region:'west',footer:'#Ftools',title:'分类列表',iconCls: 'e-icon2 fa fa-ellipsis-v fa-1g'"
+             style="width:200px;">
+            <div class="easyui-navpanel" >
+                <header style="height: 39px;">
+                    <div class="m-toolbar">
+                        <input id="tcode" class="easyui-searchbox"
+                               data-options="prompt:'请输入关键字进行定位',searcher:_searchCustomType,height:28,width:'100%'">
+                    </div>
+                </header>
+            <div id="tlist"></div>
+            </div>
+            <div id="Ftools" style="padding: 5px 2px;text-align:center;">
+                <button id="addCusType" onclick="addCusType();" class="easyui-linkbutton c8"
+                        data-options="plain:true,height:25,width:50">添加
+                </button>
+                <button id="editCusType" onclick="editCusType();" class="easyui-linkbutton c8"
+                        data-options="plain:true,disabled:true,height:25,width:50">编辑
+                </button>
+                <button id="delCusType" onclick="delCusType();" class="easyui-linkbutton c8"
+                        data-options="plain:true,disabled:true,height:25,width:50">删除
+                </button>
+            </div>
+            <div id="cusTypeContent" Style="display: none;padding:5px;"></div>
+        </div>
+        <div data-options="region:'center',title:'参数信息',iconCls: 'e-icon2 fa fa-ellipsis-v fa-1g'" style="padding: 0;">
+            <table id="paramGrid"></table>
+            <div id="Ptools" style="padding: 5px 10px;text-align:left;">
+                <span><input id="pcode" class="easyui-searchbox"
+                             data-options="prompt:'请输入关键字进行定位',searcher:_searchCusParam,height:28,width:200"></span>
+                <button id="addCusParamBtn" onclick="addCusParam();" class="easyui-linkbutton"
+                        data-options="plain:true,disabled:true,height:25,iconCls:'e-icon2 fa fa-plus'">添加
+                </button>
+                <span class="datagrid-btn-separator"
+                      style="vertical-align: middle;display:inline-block;float:none"></span>
+                <button id="editCusParamBtn" onclick="editCusParam();" class="easyui-linkbutton"
+                        data-options="plain:true,disabled:true,height:25,iconCls:'e-icon fa fa-edit'">编辑
+                </button>
+                <span class="datagrid-btn-separator"
+                      style="vertical-align: middle;display:inline-block;float:none"></span>
+                <button id="deleteCusParamBtn" class="easyui-linkbutton" onclick="deleteCusParam();"
+                        data-options="plain:true,disabled:true,height:25,iconCls:'e-icon2 fa fa-trash'">删除
+                </button>
+            </div>
+            <div id="paramContent" Style="display: none;"></div>
+        </div>
+    </div>
+    <script type="text/javascript" th:src="@{/static/js/plugins/columns-ext.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/plugins/datagrid-dnd.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/plugins/jqueryform.js}"></script>
+    <script type="text/javascript" th:inline="none" th:src="@{/static/js/admin/custom.js}"></script>
+</div>
+</body>
+</html>

@@ -1,0 +1,200 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout/header}">
+<div layout:fragment="content">
+    <div class="easyui-tabs" data-options="plain:true,border:false,fit:true,pill:true,tabWidth:80,tabHeight:28">
+        <div title="单据录入" style="padding-top:5px;display:none;">
+            <table id="applyGrid">
+                <thead>
+                <tr>
+                    <th data-options="field:'id',title:'ID', checkbox:true"></th>
+                    <th th:each="item:${columns}" th:field="${item.field}" th:width="${item.width}"
+                        th:sortable="${item.sortable} " th:hidden="${item.hidden}" th:text="${item.title}"></th>
+                </tr>
+                </thead>
+            </table>
+            <div id="Ptools">
+                <div class="m-toolbar" style="height: 36px;">
+                    <div class="m-left e-icon5 ">
+                        <input id="ss" class="easyui-searchbox" style="width:300px;height:28px;"
+                               data-options="searcher:applyInfoSearch,prompt:'输入关键字查询',menu:'#mm',icons: [{
+                        iconCls:'icon-clear',
+                        handler: function(e){
+                            $(e.data.target).textbox('clear');
+                        }
+                    }]"></input>
+                        <div id="mm" style="width:120px">
+                            <div data-options="name:'all'">快速查询</div>
+                            <div data-options="name:'b.saleCorp.corpMC'">销售方名称</div>
+                            <div data-options="name:'b.buyerCorp.corpMC'">购买方名称</div>
+                            <div data-options="name:'b.applyBH'">单据编号</div>
+                            <div data-options="name:'billMoney'">发票金额</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="buttons" style="padding: 2px 20px;height: 35px; ">
+                <div class="m-toolbar">
+                    <div class="m-left" style="padding: 5px;">
+                        <span>合计金额：</span><span id="hj"></span><span style="width: 50px">&nbsp;&nbsp;&nbsp;&nbsp;</span><span
+                            id="hj1"></span>
+                    </div>
+                    <div class="m-right">
+                        <span class="datagrid-btn-separator"
+                              style="vertical-align: middle;display:inline-block;float:none"></span>
+                        <button id="addApplyBtn" onclick="addApply();" class="easyui-linkbutton "
+                                data-options="plain:true,height:25,iconCls: 'e-icon1 fa fa-plus-square fa-1g'">
+                            新增
+                        </button>
+                        <span class="datagrid-btn-separator"
+                              style="vertical-align: middle;display:inline-block;float:none"></span>
+                        <button id="batchDeleteBtn" class="easyui-linkbutton" onclick="batchdeleteApply();"
+                                data-options="plain:true,disabled:true,height:25,iconCls:'e-icon1 fa fa-times fa-1g'">
+                            批量删除
+                        </button>
+                        <span class="datagrid-btn-separator"
+                              style="vertical-align: middle;display:inline-block;float:none"></span>
+                        <button id="batchExamineBtn" class="easyui-linkbutton" onclick="batchExamine();"
+                                data-options="plain:true,disabled:true,height:25,iconCls:'e-icon1 fa fa-check fa-1g'">
+                            提交审核
+                        </button>
+                        <span class="datagrid-btn-separator"
+                              style="vertical-align: middle;display:inline-block;float:none"></span>
+                        <button id="importCorpBtn" onclick="importUpload();" class="easyui-linkbutton "
+                                data-options="plain:true,height:25,iconCls:'e-icon1 fa fa-cloud-upload fa-1g'">导入Excel
+                        </button>
+                        <span class="datagrid-btn-separator"
+                              style="vertical-align: middle;display:inline-block;float:none"></span>
+                        <button id="exportDownBtn" onclick="exportDown();" class="easyui-linkbutton "
+                                data-options="plain:true,height:25,iconCls:'e-icon1 fa fa-cloud-download fa-1g'">导出Excel
+                        </button>
+                        <span class="datagrid-btn-separator"
+                              style="vertical-align: middle;display:inline-block;float:none"></span>
+                        <button class="easyui-linkbutton"
+                                data-options="plain:true,height:25,iconCls: 'e-icon1 fa fa-cog fa-1g'"
+                                onclick="headerSetup('applyGrid')">列配置
+
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <script type="text/javascript" th:src="@{/static/js/plugins/jqueryform.js}"></script>
+            <script type="text/javascript" th:src="@{/static/js/WebCalendar.js}"></script>
+            <script type="text/javascript" th:src="@{/static/js/plugins/columns-ext.js}"></script>
+            <script type="text/javascript" th:src="@{/static/js/plugins/datagrid-dnd.js}"></script>
+            <script type="text/javascript" th:src="@{/static/js/plugins/jquery.datagrid.extend.js}"></script>
+            <script type="text/javascript" th:inline="none" th:src="@{/static/js/admin/apply.js}"></script>
+            <script th:inline="javascript">var basepath = [[${session.basePath}]];</script>
+        </div>
+        <div title="开票记录" style="padding-top:5px;display:none;">
+            <table id="applyHistoryGrid">
+                <thead>
+                <tr>
+                    <th th:each="item:${history}" th:field="${item.field}" th:width="${item.width}"
+                        th:sortable="${item.sortable} " th:hidden="${item.hidden}" th:text="${item.title}"></th>
+                </tr>
+                </thead>
+            </table>
+            <div id="Htools" style="text-align: left">
+                <div class="m-toolbar" style="height: 180px;">
+                    <div class="m-left e-icon5 ">
+                        <table cellspacing="0" cellPadding="0" class="addTable">
+                            <tr>
+                                <td class="rightTd" style="width:150px;">部门名称：</td>
+                                <td class="leftTd">
+                                    <select name="deptBh" id="deptBh" class="easyui-combobox"
+                                            data-options="panelMaxHeight:200,panelWidth:300,editable:false,width:200,height:28">
+                                        <option th:each="item:${applyDepts}"
+                                                th:value="${item.values}"
+                                                th:text="${item.name}"></option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="rightTd" style="width:150px;">会计期间：</td>
+                                <td class="leftTd">
+
+                                    <input name="month" id="month" th:value="${month}"  class="textbox mytext"   maxlength="10"
+                                           onclick="SelectDate(this,&#39;yyyy-MM&#39;)" size="9" readonly="true" style="margin: 0px 28px 0px 0px; padding-top: 0px; padding-left: 5px; padding-bottom: 0px; height: 28px; line-height: 28px; width: 140px;"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="rightTd" width="140px">记录日期：</td>
+                                <td  class="leftTd">
+                                    <input id="starDate" th:value="${starDate}" type="text" data-options="height:28,width:140,icons: [{
+                        iconCls:'icon-clear',
+                        handler: function(e){
+                            $(e.data.target).textbox('clear');
+                        }
+                    }]" class="easyui-datebox" />&nbsp;至&nbsp;<input id="endDate"  th:value="${endDate}" data-options="height:28,width:140,icons: [{
+                        iconCls:'icon-clear',
+                        handler: function(e){
+                            $(e.data.target).textbox('clear');
+                        }
+                    }]" type="text" class="easyui-datebox"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="rightTd" width="140px">单据状态：</td>
+                                <td  class="leftTd">
+                                    <select id="Hztbz" name="Hztbz"  data-options="editable:false,height:28,panelHeight:150" style="width:200px;">
+                                        <option value="DF">DF-未提交</option>
+                                        <option value="DT">DT-已审核</option>
+                                        <option value="DO">DO-已确认</option>
+                                        <option value="C">C-已勾选</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="rightTd" width="120px">模糊查询：</td>
+                                <td  class="leftTd">
+                                    <input id="hh" class="easyui-searchbox" style="width:300px;height:28px;"
+                                           data-options="searcher:applyHistoryInfoSearch,prompt:'输入关键字查询',menu:'#hm',icons: [{
+                        iconCls:'icon-clear',
+                        handler: function(e){
+                            $(e.data.target).textbox('clear');
+                        }
+                    }]"></input>
+                                </td>
+                            </tr>
+                        </table>
+                        <div>
+
+                        </div>
+                        <div id="hm" style="width:120px">
+                            <div data-options="name:'all'">快速查询</div>
+                            <div data-options="name:'b.saleCorp.corpMC'">销售方名称</div>
+                            <div data-options="name:'b.buyerCorp.corpMC'">购买方名称</div>
+                            <div data-options="name:'b.applyBH'">单据编号</div>
+                            <div data-options="name:'billMoney'">发票金额</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="Hbuttons" style="padding: 2px 20px;height: 35px; ">
+                <div class="m-toolbar">
+                    <div class="m-left" style="padding: 5px;">
+                        <span>合计金额：</span><span id="thj"></span>
+                    </div>
+                    <div class="m-right">
+                        <span class="datagrid-btn-separator"
+                              style="vertical-align: middle;display:inline-block;float:none"></span>
+                        <button id="exportHistoryBtn" onclick="exportHistory();" class="easyui-linkbutton "
+                                data-options="plain:true,height:25,iconCls:'e-icon1 fa fa-cloud-download fa-1g'">导出Excel
+                        </button>
+                        <span class="datagrid-btn-separator"
+                              style="vertical-align: middle;display:inline-block;float:none"></span>
+                        <button class="easyui-linkbutton"
+                                data-options="plain:true,height:25,iconCls: 'e-icon1 fa fa-cog fa-1g'"
+                                onclick="theaderSetup('applyHistoryGrid')">列配置
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</html>

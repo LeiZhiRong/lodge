@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout/header}">
+<head>
+    <style type="text/css">
+        .datagrid-row-selected {
+            background: #eee;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content">
+    <div class="easyui-layout" fit="true">
+        <div data-options="region:'west',footer:'#Ftools',title:'收支费项',iconCls: 'e-icon2 fa fa-ellipsis-v fa-1g'"
+             style="width:200px;">
+            <div class="easyui-navpanel">
+                <header style="height: 39px;">
+                    <div class="m-toolbar">
+                        <input id="tcode" class="easyui-searchbox"
+                               data-options="prompt:'请输入关键字进行定位',searcher:_searchProceedType,height:28,width:'100%'">
+                    </div>
+                </header>
+                <div id="tlist"></div>
+            </div>
+            <div id="Ftools" style="padding: 5px 4px 4px 2px;text-align:center;">
+                <button id="addProceedType" onclick="addProceedType();" class="easyui-linkbutton c8"
+                        data-options="plain:true,height:25,width:50">新增
+                </button>
+                <button id="editProceedType" onclick="editProceedType();" class="easyui-linkbutton c8"
+                        data-options="plain:true,disabled:true,height:25,width:50">编辑
+                </button>
+                <button id="delProceedType" onclick="delProceedType();" class="easyui-linkbutton c8"
+                        data-options="plain:true,disabled:true,height:25,width:50">删除
+                </button>
+            </div>
+            <div id="proceedTypeContent" Style="display: none;padding:5px;"></div>
+        </div>
+        <div data-options="region:'center',title:'入账规则',iconCls: 'e-icon2 fa fa-ellipsis-v fa-1g'" style="padding: 0;">
+            <table id="reveExpeItemGrid">
+                <thead>
+                <tr>
+                    <th th:each="item:${columns}" th:field="${item.field}" th:width="${item.width}"
+                        th:sortable="${item.sortable} " th:hidden="${item.hidden}" th:text="${item.title}"></th>
+                </tr>
+                </thead>
+            </table>
+            <div id="Ptools" style="padding: 5px 10px;text-align:left;">
+                <button id="addReveExpeItemBtn" onclick="addReveExpeItem();" class="easyui-linkbutton"
+                        data-options="plain:true,disabled:true,height:25,iconCls:'e-icon1 fa fa-plus'">新增
+                </button>
+                <span class="datagrid-btn-separator"
+                      style="vertical-align: middle;display:inline-block;float:none"></span>
+                <button class="easyui-linkbutton"
+                        data-options="plain:true,height:25,iconCls: 'e-icon1 fa fa-cog fa-1g'"
+                        onclick="headerSetup('reveExpeItemGrid')">列配置
+                </button>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" th:src="@{/static/js/plugins/columns-ext.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/plugins/datagrid-dnd.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/plugins/jqueryform.js}"></script>
+    <script th:inline="javascript">var basepath = [[${session.basePath}]];</script>
+    <script type="text/javascript" th:inline="none" th:src="@{/static/js/admin/reve.js}"></script>
+</div>
+</body>
+</html>

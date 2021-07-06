@@ -1,0 +1,170 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--suppress ThymeleafVariablesResolveInspection -->
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<head th:fragment="commonHead(title)">
+    <meta charset="UTF-8">
+    <meta http-equiv="Page-Enter" content="revealTrans(Duration=0.4,Transition=3)">
+    <title th:text="${session.title}">首页</title>
+    <link rel="shortcut icon" th:href="@{/static/images/favicon.ico}" type="image/x-icon"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/static/js/themes/bootstrap/easyui.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/js/themes/icon.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/js/themes/color.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/css/font-awesome.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/js/themes/mobile.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/static/css/public.css}">
+    <script type="text/javascript" th:src="@{/static/js/jquery.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/jquery.easyui.min.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/jquery.easyui.mobile.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/plugins/jquery.easyui.menu.extend.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/plugins/jquery.easyui.tabs.extend.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/locale/easyui-lang-zh_CN.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/LG.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/php.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/security.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/admin/main.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/loading.js}"></script>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" th:src="@{/static/js/html5.js}"></script>
+    <![endif]-->
+    <style type="text/css">
+        .sidemenu .accordion .panel-title {
+            color: #b8c7ce;
+        }
+        .sidemenu .accordion .accordion-header {
+            background: #222d32;
+            color: #b8c7ce;
+        }
+        .sidemenu .accordion .accordion-body {
+            background: #2c3b41;
+            color: #8aa4af;
+        }
+        .sidemenu .accordion .accordion-header-selected {
+            background: #1e282c;
+        }
+        .sidemenu .tree-node-hover {
+            background: #2c3b41;
+            color: #fff;
+        }
+        .sidemenu .tree-node-selected {
+            background: #2c3b41;
+            color: #fff;
+        }
+        .sidemenu .accordion-header .panel-tool {
+            display: none;
+        }
+        .sidemenu .accordion-header::after,
+        .sidemenu .tree-node-nonleaf::after {
+            display: inline-block;
+            vertical-align: top;
+            border-style: solid;
+            transform: rotate(45deg);
+            width: 4px;
+            height: 4px;
+            content: "";
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            margin-top: -3px;
+            border-width: 0 1px 1px 0;
+        }
+        .sidemenu .accordion-header-selected::after {
+            transform: rotate(-135deg);
+        }
+        .sidemenu .tree-node-nonleaf::after {
+            transform: rotate(-135deg);
+        }
+        .sidemenu .tree-node-nonleaf-collapsed::after {
+            transform: rotate(45deg);
+        }
+        .sidemenu-collapsed .accordion-header::after {
+            display: none;
+        }
+        .sidemenu-tooltip .accordion {
+            border-color: #1e282c;
+        }
+    </style>
+
+</head>
+<body class="easyui-layout">
+<div class="c9" data-options="region:'north',border:0" style="overflow-y:hidden;">
+    <div class="c9 panel-header" style="height:63px;">
+        <div id="m-toolbar">
+            <div class="m-left">
+                        <span>
+                            <img th:src="@{/static/images/logo3.png}" style="height:55px; padding-top: 10px; "/>
+                        </span>
+            </div>
+            <div class="m-right">
+                <div style="height: 65px">
+                    <button style="margin-right: 10px;"
+                            class="easyui-menubutton c9" th:text="'&nbsp;欢迎您：'+${session.user.userName}"
+                            data-options="height:64,menu:'#menu',hasDownArrow:false,plain:true,iconCls:'fa fa-user-circle fa-2x',size:'large',iconAlign:'left'"></button>
+                </div>
+            </div>
+            <div id="menu" style="display: none;">
+<!--                <div data-options="iconCls:'e-icon1 fa fa-user-o'" onclick="f_getUserInfo()">用户信息</div>-->
+                <div data-options="iconCls:'e-icon1 fa fa-key'" onclick="f_updateUserPwd()">密码重置</div>
+                <div class="menu-sep"></div>
+                <div data-options="iconCls:'e-icon1 fa fa-sign-out'" onclick="logout()">退出系统</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div data-options="region:'west',split:false,width:48,border:false"
+     style="position: relative; overflow-y:hidden;overflow: hidden;padding: 0;background: #222d32;">
+    <div id="sm" class="easyui-sidemenu"
+         data-options="data:menu,collapsed:'collapse',width:48,border:false,floatMenuWidth:150,onSelect: onSideMenuSelect"></div>
+
+</div>
+<div id="mainPanle" data-options="region:'center',border:true" style="overflow-y:hidden">
+    <div id="wu-tabs" class="easyui-tabs" style="position: relative; overflow: hidden;"
+         data-options="border:false,fit:true,tools:'#tabs_menu'">
+        <div title="首页" data-options="closable:false,iconCls:'e-icon2 fa fa-home red'" style="overflow:hidden;padding:5px">
+            <iframe scrolling="auto" frameborder="0" th:src="@{/home/index}" style="width:100%;height:100%"></iframe>
+        </div>
+    </div>
+    <div class="m-right" id="tabs_menu">
+        <a href="javascript:void(0)" class="easyui-menubutton"
+           data-options="menu:'#tb_menu',plain:true,border:false,top:0,iconCls:'e-icon fa fa-bars 2x',hasDownArrow:false"></a>
+    </div>
+    <div id="tb_menu" style="display: none;">
+        <div data-options="iconCls:'e-icon1 fa fa-refresh'" onclick="reloadTab()">刷新当前页</div>
+        <div onclick="closeTab()">关闭当前页</div>
+        <div class="menu-sep"></div>
+        <div onclick="closeOtherTab()">关闭其它页</div>
+        <div data-options="iconCls:'e-icon1 fa fa-close'" onclick="closeAllTab()">关闭所有页</div>
+    </div>
+</div>
+<!--<div data-options="region:'south'" class="" style="height:28px;overflow-y:hidden;color: #0E2D5F;padding: 5px;">-->
+<!--    <div style="text-align: center">-->
+<!--        <span>Copyright©<span id="copy"></span>&nbsp;<span th:text="${session.user.corpName}"></span></span>-->
+<!--    </div>-->
+<!--</div>-->
+
+<script th:inline="javascript">
+    var basepath = [[${session.basePath}]];
+    var menu = JSON.parse([[${session.menuList}]]);
+    $("#copy").html(new Date().getFullYear());
+
+    //add tabs
+    function onSideMenuSelect(item) {
+        var title = item.text;
+        var href = item.arg;
+        var tabPanel = $('#wu-tabs');
+        if (tabPanel.tabs('exists', title)) {
+            tabPanel.tabs('select', title);
+            return;
+        }
+        tabPanel.tabs('add', {
+            title: title,
+            content: 'url:' + basepath + href,
+            useiframe: true,
+            closable: true
+        });
+    }
+</script>
+</body>
+</html>

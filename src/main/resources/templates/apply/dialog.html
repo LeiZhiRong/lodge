@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<!--suppress ThymeleafVariablesResolveInspection -->
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<div class="easyui-navpanel" style="padding:10px; ">
+    <form id="applyForm" th:action="@{saveApplyInfo}" th:object="${billApplyInfoDto}" method="post">
+
+        <table cellspacing="0" cellPadding="0" class="addTable" style="margin: 0">
+            <tr>
+                <td class="rightTd" style="width:150px;">单据编号：</td>
+                <td class="leftTd">
+                    <input name="applyBH" id="applyBH" class="easyui-textbox" th:value="*{applyBH}"
+                           data-options="editable:false,width:200,height:28"/>
+
+                </td>
+                <td class="rightTd" style="width:150px;">会计期间：</td>
+                <td class="leftTd">
+                    <input name="periodMonth" id="periodMonth" class="easyui-textbox" th:value="*{periodMonth}"
+                           data-options="editable:false,width:200,height:28"/>
+
+                </td>
+
+            </tr>
+            <tr>
+                <td class="rightTd" style="width:150px;">申请人：</td>
+                <td class="leftTd">
+                    <input name="applyUserName" id="applyUserName" class="easyui-textbox" th:value="*{applyUserName}"
+                           data-options="editable:false,width:200,height:28"/>
+
+                </td>
+                <td class="rightTd" style="width:150px;"><i class="info">*</i>申请部门：</td>
+                <td class="leftTd">
+                    <select name="applyDeptBH" id="applyDeptBH" class="easyui-combobox"
+                            data-options="panelMaxHeight:200,panelWidth:300,editable:false,width:200,height:28">
+                        <option th:each="item:${applyDept}"
+                                th:value="${item.values}"
+                                th:selected="${billApplyInfoDto.applyDeptBH eq item.values}"
+                                th:text="${item.name}"></option>
+                    </select>
+                </td>
+
+            </tr>
+            <tr>
+                <td class="rightTd" style="width:150px;"><i class="info">*</i>销售方：</td>
+                <td class="leftTd">
+                    <input id="saleCorpName" name="saleCorpName" th:value="*{saleCorpName}" class="easyui-searchbox"
+                           data-options="prompt:'请选择...',editable:false,required:true,missingMessage:null,searcher:_searchSaleCorp,height:28,width:200"/>
+                </td>
+                <td class="rightTd" style="width:150px;"><i class="info">*</i>销售方银行账号：</td>
+                <td class="leftTd">
+                    <input id="saleYhzh" name="saleYhzh" th:value="*{saleYhzh}" class="easyui-searchbox"
+                           data-options="prompt:'请选择...',editable:false,required:true,missingMessage:null,searcher:function(){getBankAccount('sale');},height:28,width:200"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="rightTd" style="width:150px;"><i class="info">*</i>购买方：</td>
+                <td class="leftTd">
+                    <input id="buyerCorpName" name="buyerCorpName" th:value="*{buyerCorpName}"/>
+                </td>
+                <td class="rightTd" style="width:150px;">购买方银行账号：</td>
+                <td class="leftTd">
+                    <input id="buyYhzh" name="buyYhzh" th:value="*{buyYhzh}" class="easyui-searchbox"
+                           data-options="prompt:'请选择...',editable:false,searcher:function(){getBankAccount('buy');},height:28,width:200"/>
+                </td>
+            </tr>
+            <tr>
+
+                <td class="rightTd" style="width:150px;"><i class="info">*</i>可结算部门：</td>
+                <td class="leftTd">
+                    <select name="setllDeptBH" id="setllDeptBH"
+                            data-options="required:true,missingMessage:null,panelMaxHeight:200,panelWidth:280,editable:false,width:200,height:28">
+                        <option th:each="item:${setllDept}"
+                                th:value="${item.values}"
+                                th:selected="${billApplyInfoDto.setllDeptBH eq item.values}"
+                                th:text="${item.name}">
+                        </option>
+                    </select>
+                </td>
+                <td class="rightTd" style="width:150px;"><i class="info">*</i>收支费项：</td>
+                <td class="leftTd">
+                    <input id="proceedName" name="proceedName" th:value="*{proceedName}" class="easyui-searchbox"
+                           data-options="prompt:'请选择...',editable:false,required:true,missingMessage:null,searcher:getProceed,height:28,width:200"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="rightTd" style="width:150px;"><i class="info">*</i>结算方式：</td>
+                <td class="leftTd">
+                    <input id="paymentMethod" name="paymentMethod" th:value="*{paymentMethod}" class="easyui-searchbox"
+                           data-options="prompt:'请选择...',editable:false,required:true,missingMessage:null,searcher:getPayment,height:28,width:200"/>
+                </td>
+                <td class="rightTd" style="width:150px;">是否挂账：</td>
+                <td class="leftTd">
+                    <input class="easyui-checkbox" th:checked="${billApplyInfoDto.onAccount=='T'?1:0}" data-options="
+                        onChange:function(checked){
+                        if(checked){
+                        $('#onAccount').val('T');
+                        } else{
+                        $('#onAccount').val('F');
+                        }
+                        }">&nbsp;
+                </td>
+
+            </tr>
+        </table>
+        <table cellspacing="0" cellPadding="0" class="addTable" style="margin: 0">
+            <tr>
+                <td class="rightTd" style="width:150px;"><i class="info">*</i>发票类型：</td>
+                <td class="leftTd">
+                    <select name="billType" class="easyui-combobox"
+                            data-options="panelMaxHeight:150,editable:false"
+                            style="width:200px;height:28px">
+                        <option th:each="item:${billType}"
+                                th:value="${item.values}"
+                                th:selected="${billApplyInfoDto.billType eq item.values}"
+                                th:text="${item.name}"></option>
+                    </select>
+                </td>
+                <td class="rightTd" style="width:150px;"><i class="info">*</i>发票金额：</td>
+                <td class="leftTd">
+                    <input name="billMoney" id="billMoney"
+                           data-options="required:true,missingMessage:null,editable:true,precision:2,groupSeparator:',',icons: [{
+                        iconCls:'icon-clear',
+                        handler: function(e){
+                            $(e.data.target).textbox('clear');
+                        }
+                    }]"
+                           style="width:200px;height:28px"
+                           th:value="*{billMoney}"/>
+                </td>
+            </tr>
+            </tr>
+            <tr>
+                <td class="rightTd" style="width:150px;">发票代码：</td>
+                <td class="leftTd">
+                    <input name="billCode" id="billCode" th:value="*{billCode}"
+                           data-options="panelMaxHeight:200,editable:true,width:200,height:28,icons: [{
+                        iconCls:'icon-clear',
+                        handler: function(e){
+                            $(e.data.target).textbox('clear');
+                        }
+                    }]"/>
+
+                </td>
+                <td class="rightTd" style="width:150px;">发票号码：</td>
+                <td class="leftTd">
+                    <input name="billNumber" id="billNumber" th:value="*{billNumber}"
+                           data-options="panelMaxHeight:200,editable:true,width:200,height:28,icons: [{
+                        iconCls:'icon-clear',
+                        handler: function(e){
+                            $(e.data.target).textbox('clear');
+                        }
+                    }]"/>
+                </td>
+
+            </tr>
+            <tr>
+                <td class="rightTd" style="width:150px;">税率(%)：</td>
+                <td class="leftTd">
+                    <input name="taxRate" id="taxRate" th:value="*{taxRate}"
+                           data-options="panelMaxHeight:200,min:0,max:100,precision:0,editable:true,width:200,height:28,icons: [{
+                        iconCls:'icon-clear',
+                        handler: function(e){
+                            $(e.data.target).textbox('clear');
+                        }
+                    }]"/>
+                </td>
+                <td class="rightTd" style="width:150px;">税额：</td>
+                <td class="leftTd">
+                    <input name="taxMoney" id="taxMoney" th:value="*{taxMoney}"
+                           data-options="panelMaxHeight:200,editable:true,precision:2,groupSeparator:',',width:200,height:28,icons: [{
+                        iconCls:'icon-clear',
+                        handler: function(e){
+                            $(e.data.target).textbox('clear');
+                        }
+                    }]"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="rightTd" style="width:150px;">不含税金额：</td>
+                <td class="leftTd">
+                    <input name="amountMoney" id="amountMoney" th:value="*{amountMoney}"
+                           data-options="panelMaxHeight:200,editable:true,precision:2,groupSeparator:',',width:200,height:28,icons: [{
+                        iconCls:'icon-clear',
+                        handler: function(e){
+                            $(e.data.target).textbox('clear');
+                        }
+                    }]"/>
+                </td>
+                <td class="rightTd" style="width:150px;">进项税档案：</td>
+                <td class="leftTd">
+                    <input id="jxsdaName" name="jxsdaName" class="easyui-searchbox" th:value="*{jxsdaName}"
+                           data-options="editable:false,searcher:function(){getProjects('jxsdaName');},height:28,width:200,icons:[{
+				iconCls:'icon-clear',
+				handler: function(e){
+					 $(e.data.target).textbox('setValue','');
+				}
+			}]">
+
+            </tr>
+            <tr>
+                </td>
+                <td class="rightTd" style="width:150px;">开票备注：</td>
+                <td class="leftTd">
+                    <input name="remarks" class="easyui-textbox"
+                           data-options="width:200,height:28" th:value="*{remarks}"/>
+                </td>
+                </td>
+                <td class="rightTd" style="width:150px;">摘要：</td>
+                <td class="leftTd">
+                    <input name="describe" class="easyui-textbox"
+                           data-options="width:200,height:28" th:value="*{describe}"/>
+                </td>
+            </tr>
+        </table>
+        <input hidden="true" name="id" id="id" th:value="*{id}"/>
+        <input hidden="true" name="saleCorpID" id="saleCorpID" th:value="*{saleCorpID}"/>
+        <input hidden="true" name="buyerCorpID" id="buyerCorpID" th:value="*{buyerCorpID}"/>
+        <input hidden="true" name="onAccount" id="onAccount" th:value="*{onAccount}"/>
+        <input hidden="true" name="saleKhyh" id="saleKhyh" th:value="*{saleKhyh}"/>
+        <input hidden="true" name="buyKhyh" id="buyKhyh" th:value="*{buyKhyh}"/>
+        <input hidden="true" name="proceedId" id="proceedId" th:value="*{proceedId}"/>
+    </form>
+    <div id="corpContent" Style="display: none;"></div>
+    <script th:inline="javascript">
+        $("#billCode").textbox();
+        $("#billNumber").textbox();
+        var taxRate = $('#taxRate').numberbox();
+        var billMoney = $('#billMoney').numberbox();
+        var tax = $('#taxMoney').numberbox();
+        var amount = $('#amountMoney').numberbox();
+
+        //费项计算
+        function subMoney() {
+            var billMoney = $("#billMoney").numberbox("getValue");
+            var taxRate = $("#taxRate").numberbox("getValue");
+            if (empty(taxRate)) {
+                taxRate = 0;
+                $("#taxRate").numberbox("setValue", 0);
+            }
+            var taxMoney = accMul(billMoney, accDiv(taxRate, 100));
+            var amountMoney = accSub(taxMoney, billMoney);
+            tax.numberbox("setValue", taxMoney);
+            amount.numberbox("setValue", amountMoney);
+        }
+
+        $(function () {
+            $(taxRate).numberbox({
+                onChange: function (newValue, oldValue) {
+                    subMoney();
+
+                }
+            });
+            $(billMoney).numberbox({
+                onChange: function (newValue, oldValue) {
+                    subMoney();
+                }
+            });
+            $("#buyerCorpName").searchbox({
+                prompt: '请选择...',
+                editable: false,
+                required: true,
+                missingMessage: null,
+                searcher: _searchBuyerCorp,
+                height: 28,
+                width: 200
+            })
+            //实现复选框
+            $("#setllDeptBH").combobox({
+                multiple: true,
+                separator: ';',
+                prompt: '请选择...',
+                formatter: function (row) {
+                    var opts = $(this).combobox('options');
+                    return '<input type="checkbox" class="combobox-checkbox">&nbsp;' + row[opts.textField];
+                },
+                onLoadSuccess: function () {
+                    var setllDeptBH = [[${billApplyInfoDto.setllDeptBH}]];
+                    if (!empty(setllDeptBH)) {
+                        $(this).combobox('setValues', setllDeptBH);
+                    } else {
+                        $(this).combobox('setValues', "");
+                    }
+                    var opts = $(this).combobox('options');
+                    var target = this;
+                    var values = $(target).combobox('getValues');
+                    $.map(values, function (value) {
+                        var el = opts.finder.getEl(target, value);
+                        el.find('input.combobox-checkbox')._propAttr('checked', true);
+                    })
+                    $(this).combobox("panel").parent("div").append("<div style='background: #eeeeee;height: 35px;padding: 5px;text-align: center'><button  style='border: 0;width: 80px;height: 25px' id='combox_select'>正选</button><button  style='border: 0;width: 80px;height: 25px' id='combox_close'>确定</button></div>");
+                },
+                onSelect: function (row) {
+                    var opts = $(this).combobox('options');
+                    var el = opts.finder.getEl(this, row[opts.valueField]);
+                    el.find('input.combobox-checkbox')._propAttr('checked', true);
+                },
+                onUnselect: function (row) {
+                    var opts = $(this).combobox('options');
+                    var el = opts.finder.getEl(this, row[opts.valueField]);
+                    el.find('input.combobox-checkbox')._propAttr('checked', false);
+                }
+            })
+            //全选（反选）
+            $("#combox_select").linkbutton({
+                onClick: function () {
+                    var str = $("#combox_select").linkbutton("options").text;
+                    var valueField = $("#setllDeptBH").combobox("options").valueField;
+                    var data = $("#setllDeptBH").combobox("getData");
+                    var selectVaues = [];
+                    if (is_eq("正选", str)) {
+                        $('#combox_select').linkbutton({text: '反选'});
+                        data.reduce(function (prev, current, index, array) {
+                            selectVaues.push(current[valueField]);
+                        }, selectVaues);
+
+                    } else {
+                        selectVaues.push(null);
+                        $('#combox_select').linkbutton({text: '正选'});
+                    }
+                    $("#setllDeptBH").combobox('setValues', selectVaues);
+
+                }
+            })
+            // 关闭下拉框
+            $("#combox_close").linkbutton({
+                onClick: function () {
+                    $('#setllDeptBH').combobox('hidePanel');
+
+                }
+            })
+        })
+
+        //查询销售方
+        function _searchSaleCorp(value) {
+            var corpParent = $('#corpContent').parent();
+            var corpOwn = $('#corpContent').clone();
+            corpOwn.hide();
+            $('#corpContent').dialog({
+                title: "【客商】选择器...",
+                iconCls: 'fa fa-check-square-o blue',
+                loadingMessage: '数据加载中,请稍等...',
+                modal: true,
+                height: 450,
+                width: 350,
+                top: '7%',
+                left: '30%',
+                inline: false,
+                border: true,
+                cls: 'c4',
+                constrain: true,
+                href: 'getCorpInfo',
+                queryParams: {
+                    keyword: value,
+                    corpType: 0
+                },
+                onClose: function () {
+                    corpOwn.appendTo(corpParent);
+                    $(this).dialog("destroy").remove();
+                }
+            });
+        }
+
+        //查询购买方
+        function _searchBuyerCorp(value) {
+            var corpParent = $('#corpContent').parent();
+            var corpOwn = $('#corpContent').clone();
+            corpOwn.hide();
+            $('#corpContent').dialog({
+                title: "【客商】选择器...",
+                iconCls: 'fa fa-check-square-o blue',
+                loadingMessage: '数据加载中,请稍等...',
+                modal: true,
+                height: 450,
+                width: 350,
+                top: '7%',
+                left: '30%',
+                inline: false,
+                border: true,
+                cls: 'c4',
+                constrain: true,
+                href: 'getCorpInfo',
+                queryParams: {
+                    keyword: value,
+                    corpType: 1
+                },
+                onClose: function () {
+                    corpOwn.appendTo(corpParent);
+                    $(this).dialog("destroy").remove();
+                }
+            });
+        }
+
+        //获取收支费项
+        function getProceed() {
+            $("body").append("<div id='proceedContent' Style='display: none;'></div>");
+            $('#proceedContent').dialog({
+                title: "【收支费项】选择器...",
+                iconCls: 'fa fa-check-square-o blue',
+                loadingMessage: '数据加载中,请稍等...',
+                modal: true,
+                height: 400,
+                width: 500,
+                top: '8%',
+                inline: false,
+                border: true,
+                cls: 'c4',
+                constrain: true,
+                href: 'getProceed',
+                onClose: function () {
+                    $(this).dialog("destroy").remove();
+                }
+            });
+        }
+
+        //获取结算方式
+        function getPayment() {
+            $("body").append("<div id='paymentContent' Style='display: none;'></div>");
+            $('#paymentContent').dialog({
+                title: "【结算方式】选择器...",
+                iconCls: 'fa fa-check-square-o blue',
+                loadingMessage: '数据加载中,请稍等...',
+                modal: true,
+                height: 400,
+                width: 500,
+                top: '8%',
+                inline: false,
+                border: true,
+                cls: 'c4',
+                constrain: true,
+                href: 'getPayment',
+                onClose: function () {
+                    $(this).dialog("destroy").remove();
+                }
+            });
+        }
+
+        //获取银行账号
+        function getBankAccount(action) {
+            var corpId=null;
+            if (is_eq("buy", action) && !empty($("#buyerCorpID").val())) {
+                corpId = $("#buyerCorpID").val();
+            } else if (is_eq("sale", action) && !empty($("#saleCorpID").val())) {
+                corpId = $("#saleCorpID").val();
+            } else {
+                return false;
+            }
+
+            $("body").append("<div id='cashBankListContent' Style='display: none;'></div>");
+            $('#cashBankListContent').dialog({
+                title: "【银行账号】选择器...",
+                iconCls: 'fa fa-check-square-o blue',
+                loadingMessage: '数据加载中,请稍等...',
+                modal: true,
+                height: 400,
+                width: 500,
+                top: '8%',
+                inline: false,
+                border: true,
+                cls: 'c4',
+                constrain: true,
+                href: 'getBankAccount',
+                queryParams: {
+                    action: action,
+                    corpId: corpId
+                },
+                onClose: function () {
+                    $(this).dialog("destroy").remove();
+                }
+            });
+
+        }
+
+        //获取辅助项目
+        function getProjects(value) {
+            $("body").append("<div id='projectsListContent' Style='display: none;'></div>");
+            $('#projectsListContent').dialog({
+                title: "【进项税档案】选择器...",
+                iconCls: 'fa fa-check-square-o blue',
+                loadingMessage: '数据加载中,请稍等...',
+                modal: true,
+                height: 400,
+                width: 500,
+                top: '8%',
+                inline: false,
+                border: true,
+                cls: 'c4',
+                constrain: true,
+                href: 'getProjects',
+                queryParams: {
+                    value: value
+                },
+                onClose: function () {
+                    $(this).dialog("destroy").remove();
+                }
+            });
+        }
+
+    </script>
+</div>
+</html>

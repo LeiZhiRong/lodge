@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<form id="userForm" th:action="@{saveUserInfo}" th:object="${userInfo}" method="post">
+    <table cellspacing="0" cellPadding="0" class="addTable">
+        <tr>
+            <td class="rightTd" width="100px">用户状态：</td>
+            <td class="leftTd">
+                <input class="easyui-switchbutton"  th:checked="${userInfo.status==1?1:0}"
+                       style="height:28px;"
+                       data-options="onText:'启用',offText:'停用',
+                        onChange:function(checked){
+                        if(checked){
+                        $('#status').val(1);
+                        } else{
+                        $('#status').val(0);
+                        }
+                        }">
+            </td>
+        </tr>
+        <tr>
+            <td class="rightTd" width="100px">用户编号：</td>
+            <td class="leftTd">
+                <input name="loginAccount" class="easyui-textbox" data-options="required:true,missingMessage:null"
+                       style="width:150px;height:28px;"
+                       th:value="*{loginAccount}"/>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="rightTd" width="100px">用户名称：</td>
+            <td class="leftTd">
+                <input name="userName" class="easyui-textbox" data-options="required:true,missingMessage:null"
+                       style="width:150px;height:28px;"
+                       th:value="*{userName}"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="rightTd" width="120px">岗位：</td>
+            <td class="leftTd">
+                <select name="station" class="easyui-combobox"
+                        data-options="panelMaxHeight:200,editable:false"
+                        style="width:150px;height:28px;">
+                    <option th:each="item:${stations}"
+                            th:value="${item.values}"
+                            th:selected="${userInfo.station eq item.values}"
+                            th:text="${item.name}"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="rightTd" width="100px">登录密码：</td>
+            <td class="leftTd">
+                <input name="LoginPassword" class="easyui-passwordbox" style="width:150px;height:28px;"
+                       th:value="*{loginPassword}"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="rightTd" width="100px">管理部门：</td>
+            <td class="leftTd">
+                <input id="deptID" name="deptID" th:value="*{deptID}" class="easyui-searchbox"
+                       data-options="prompt:'请选择...',multiline:true,editable:false,searcher:_searchDeptID,height:60,width:400">
+            </td>
+        </tr>
+        <tr>
+            <td class="rightTd" width="100px">结算部门：</td>
+            <td class="leftTd">
+                <input id="settID" name="settID" th:value="*{settID}" class="easyui-searchbox"
+                       data-options="prompt:'请选择...',multiline:true,editable:false,searcher:_searchSettID,height:60,width:400">
+            </td>
+        </tr>
+
+    </table>
+    <input hidden="true" name="id" id="id" th:value="*{id}"/>
+    <input hidden="true" name="status" id="status" th:value="*{status}"/>
+</form>
+<div id="deptContent" Style="display: none;"></div>
+
+<script type="text/javascript" th:inline="none">
+    //管理部门列表
+    function _searchDeptID(value) {
+        var deptParent = $('#deptContent').parent();
+        var deptOwn = $('#deptContent').clone();
+        deptOwn.hide();
+        $('#deptContent').dialog({
+            title: "【部门】选择器...",
+            loadingMessage: false,
+            modal: true,
+            height: 400,
+            width: 350,
+            top:'10%',
+            left:'35%',
+            border: true,
+            constrain: true,
+            href: 'getDeptInfo',
+            queryParams: {
+                keyword: value
+            },
+            onClose: function () {
+                deptOwn.appendTo(deptParent);
+                $(this).dialog("destroy").remove();
+            },
+            buttons: [{
+                iconCls: 'e-icon2 fa fa-check red',
+                text: '选择',
+                handler: function () {
+                    var rows = $('#deptTree').tree('getChecked', ['checked', 'indeterminate']);
+                    var ids = $(rows).map(function () {
+                        if (is_eq("F", this.arg1))
+                            return this.arg;
+                    }).get().join(";");
+                     $("#deptID").textbox("setValue", ids);
+                    $('#deptContent').dialog('close');
+
+                }
+            }, {
+                iconCls: 'e-icon2 fa fa-reply',
+                text: '关闭',
+                handler: function () {
+                    $('#deptContent').dialog('close');
+                }
+            }]
+        });
+    }
+    //结算部门列表
+    function _searchSettID(value) {
+        var deptParent = $('#deptContent').parent();
+        var deptOwn = $('#deptContent').clone();
+        deptOwn.hide();
+        $('#deptContent').dialog({
+            title: "【部门】选择器...",
+            loadingMessage: false,
+            modal: true,
+            height: 400,
+            width: 350,
+            top:'10%',
+            left:'35%',
+            border: true,
+            constrain: true,
+            href: 'getDeptInfo',
+            queryParams: {
+                keyword: value
+            },
+            onClose: function () {
+                deptOwn.appendTo(deptParent);
+                $(this).dialog("destroy").remove();
+            },
+            buttons: [{
+                iconCls: 'fa fa-check red',
+                text: '选择',
+                handler: function () {
+                    var rows = $('#deptTree').tree('getChecked', ['checked', 'indeterminate']);
+                    var ids = $(rows).map(function () {
+                        if (is_eq("F", this.arg1))
+                            return this.arg;
+                    }).get().join(";");
+                    $("#settID").textbox("setValue", ids);
+                    $('#deptContent').dialog('close');
+
+                }
+            }, {
+                iconCls: 'fa fa-reply',
+                text: '关闭',
+                handler: function () {
+                    $('#deptContent').dialog('close');
+                }
+            }]
+        });
+    }
+</script>
+</body>
+</html>

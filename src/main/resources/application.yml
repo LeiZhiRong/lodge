@@ -1,0 +1,109 @@
+# Spring配置
+spring:
+  # 缓存配置
+  cache:
+    type: ehcache
+    ehcache:
+      config: classpath:ehcache.xml
+  jpa:
+    database: sql_server
+    database-platform: org.hibernate.dialect.SQLServer2008Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    properties:
+      hibernate:
+        jdbc:
+          batch_size: 500
+          batch_versioned_data: true
+        order_inserts: true
+        order_updates: true
+    open-in-view: false
+  mvc:
+    static-path-pattern: /static/**
+    resources:
+      static-locations: classpath:/static/
+    view:
+      suffix: .html
+  # thymeleaf配置
+  thymeleaf:
+    cache: false
+    encoding: utf-8
+    servlet:
+      content-type: text/html
+    mode: HTML
+  jackson:
+    # 设置属性命名策略,对应jackson下PropertyNamingStrategy中的常量值，SNAKE_CASE-返回的json驼峰式转下划线，json body下划线传到后端自动转驼峰式
+    property-naming-strategy: LOWER_CAMEL_CASE
+    # 全局设置@JsonFormat的格式pattern
+    date-format: yyyy-MM-dd HH:mm:ss
+    # 当地时区
+    locale: zh
+    # 设置全局时区
+    time-zone: GMT+8
+    # 常用，全局设置pojo或被@JsonInclude注解的属性的序列化方式
+    default-property-inclusion: NON_NULL #不为空的属性才会序列化,具体属性可看JsonInclude.Include
+    # 常规默认,枚举类SerializationFeature中的枚举属性为key，值为boolean设置jackson序列化特性,具体key请看SerializationFeature源码
+    serialization:
+      WRITE_DATES_AS_TIMESTAMPS: true # 返回的java.util.date转换成timestamp
+      FAIL_ON_EMPTY_BEANS: true # 对象为空时是否报错，默认true
+    # 枚举类DeserializationFeature中的枚举属性为key，值为boolean设置jackson反序列化特性,具体key请看DeserializationFeature源码
+    deserialization:
+      # 常用,json中含pojo不存在属性时是否失败报错,默认true
+      FAIL_ON_UNKNOWN_PROPERTIES: false
+    # 枚举类MapperFeature中的枚举属性为key，值为boolean设置jackson ObjectMapper特性
+    # ObjectMapper在jackson中负责json的读写、json与pojo的互转、json tree的互转,具体特性请看MapperFeature,常规默认即可
+    mapper:
+      # 使用getter取代setter探测属性，如类中含getName()但不包含name属性与setName()，传输的vo json格式模板中依旧含name属性
+      USE_GETTERS_AS_SETTERS: true #默认false
+    # 枚举类JsonParser.Feature枚举类中的枚举属性为key，值为boolean设置jackson JsonParser特性
+    # JsonParser在jackson中负责json内容的读取,具体特性请看JsonParser.Feature，一般无需设置默认即可
+    parser:
+      ALLOW_SINGLE_QUOTES: true # 是否允许出现单引号,默认false
+    # 枚举类JsonGenerator.Feature枚举类中的枚举属性为key，值为boolean设置jackson JsonGenerator特性，一般无需设置默认即可
+    # JsonGenerator在jackson中负责编写json内容,具体特性请看JsonGenerator.Feature
+  servlet:
+    multipart:
+      enabled: true
+      max-request-size: 100MB
+      max-file-size: 20MB
+      file-size-threshold: 20MB
+  application:
+    name: lodge
+# Server配置
+server:
+  port: 8080
+  compression:
+    enabled: true
+    min-response-size: 1024
+    mime-types:
+      - image/png
+      - image/jpeg
+      - image/jpg
+      - text/html
+      - application/javascript
+      - text/css
+      - application/octet-stream
+      - application/json
+  servlet:
+    encoding:
+      charset: utf-8
+      force: true
+      enabled: true
+    context-path: /lodge
+    session:
+      timeout: 60m
+jasypt:
+  encryptor:
+    password: EbfYkitulv73I2p0mXI50JMXoaxZTKJ0
+jwt:
+  # 密匙KEY
+  secret: EbfYkitulv73I2p0mXI50JMXoaxZTKJ0
+  # HeaderKEY
+  tokenHeader: Authorization
+  # Token前缀字符
+  tokenPrefix: Shgs-
+  # 过期时间 单位秒 1天后过期=86400 7天后过期=604800
+  expiration: 604800

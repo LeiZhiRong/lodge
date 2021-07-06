@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <form id="corpBankForm" th:action="@{saveCorpBank}" th:object="${bankAccount}" method="post">
+            <table cellspacing="0" cellPadding="0" class="addTable">
+                <tr>
+                    <td class="rightTd" style="width:100px;">启用状态：</td>
+                    <td  class="leftTd">
+                        <input class="easyui-switchbutton" th:checked="${bankAccount.ztbz=='T'?1:0}"
+                               style="height:28px;"
+                               data-options="onText:'启用',offText:'停用',
+                        onChange:function(checked){
+                        if(checked){
+                        $('#ztbz').val('T');
+                        } else{
+                        $('#ztbz').val('F');
+                        }
+                        }">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" width="100px">开户银行：</td>
+                    <td>
+                        <input name="khyh" class="easyui-textbox" data-options="required:true,missingMessage:null" style="width:200px;height:28px;"
+                               th:value="*{khyh}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" width="100px">银行账号：</td>
+                    <td>
+                        <input name="yhzh" class="easyui-textbox" data-options="required:true,missingMessage:null" style="width:200px;height:28px;" th:value="*{yhzh}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" style="width:100px;">是否默认：</td>
+                    <td  class="leftTd">
+                        <input class="easyui-checkbox" th:checked="${bankAccount.moren=='T'?1:0}"
+                               data-options="
+                        onChange:function(checked){
+                        if(checked){
+                        $('#moren').val('T');
+                        } else{
+                        $('#moren').val('F');
+                        }
+                        }">
+                    </td>
+                </tr>
+
+            </table>
+            <input hidden="true" name="ztbz" id="ztbz" th:value="*{ztbz}"/>
+            <input hidden="true" name="moren" id="moren" th:value="*{moren}"/>
+            <input hidden="true" name="id" id="id" th:value="*{id}"/>
+            <input hidden="true" name="corpId" id="corpId" th:value="*{corpId}"/>
+         </form>
+    </body>
+</html>

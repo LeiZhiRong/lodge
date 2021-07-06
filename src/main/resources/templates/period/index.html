@@ -1,0 +1,30 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout/header}">
+    <div layout:fragment="content"  style="padding: 5px;">
+        <table id="periodDG">
+            <thead>
+            <tr>
+                <th th:each="item:${columns}" th:field="${item.field}" th:width="${item.width}"
+                    th:sortable="${item.sortable} " th:hidden="${item.hidden}" th:text="${item.title}"></th>
+            </tr>
+            </thead>
+        </table>
+        <div id="top-toolbar">
+            <div class="m-toolbar">
+                <div class="m-left e-icon5 ">
+                    <button class="easyui-linkbutton"
+                            data-options="plain:true,height:28,iconCls:'e-icon1 fa fa-plus'"
+                            th:onclick="mergeRow(null)">增加
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="period_content" Style="display: none;padding:10px 30px;"></div>
+        <script type="text/javascript" th:src="@{/static/js/plugins/jqueryform.js}"></script>
+        <script type="text/javascript" th:inline="none" th:src="@{/static/js/admin/period.js}"></script>
+
+    </div>
+</html>

@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<form id="reveExpeItemForm" th:action="@{saveReveExpeItem}" th:object="${reveExpeItemDto}" method="post">
+    <fieldset class=" x-fieldset ">
+        <legend class="x-fieldset-header" style="user-select: none;">基本设置</legend>
+        <table cellspacing="0" cellPadding="0" class="addTable" style="margin-bottom: 10px;">
+            <tr>
+                <td class="rightTd" style="width:150px;">启用状态：</td>
+                <td class="leftTd">
+                    <input class="easyui-switchbutton" th:checked="${reveExpeItemDto.ztbz=='T'?1:0}"
+                           style="height:28px;"
+                           data-options="onText:'启用',offText:'停用',
+                        onChange:function(checked){
+                        if(checked){
+                        $('#ztbz').val('T');
+                        } else{
+                        $('#ztbz').val('F');
+                        }
+                        }">
+                </td>
+                <td class="rightTd" style="width:150px;">借贷方向：</td>
+                <td class="leftTd">
+                    <select name="balance" class="easyui-combobox"
+                            data-options="panelMaxHeight:100,editable:false"
+                            style="width:80px;height:28px">
+                        <option th:each="item:${balance}"
+                                th:value="${item.values}"
+                                th:selected="${reveExpeItemDto.balance eq item.values}"
+                                th:text="${item.name}"></option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td class="rightTd" style="width:150px;">收支类型：</td>
+                <td class="leftTd">
+                    <select name="reType" class="easyui-combobox"
+                            data-options="required:true,missingMessage:null,panelMaxHeight:100,editable:false"
+                            style="width:200px;height:28px">
+                        <option th:each="item:${retypelist}"
+                                th:value="${item.name}"
+                                th:selected="${reveExpeItemDto.reType!=null && reveExpeItemDto.reType eq item.name}"
+                                th:text="${item.name}"></option>
+                    </select>
+                </td>
+                <td class="rightTd" style="width:150px;">收支同向：</td>
+                <td class="leftTd">
+                    <input class="easyui-checkbox" th:checked="${reveExpeItemDto.syntropy=='T'?1:0}" data-options="
+                        onChange:function(checked){
+                        if(checked){
+                        $('#syntropy').val('T');
+                        } else{
+                        $('#syntropy').val('F');
+                        }
+                        }">
+                </td>
+            </tr>
+            <tr>
+
+                <td class="rightTd" style="width:150px;">科目编号：</td>
+                <td class="leftTd">
+                    <input id="cashBankBh" class="easyui-searchbox" th:value="*{cashBankBh}"
+                           style="width:200px;height:28px"
+                           data-options="required:true,missingMessage:null,editable:false,searcher:getCashBank,height:28,icons:[{
+				iconCls:'icon-clear',
+				handler: function(e){
+					 $(e.data.target).textbox('setValue','');
+					 $('#cashBankId').val('');
+				}
+			}]">
+                </td>
+                <td class="rightTd" style="width:100px;">摘要格式：</td>
+                <td class="leftTd">
+                    <input id="describe" name="describe" th:value="*{describe}" class="easyui-textbox"
+                           data-options="prompt:'摘要格式如：{部门}售{客商}',height:28,width:250">
+                </td>
+
+            </tr>
+        </table>
+    </fieldset>
+    <fieldset class=" x-fieldset ">
+        <legend class="x-fieldset-header" style="user-select: none;">入账策略</legend>
+        <table cellspacing="0" cellPadding="0" class="addTable" style="margin-bottom: 10px;">
+            <tr>
+                <td class="rightTd" style="width:150px;"><i class="info">*</i>表单状态：</td>
+                <td class="leftTd">
+                    <select id="auditStatus" name="auditStatus" class="easyui-combobox"
+                            data-options="editable:false,height:28,panelHeight:200"
+                            style="width:200px;">
+                        <option th:each="item:${auditStatus}"
+                                th:value="${item.values}"
+                                th:selected="${reveExpeItemDto.auditStatus eq item.values}"
+                                th:text="${item.name}"></option>
+                    </select>
+                </td>
+                <td class="rightTd" style="width:150px;">是否挂账：</td>
+                <td class="leftTd">
+                    <input class="easyui-checkbox" th:checked="${reveExpeItemDto.onAccount=='T'?1:0}" data-options="
+                        onChange:function(checked){
+                        if(checked){
+                        $('#onAccount').val('T');
+                        } else{
+                        $('#onAccount').val('F');
+                        }
+                        }">
+                </td>
+
+            </tr>
+            <tr>
+                <td class="rightTd" style="width:150px;"><i class="info">*</i>结算方式：</td>
+                <td>
+                    <input id="paymentMethod" name="paymentMethod" th:value="*{paymentMethod}" />
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <fieldset class=" x-fieldset ">
+        <legend class="x-fieldset-header" style="user-select: none;">辅助核算</legend>
+        <table cellspacing="0" cellPadding="0" class="addTable" style="margin-bottom: 10px;">
+            <tr>
+                <td class="rightTd" style="width:150px;">收支项目：</td>
+                <td class="leftTd">
+                    <input id="szxmName" name="szxmName" class="easyui-searchbox" th:value="*{szxmName}"
+                           data-options="editable:false,searcher:function(){getProjects('szxmName');},height:28,width:200,icons:[{
+				iconCls:'icon-clear',
+				handler: function(e){
+					 $(e.data.target).textbox('setValue','');
+				}
+			}]">
+                </td>
+                <td class="rightTd" style="width:150px;">营业项目：</td>
+                <td class="leftTd">
+                    <input id="yinyexmName" name="yinyexmName" class="easyui-searchbox" th:value="*{yinyexmName}"
+                           data-options="editable:false,searcher:function(){getProjects('yinyexmName');},height:28,width:200,icons:[{
+				iconCls:'icon-clear',
+				handler: function(e){
+					 $(e.data.target).textbox('setValue','');
+				}
+			}]">
+                </td>
+            </tr>
+            <tr>
+                <td class="rightTd" style="width:150px;">物料基本分类：</td>
+                <td class="leftTd">
+                    <input id="wljbflName" name="wljbflName" class="easyui-searchbox" th:value="*{wljbflName}"
+                           data-options="editable:false,searcher:function(){getProjects('wljbflName');},height:28,width:200,icons:[{
+				iconCls:'icon-clear',
+				handler: function(e){
+					 $(e.data.target).textbox('setValue','');
+				}
+			}]">
+                </td>
+                <td class="rightTd" style="width:150px;">物流费用项目：</td>
+                <td class="leftTd">
+                    <input id="wlfyxmName" name="wlfyxmName" class="easyui-searchbox" th:value="*{wlfyxmName}"
+                           data-options="editable:false,searcher:function(){getProjects('wlfyxmName');},height:28,width:200,icons:[{
+				iconCls:'icon-clear',
+				handler: function(e){
+					 $(e.data.target).textbox('setValue','');
+				}
+			}]">
+                </td>
+            </tr>
+            <tr>
+                <td class="rightTd" style="width:150px;">部门：</td>
+                <td class="leftTd">
+                    <input id="deptName" class="easyui-searchbox" th:value="*{deptName}"
+                           data-options="editable:false,searcher:getDeptInfo,height:28,width:200,icons:[{
+				iconCls:'icon-clear',
+				handler: function(e){
+					 $(e.data.target).textbox('setValue','');
+					 $('#deptId').val('');
+				}
+			}]">
+                </td>
+                <td class="rightTd" style="width:150px;">客商：</td>
+                <td class="leftTd">
+                    <input id="saleCorpName" class="easyui-searchbox" th:value="*{saleCorpName}"
+                           data-options="editable:false,searcher:getCorpInfo,height:28,width:200,icons:[{
+				iconCls:'icon-clear',
+				handler: function(e){
+					 $(e.data.target).textbox('setValue','');
+					 $('#saleCorpId').val('');
+				}
+			}]">
+                </td>
+            </tr>
+            <tr>
+                <td class="rightTd" style="width:150px;">地区分类码：</td>
+                <td class="leftTd">
+                    <input id="dqflmName" name="dqflmName" class="easyui-searchbox" th:value="*{dqflmName}"
+                           data-options="editable:false,searcher:function(){getProjects('dqflmName');},height:28,width:200,icons:[{
+				iconCls:'icon-clear',
+				handler: function(e){
+					 $(e.data.target).textbox('setValue','');
+				}
+			}]">
+                </td>
+                <td class="rightTd" style="width:150px;">进项税档案：</td>
+                <td class="leftTd">
+                    <input id="jxsdaName" name="jxsdaName" class="easyui-searchbox" th:value="*{jxsdaName}"
+                           data-options="editable:false,searcher:function(){getProjects('jxsdaName');},height:28,width:200,icons:[{
+				iconCls:'icon-clear',
+				handler: function(e){
+					 $(e.data.target).textbox('setValue','');
+				}
+			}]">
+                </td>
+            </tr>
+        </table>
+    </fieldset>
+    <input hidden="true" name="id" th:value="*{id}"/>
+    <input hidden="true" id="cashBankId" name="cashBankId" th:value="*{cashBankId}"/>
+    <input hidden="true" name="ztbz" id="ztbz" th:value="*{ztbz}"/>
+    <input hidden="true" name="proceedTypeId" id="proceedTypeId" th:value="*{proceedTypeId}"/>
+    <input hidden="true" name="saleCorpId" id="saleCorpId" th:value="*{saleCorpId}"/>
+    <input hidden="true" name="deptId" id="deptId" th:value="*{deptId}"/>
+    <input hidden="true" name="syntropy" id="syntropy" th:value="*{syntropy}"/>
+    <input hidden="true" name="onAccount" id="onAccount" th:value="*{onAccount}"/>
+</form>
+<script type="text/javascript" th:inline="none">
+    $(function () {
+        $("#paymentMethod").combotree({
+            prompt:'请选择...',
+            idField:'text',
+            treeField:'text',
+            multiple:true,
+            checkbox:true,
+            onlyLeafCheck:true,
+            editable:false,
+            panelMaxHeight : 200,
+            panelWidth : 300,
+            height:28,
+            width:200,
+            url:'getPaymentMethod',
+            onClick: function (node) {
+                if (node.checked) {
+                    $(this).combotree('uncheck', node.target);
+                } else {
+                    $(this).combotree('check', node.target);
+                }
+            },
+            onLoadSuccess:function () {
+                $(".tree-icon,.tree-file").removeClass("tree-icon tree-file");
+                $(".tree-icon,.tree-folder").removeClass("tree-icon tree-folder tree-folder-open tree-folder-closed");
+            }
+        });
+
+    })
+    //获取科目编码
+    function getCashBank(value) {
+        $("body").append("<div id='cashBankContent' Style='display: none;'></div>");
+        $('#cashBankContent').dialog({
+            title: "【科目】选择器...",
+            iconCls: 'fa fa-check-square-o red',
+            loadingMessage: '数据加载中,请稍等...',
+            modal: true,
+            height: 400,
+            width: 500,
+            top: '8%',
+            href: 'getCashBank',
+            // queryParams: {
+            //     value: value
+            // },
+            onClose: function () {
+                var _cashBankid = $("#cashBankId").val();
+                if (empty(_cashBankid))
+                    $("#cashBankBh").searchbox("setValue", "");
+                $(this).dialog("destroy").remove();
+            }
+        });
+    }
+
+    //获取客商信息
+    function getCorpInfo(value) {
+        $("body").append("<div id='corpInfoListContent' Style='display: none;'></div>");
+        $('#corpInfoListContent').dialog({
+            title: "【客商】选择器...",
+            iconCls: 'fa fa-check-square-o red',
+            loadingMessage: '数据加载中,请稍等...',
+            modal: true,
+            height: 400,
+            width: 500,
+            top: '8%',
+            href: 'getCorpInfo',
+            onClose: function () {
+                var _saleCorpId = $("#saleCorpId").val();
+                if (empty(_saleCorpId))
+                    $("#saleCorpName").searchbox("setValue", "");
+                $(this).dialog("destroy").remove();
+            }
+        });
+    }
+
+    //获取辅助项目
+    function getProjects(value) {
+        $("body").append("<div id='projectsListContent' Style='display: none;'></div>");
+        $('#projectsListContent').dialog({
+            title: "【辅助项目】选择器...",
+            iconCls: 'fa fa-check-square-o red',
+            loadingMessage: '数据加载中,请稍等...',
+            modal: true,
+            height: 400,
+            width: 500,
+            top: '8%',
+            href: 'getProjects',
+            queryParams: {
+                value: value
+            },
+            onClose: function () {
+                $(this).dialog("destroy").remove();
+            }
+        });
+    }
+
+    //获取部门信息getDeptInfo
+    function getDeptInfo(value) {
+        $("body").append("<div id='deptListContent' Style='display: none;'></div>");
+        $('#deptListContent').dialog({
+            title: "【部门】选择器...",
+            iconCls: 'fa fa-check-square-o red',
+            loadingMessage: '数据加载中,请稍等...',
+            modal: true,
+            height: 400,
+            width: 500,
+            top: '8%',
+            href: 'getDeptInfo',
+            onClose: function () {
+                var _deptId = $("#deptId").val();
+                if (empty(_deptId))
+                    $("#deptName").searchbox("setValue", "");
+                $(this).dialog("destroy").remove();
+            }
+        });
+    }
+</script>
+</body>
+</html>

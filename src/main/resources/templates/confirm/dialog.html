@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<!--suppress ThymeleafVariablesResolveInspection -->
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<div class="easyui-navpanel" style="padding:10px;">
+    <form id="confirmForm" th:action="@{saveConfirmInfo}" th:object="${billApplyInfoDto}" method="post">
+        <table cellspacing="0" cellPadding="0" class="addTable">
+            <tr>
+                <td class="rightTd" width="120px">单据编号：</td>
+                <td colspan="3" class="leftTd">
+                    <input id="applyBH" name="applyBH" th:value="*{applyBH}" class="easyui-textbox"
+                           data-options="height:28,width:200,editable:false"/>
+                </td>
+            </tr>
+            <tr>
+            <tr>
+                <td class="rightTd" width="120px">销售方：</td>
+                <td class="leftTd">
+                    <input id="saleCorpName" name="saleCorpName" th:value="*{saleCorpName}" class="easyui-textbox"
+                           data-options="height:28,width:200,editable:false"/>
+                </td>
+                <td class="rightTd" width="120px">购买方：</td>
+                <td class="leftTd">
+                    <input id="buyerCorpName" name="buyerCorpName" th:value="*{buyerCorpName}" class="easyui-textbox"
+                           data-options="editable:false,height:28,width:200"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="rightTd" width="120px">申请部门：</td>
+                <td class="leftTd">
+                    <input name="applyDeptBH" id="applyDeptBH" th:value="*{applyDeptBH}" class="easyui-textbox"
+                           data-options="panelMaxHeight:200,editable:false,width:200,height:28"/>
+
+                </td>
+                <td class="rightTd" width="120px">发票类型：</td>
+                <td class="leftTd">
+                    <input name="billTypeName" id="billTypeName" th:value="*{billTypeName}" class="easyui-textbox"
+                           data-options="panelMaxHeight:200,editable:false,width:200,height:28"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="rightTd" width="120px">发票金额：</td>
+                <td class="leftTd">
+                    <input name="billMoney" id="billMoney" class="easyui-numberbox"
+                           data-options="editable:false,precision:2,groupSeparator:','"
+                           style="width:200px;height:28px"
+                           th:value="*{billMoney}"/>
+                </td>
+                <td class="rightTd" width="120px">备注：</td>
+                <td class="leftTd">
+                    <input name="remarks" id="remarks" th:value="*{remarks}" class="easyui-textbox"
+                           data-options="panelMaxHeight:200,editable:false,width:200,height:28"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="rightTd" width="120px">发票代码：</td>
+                <td class="leftTd">
+                    <input name="billCode" id="billCode"
+                           data-options="panelMaxHeight:200,editable:true,width:200,height:28,icons: [{
+                        iconCls:'icon-clear',
+                        handler: function(e){
+                            $(e.data.target).textbox('clear');
+                        }
+                    }]"/>
+
+                </td>
+                <td class="rightTd" width="120px">发票号码：</td>
+                <td class="leftTd">
+                    <input name="billNumber" id="billNumber"
+                           data-options="panelMaxHeight:200,editable:true,width:200,height:28,icons: [{
+                        iconCls:'icon-clear',
+                        handler: function(e){
+                            $(e.data.target).textbox('clear');
+                        }
+                    }]"/>
+                </td>
+
+            </tr>
+            <tr>
+                <td class="rightTd" width="120px">税率(%)：</td>
+                <td class="leftTd">
+                    <input name="taxRate" id="taxRate"
+                           data-options="panelMaxHeight:200,min:0,max:100,precision:0,editable:true,width:200,height:28,icons: [{
+                        iconCls:'icon-clear',
+                        handler: function(e){
+                            $(e.data.target).textbox('clear');
+                        }
+                    }]"/>
+                </td>
+                <td class="rightTd" width="120px">税额：</td>
+                <td class="leftTd">
+                    <input name="taxMoney" id="taxMoney"
+                           data-options="panelMaxHeight:200,editable:true,precision:2,groupSeparator:',',width:200,height:28,icons: [{
+                        iconCls:'icon-clear',
+                        handler: function(e){
+                            $(e.data.target).textbox('clear');
+                        }
+                    }]"/>
+                </td>
+            </tr>
+            <tr>
+                <td class="rightTd" width="120px">不含税金额：</td>
+                <td colspan="3" class="leftTd">
+                    <input name="amountMoney" id="amountMoney"
+                           data-options="panelMaxHeight:200,editable:true,precision:2,groupSeparator:',',width:200,height:28,icons: [{
+                        iconCls:'icon-clear',
+                        handler: function(e){
+                            $(e.data.target).textbox('clear');
+                        }
+                    }]"/>
+                </td>
+            </tr>
+        </table>
+        <input hidden="true" name="id" id="id" th:value="*{id}"/>
+        <input hidden="true" name="saleCorpID" id="saleCorpID" th:value="*{saleCorpID}"/>
+        <input hidden="true" name="buyerCorpID" id="buyerCorpID" th:value="*{buyerCorpID}"/>
+    </form>
+    <div id="corpContent" Style="display: none;"></div>
+    <script th:inline="javascript">
+        $("#billCode").textbox();
+        $("#billNumber").textbox();
+        $('#taxRate').numberbox();
+        var tax= $('#taxMoney').numberbox();
+        var amount= $('#amountMoney').numberbox();
+        $(function () {
+            $("#taxRate").numberbox({
+                onChange: function (newValue, oldValue) {
+                    subMoney();
+
+                }
+            }).numberbox("setValue", "13");
+            //enter键处理
+            $('#billCode').textbox('textbox').bind('keydown', function (e) {
+                if (e.keyCode == 13) {
+                    $('#billNumber').textbox('textbox').focus();
+                }
+            });
+            $('#billNumber').textbox('textbox').bind('keydown', function (e) {
+                if (e.keyCode == 13) {
+                    $('#taxRate').textbox('textbox').focus();
+                }
+            });
+            $('#taxRate').textbox('textbox').bind('keydown', function (e) {
+                if (e.keyCode == 13) {
+                    $('#taxMoney').textbox('textbox').focus();
+                }
+            });
+            $('#taxMoney').textbox('textbox').bind('keydown', function (e) {
+                if (e.keyCode == 13) {
+                    $('#amountMoney').textbox('textbox').focus();
+                }
+            });
+            $('#amountMoney').textbox('textbox').bind('keydown', function (e) {
+                if (e.keyCode == 13) {
+                    savaForm();
+                }
+            });
+        })
+
+        //费项计算
+        function subMoney() {
+            var billMoney = [[${billApplyInfoDto.billMoney}]];
+            var taxRate = $("#taxRate").numberbox("getValue");
+            if(empty(taxRate)){
+                taxRate=0;
+                $("#taxRate").numberbox("setValue",0);
+            }
+            var taxMoney = accMul(billMoney, accDiv(taxRate,100));
+            var amountMoney = accSub(taxMoney,billMoney);
+            tax.numberbox("setValue",taxMoney);
+            amount.numberbox("setValue",amountMoney);
+        }
+
+        //开票确认
+        function savaForm() {
+            $.messager.confirm({
+                msg: '是否确认开票？',
+                title: '提示',
+                top: '10%',
+                fn: function (r) {
+                    if (r) {
+                        if (!$("#confirmForm").form('enableValidation').form('validate'))
+                            return false;
+                        var actiform = $("#confirmForm");
+                        LG.ajaxSubmitForm(actiform, function (data) {
+                            if (data.code == 1) {
+                                $('#confirmGrid').datagrid('reload');
+                                $('#confirmContent').dialog('destroy').remove();
+                            } else {
+                                LG.alert("error", data.message);
+                            }
+                        })
+                    }
+                }
+            });
+        }
+
+    </script>
+</div>
+</html>

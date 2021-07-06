@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<form id="roleForm" th:action="@{saveCusType}" th:object="${customType}" method="post">
+    <table cellspacing="0" cellPadding="0" class="addTable">
+        <tr>
+            <td class="rightTd" style="width:100px;">所属类型：</td>
+            <td class="leftTd">
+                <select name="pid"  class="easyui-combobox"
+                        data-options="panelMaxHeight:200,editable:false"
+                        style="width:200px;height:28px;">
+                    <option th:each="item:${parent}"
+                            th:value="${item.id}"
+                            th:selected="${customType.pid eq item.id}"
+                            th:text="${item.name}"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="rightTd"style="width:100px;">类型名称：</td>
+            <td>
+                <input name="typeName" class="easyui-textbox" data-options="required:true,missingMessage:null"
+                       style="width:200px;height:28px;"
+                       th:value="*{typeName}"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="rightTd" style="width:100px;">类型编码：</td>
+            <td>
+                <input name="typeCode" class="easyui-textbox" data-options="required:true,missingMessage:null"
+                       style="width:200px;height:28px;"
+                       th:value="*{typeCode}"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="rightTd" style="width:100px;">排序号：</td>
+            <td>
+                <input name="orders" class="easyui-numberbox" data-options="precision:0"
+                       style="width:200px;height:28px;"
+                       th:value="*{orders}"/>
+            </td>
+        </tr>
+    </table>
+    <input hidden="true" name="id" id="id" th:value="*{id}"/>
+</form>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout/header}">
+<div layout:fragment="content">
+    <div class="easyui-tabs" data-options="plain:true,border:false,fit:true,pill:true,tabWidth:80,tabHeight:28">
+        <div title="待确认表" style="padding-top:5px;display:none;">
+            <table id="confirmGrid">
+                <thead>
+                <tr>
+                    <th th:each="item:${columns}" th:field="${item.field}" th:width="${item.width}"
+                        th:sortable="${item.sortable} " th:hidden="${item.hidden}" th:text="${item.title}"></th>
+                </tr>
+                </thead>
+            </table>
+            <div id="Ptools">
+                <div class="m-toolbar" style="height: 200px;">
+                    <div class="m-left e-icon5 ">
+                        <table cellspacing="0" cellPadding="0" class="addTable">
+                            <tr>
+                                <td class="rightTd" width="100px">销售方：</td>
+                                <td  class="leftTd">
+                                    <input id="saleCorpName" name="saleCorpName"  class="easyui-searchbox"
+                                           data-options="prompt:'请选择...',editable:false,searcher:_searchSaleCorp,height:28,width:'100%',icons: [{
+                        iconCls:'icon-clear',
+                        handler: function(e){
+                            $(e.data.target).textbox('clear');
+                            $('#saleCorpID').val('');
+                        }
+                    }]"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="rightTd" width="100px">购买方：</td>
+                                <td class="leftTd">
+                                    <input id="buyerCorpName" name="buyerCorpName" class="easyui-searchbox"
+                                           data-options="prompt:'请选择...',editable:false,searcher:_searchBuyerCorp,height:28,width:'100%',icons: [{
+                        iconCls:'icon-clear',
+                        handler: function(e){
+                            $(e.data.target).textbox('clear');
+                            $('#buyerCorpID').val('');
+                        }
+                    }]"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="rightTd" width="100px">申请部门：</td>
+                                <td class="leftTd">
+                                    <select name="applyDeptBH" id="applyDeptBH" class="easyui-combobox"
+                                            data-options="panelMaxHeight:200,editable:false,width:'100%',height:28">
+                                        <option th:each="item:${applyDept}"
+                                                th:value="${item.values}"
+                                                th:text="${item.name}"></option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="rightTd" width="100px">申请日期：</td>
+                                <td  class="leftTd">
+                                    <input id="starDate" th:value="${starDate}" type="text" data-options="height:28,width:140" class="easyui-datebox" />&nbsp;至&nbsp;<input id="endDate"  th:value="${endDate}" data-options="height:28,width:140" type="text" class="easyui-datebox"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="rightTd" width="120px">模糊查询：</td>
+                                <td  class="leftTd">
+                        <input id="ss" class="easyui-searchbox" style="width:300px;height:28px;"
+                               data-options="searcher:confirmInfoSearch,prompt:'输入关键字查询',menu:'#mm',icons: [{
+                        iconCls:'icon-clear',
+                        handler: function(e){
+                            $(e.data.target).textbox('clear');
+                        }
+                    }]"></input>
+                                </td>
+                            </tr>
+                        </table>
+                        <div id="mm" style="width:120px">
+                            <div data-options="name:'all'">快速查询</div>
+                            <div data-options="name:'b.applyBH'">单据编号</div>
+                            <div data-options="name:'billMoney'">发票金额</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="buttons" style="padding: 2px 20px;height: 35px; ">
+                <div class="m-toolbar">
+                    <div class="m-left" style="padding: 5px;">
+                        <span id="hj"></span>
+                    </div>
+                    <div class="m-right">
+                        <span class="datagrid-btn-separator"
+                              style="vertical-align: middle;display:inline-block;float:none"></span>
+                        <button id="importCorpBtn" onclick="importUpload();" class="easyui-linkbutton "
+                                data-options="plain:true,height:25,iconCls:'e-icon1 fa fa-cloud-upload fa-1g'">导入Excel
+                        </button>
+                        <span class="datagrid-btn-separator"
+                              style="vertical-align: middle;display:inline-block;float:none"></span>
+                        <button id="exportDownBtn" onclick="exportDown();" class="easyui-linkbutton "
+                                data-options="plain:true,height:25,iconCls:'e-icon1 fa fa-cloud-download fa-1g'">导出Excel
+                        </button>
+                        <span class="datagrid-btn-separator"
+                              style="vertical-align: middle;display:inline-block;float:none"></span>
+                        <button class="easyui-linkbutton"
+                                data-options="plain:true,height:25,iconCls: 'e-icon1 fa fa-cog fa-1g'"
+                                onclick="headerSetup('confirmGrid')">列配置
+
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <script type="text/javascript" th:src="@{/static/js/plugins/jqueryform.js}"></script>
+            <script type="text/javascript" th:src="@{/static/js/plugins/columns-ext.js}"></script>
+            <script type="text/javascript" th:src="@{/static/js/plugins/datagrid-dnd.js}"></script>
+            <script type="text/javascript" th:src="@{/static/js/plugins/jquery.datagrid.extend.js}"></script>
+            <script type="text/javascript" th:inline="none" th:src="@{/static/js/admin/confirm.js}"></script>
+            <script th:inline="javascript">var basepath = [[${session.basePath}]];</script>
+            <div id="corpContent" Style="display: none;"></div>
+            <input hidden="true" name="saleCorpID" id="saleCorpID"/>
+            <input hidden="true" name="buyerCorpID" id="buyerCorpID"/>
+        </div>
+        <div title="确认记录" style="padding-top:5px;display:none;">
+
+        </div>
+    </div>
+</div>
+</html>

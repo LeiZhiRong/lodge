@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <form id="proceedTypeForm" th:action="@{saveProceedType}" th:object="${proceedType}" method="post">
+            <table cellspacing="0" cellPadding="0" class="addTable">
+                <tr>
+                    <td class="rightTd" style="width:100px;">费项编号：</td>
+                    <td>
+                        <input name="proceedBh" class="easyui-textbox" data-options="required:true,missingMessage:null" style="width:250px;height:28px;"
+                               th:value="*{proceedBh}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" style="width:100px;">费项名称：</td>
+                    <td>
+                        <input name="name" class="easyui-textbox" data-options="required:true,missingMessage:null" style="width:250px;height:28px;"
+                               th:value="*{name}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" style="width:100px;">上级费项：</td>
+                    <td>
+                        <input id="pid" name="pid" class="easyui-combotree" th:value="${pid!='all'?pid:''}"
+                               th:disabled="${disabled}" style="width:250px;height:28px;"
+                               data-options="prompt:'请选择...', editable:true,panelMaxHeight : 200,panelWidth : 300,url:'listProceedType',onLoadSuccess:function (row,data) {
+                }"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" style="width:100px;">费项描述：</td>
+                    <td class="leftTd">
+                        <input id="remarks" name="remarks" th:value="*{remarks}" class="easyui-textbox"
+                               data-options="prompt:'费项描述',height:28,width:250">
+                    </td>
+                </tr>
+
+            </table>
+            <input hidden="true" name="id" id="id" th:value="*{id}"/>
+        </form>
+    </body>
+</html>

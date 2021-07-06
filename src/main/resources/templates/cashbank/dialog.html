@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <form id="cashFrom" th:action="@{save}" th:object="${cashBank}" method="post">
+            <table cellspacing="0" cellPadding="0" class="addTable">
+                <tr>
+                    <td class="rightTd" width="100px">科目编号：</td>
+                    <td>
+                        <input name="kmBH" class="easyui-textbox" data-options="required:true,missingMessage:null" style="width:200px;height:28px;"
+                               th:value="*{kmBH}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" width="100px">科目名称：</td>
+                    <td>
+                        <input name="kmMC" class="easyui-textbox" data-options="required:true,missingMessage:null" style="width:200px;height:28px;" th:value="*{kmMC}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" width="100px">科目简称：</td>
+                    <td>
+                        <input name="kmJC" class="easyui-textbox"  style="width:200px;height:28px;" th:value="*{kmJC}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" width="100px">上级科目：</td>
+                    <td>
+                        <input id="pid" name="pid" class="easyui-combotree" th:value="${pid!='all'?pid:''}"
+                               th:disabled="${disabled}" style="width:200px;height:30px;"
+                               data-options="prompt:'请选择...', editable:true,panelMaxHeight : 200,panelWidth : 300,url:'listParent',onLoadSuccess:function (row,data) {
+                }"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" width="100px">余额方向：</td>
+                    <td class="leftTd">
+                        <select name="balance" class="easyui-combobox"
+                                data-options="panelMaxHeight:200,editable:false"
+                                style="width:200px;height:28px">
+                            <option th:each="item:${balance}"
+                                    th:value="${item.values}"
+                                    th:selected="${cashBank.balance eq item.values}"
+                                    th:text="${item.name}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" width="100px">备注：</td>
+                    <td>
+                        <input name="remarks" class="easyui-textbox" style="width:200px;height:28px;" th:value="*{remarks}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" width="100px">状态标识：</td>
+                    <td>
+                        <input class="easyui-switchbutton" th:checked="${cashBank.ztbz=='T'?1:0}"
+                               style="height:28px;"
+                               data-options="onText:'启用',offText:'停用',
+                        onChange:function(checked){
+                        if(checked){
+                        $('#ztbz').val('T');
+                        } else{
+                        $('#ztbz').val('F');
+                        }
+                        }">
+                    </td>
+                </tr>
+            </table>
+            <input hidden="true" name="ztbz" id="ztbz" th:value="*{ztbz}"/>
+            <input hidden="true" name="id" id="id" th:value="*{id}"/>
+            <input hidden="true" name="contents" id="contents" th:value="*{contents}"/>
+            <script th:inline="javascript">
+            </script>
+        </form>
+    </body>
+</html>

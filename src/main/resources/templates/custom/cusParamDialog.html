@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <form id="paramForm" th:action="@{saveCusParam}" th:object="${customParam}" method="post">
+            <table cellspacing="0" cellPadding="0" class="addTable">
+                <tr>
+                    <td class="rightTd" width="100px">启用状态：</td>
+                    <td>
+                        <input class="easyui-switchbutton" th:checked="${customParam.status==1?1:0}"
+                               style="height:28px;"
+                               data-options="onText:'启用',offText:'停用',
+                        onChange:function(checked){
+                        if(checked){
+                        $('#status').val(1);
+                        } else{
+                        $('#status').val(0);
+                        }
+                        }">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" width="100px">参数名称：</td>
+                    <td>
+                        <input name="parameName" class="easyui-textbox" data-options="required:true,missingMessage:null" style="width:200px;height:28px;"
+                               th:value="*{parameName}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" width="100px">参数编码：</td>
+                    <td>
+                        <input name="parameCode" class="easyui-textbox"  style="width:200px;height:28px;"
+                               th:value="*{parameCode}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" width="100px">参数描述：</td>
+                    <td>
+                        <input name="describe" class="easyui-textbox" style="width:200px;height:28px;"
+                               th:value="*{describe}"/>
+                    </td>
+                </tr>
+            </table>
+            <input hidden="true" name="id" th:value="*{id}"/>
+            <input hidden="true" name="status" id="status" th:value="*{status}"/>
+            <input hidden="true" name="typeId"  th:value="*{typeId}"/>
+        </form>
+    </body>
+</html>

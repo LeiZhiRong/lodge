@@ -1,0 +1,139 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!--suppress ThymeleafVariablesResolveInspection -->
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout/header}">
+<body>
+<div class="easyui-navpanel" layout:fragment="content">
+    <div class=" loginbackg">
+        <div class="login">
+            <div id="p" class="easyui-panel" title="" style="width:600px;height:300px;">
+                <div class="login1">
+                    <div id="r" style="width:250px;padding:20px 0px;margin-top: 30px;float:right;">
+                        <form id="loginForm" method="post">
+                            <div style="margin-bottom:10px">
+                                <select id="bookSet" name="bookSet" class="easyui-combobox"
+                                        data-options="iconAlign:'right',iconWidth:38,panelMaxHeight:200,editable:false"
+                                        style="width:180px;height:32px">
+                                    <option th:each="item:${bookSet}"
+                                            th:value="${item.values}"
+                                            th:selected="${accoun eq item.values}"
+                                            th:text="${item.name}"></option>
+                                </select>
+                            </div>
+                            <div style="margin-bottom:10px">
+                                <input id="userName" name="userName" th:value="${userName}" class="easyui-textbox"
+                                       data-options="prompt:'登录帐号',iconAlign:'right',iconCls:'icon-man',iconWidth:38"
+                                       style="width:180px;height: 32px;"/>
+                            </div>
+                            <div style="margin-bottom:10px">
+                                <input id="pwd" class="easyui-passwordbox"
+                                       data-options="prompt:'登录密码',iconAlign:'right',iconWidth:38"
+                                       style="width:180px;height: 32px;"/>
+                            </div>
+                            <div style="margin-bottom:10px">
+                                <input class="easyui-checkbox" th:checked="${check=='T'?1:0}" data-options="
+                        onChange:function(checked){
+                        if(checked){
+                        $('#check').val('T');
+                        } else{
+                        $('#check').val('F');
+                        }
+                        }">&nbsp;&nbsp;记住我
+                            </div>
+                            <div style="margin-bottom:10px;margin-left:5px;margin-top:20px;">
+                                <a href="javascript:;" class="easyui-linkbutton c8"
+                                   style="width:80px;height:30px;margin-right: 10px;" onClick="login();">登录</a>
+                                <a href="javascript:;" class="easyui-linkbutton  c8 "
+                                   style="width:80px;height:30px;" onClick="rest();">重置</a>
+                            </div>
+                            <input hidden="true" name="password" id="password"/>
+                            <input hidden="true" name="check" id="check" th:value="${check}"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" th:src="@{/static/js/security.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/plugins/jqueryform.js}"></script>
+    <script type="text/javascript" th:inline="none">
+        $(function () {
+            $('#userName').textbox('textbox').focus();
+            $('#userName').textbox('textbox').bind('keydown', function (e) {
+                if (e.keyCode == 13) {
+                    $('#pwd').textbox('textbox').focus();
+                }
+            });
+            $('#pwd').textbox('textbox').bind('keydown', function (e) {
+                if (e.keyCode == 13) {
+                    login();
+                }
+            });
+        });
+
+        //登录验证
+        function login() {
+            var bookset = $("#bookSet").combobox("getValue");
+            var pwd = $("#pwd").passwordbox("getValue");
+            var logName = $("#userName").textbox("getValue");
+            var check = $("#check").val();
+            var error = "";
+            if (empty(logName))
+                error = error + "登录账号不能为空 ";
+            if (empty(pwd))
+                error = error + "登录密码不能为空 ";
+            if (!empty(error)) {
+                LG.tip("error", error);
+                return false;
+            }
+            $.ajax({
+                url: 'getKey',
+                type: "post",
+                success: function (data) {
+                    if (empty(data)) {
+                        LG.tip("error", "获取公钥失败");
+                        return false;
+                    }
+                    var Key = new RSAUtils.getKeyPair(data.exponent, "", data.modulus);
+                    if (!empty(pwd)) {
+                        pwd = encodeURIComponent(pwd);
+                        pwd = pwd.split("").reverse().join("");
+                        $("#password").val(RSAUtils.encryptedString(Key, pwd));
+                    }
+                    LG.ajax({
+                        url: 'login',
+                        type: "post",
+                        data: {
+                            password: $("#password").val(),
+                            userName: logName,
+                            bookSet: bookset,
+                            check: check
+                        },
+                        success: function (data) {
+                            top.location = data.data;
+                        },
+                        error: function (message) {
+                            LG.tip("error", message);
+                        }
+                    });
+                },
+                error: function (xhr) {
+                    LG.alert("error", xhr.responseText);
+                    return false;
+                }
+            });
+            return false;
+        }
+
+        //重置
+        function rest() {
+            $('#loginForm').form('clear');
+        }
+    </script>
+</div>
+
+</body>
+</html>

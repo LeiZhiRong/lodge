@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!--suppress ThymeleafVariablesResolveInspection -->
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<div class="easyui-navpanel">
+        <div id="top-toolbar" style="height: 38px">
+            <div class="m-toolbar">
+                <div class="m-left">
+                    快速查询：<input id="searchCorpBox" class=" easyui-searchbox"
+                                data-options="prompt:'输入关键字过滤',searcher:f_searchCorp"
+                                style="width:200px;height: 28px;">
+                </div>
+            </div>
+        </div>
+    <table id="corpGD" ></table>
+    <input type="hidden" id="keyword" th:value="${keyword}">
+    <input type="hidden" id="corpType" th:value="${corpType}">
+</div>
+<script type="text/javascript" th:inline="none">
+     $(function () {
+        let eu = $("#corpGD").datagrid({
+            url: 'getCorpList',
+            queryParams:{
+                keyword:$("#keyword").val(),
+                corpType:$("#corpType").val()
+            },
+            header: '#top-toolbar',
+            fit: true,
+            loadMsg: "正在加载中...",
+            singleSelect: true,
+            maximized: true,
+            fitColumns:true,
+            border:false,
+            sortName: 'corpBM',
+            sortOrder: 'asc',
+            pagination: true,
+            pageSize: 20,
+            columns: [[
+                {field: 'corpMC', title: '客户名称', width: 250,sortable:true},
+                {field: 'corpBM', title: '编号', width: 80,sortable:true}
+            ]],
+            onClickRow: function (rowIndex, rowData) {
+                var type=$("#corpType").val();
+                if(is_eq("0",type)) {
+                    $("#saleCorpName").searchbox("setValue",rowData.corpMC);
+                    $("#saleCorpID").val(rowData.id);
+
+                }else{
+                    $("#buyerCorpName").searchbox("setValue",rowData.corpMC);
+                    $("#buyerCorpID").val(rowData.id);
+                }
+                $('#corpContent').dialog('close');
+            }
+        }).datagrid('columnMoving').datagrid('getPanel').addClass("lines-no");
+    })
+
+    function f_searchCorp(value) {
+        var queryparams = {
+            keyword: value,
+            corpType:$("#corpType").val()
+        };
+        $('#corpGD').datagrid('options').queryParams = queryparams;
+        $('#corpGD').datagrid('reload');
+    }
+</script>
+
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout/header}">
+<div layout:fragment="content">
+    <div class="easyui-layout" fit="true">
+        <div data-options="region:'west',title:'用户信息',iconCls: 'e-icon2 fa fa-ellipsis-v fa-1g'"
+             style="width:200px;">
+            <div id="Ttools" style="padding: 2px 4px 2px 2px;">
+                <input id="tcode" class="easyui-searchbox"
+                       data-options="prompt:'请输入关键字查询...',searcher:_searchRole,height:28,width:'100%'">
+            </div>
+            <ul id="tlist" style="margin-left: 20px;margin-right: 10px;"></ul>
+            <div id="roleContent" Style="display: none;padding:10px;"></div>
+        </div>
+        <div data-options="region:'center',title:'角色授权',iconCls: 'e-icon2 fa fa-ellipsis-v fa-1g'" style="padding: 0;">
+            <table style="height: 100%">
+                <tr>
+                    <td>
+                        <div id="dl1" style="height:100%;width:300px;"></div>
+                    </td>
+                    <td>
+                        <button id="dl_add" class="easyui-linkbutton c4" data-options="height:25,iconCls: 'e-icon2 fa fa-step-forward'" style="width:50px;margin:5px;"></button>
+                        <br/>
+                        <button id="dl_add_all" class="easyui-linkbutton c3" data-options="height:25,iconCls: 'e-icon2 fa fa-fast-forward'" style="width:50px;margin:5px;"></button>
+                        <br/>
+                        <button id="dl_remove_all" class="easyui-linkbutton c3" data-options="height:25,iconCls: 'e-icon2 fa fa-fast-backward'"  style="width:50px;margin:5px;"></button>
+                        <br/>
+                        <button id="dl_remove" class="easyui-linkbutton c4" data-options="height:25,iconCls: 'e-icon2 fa fa-step-backward'" style="width:50px;margin:5px;"></button>
+                    </td>
+                    <td>
+                        <div id="dl2" style="height:100%;width:300px;"></div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div id="wfqx" style="padding: 2px 4px 2px 10px;">
+            角色列表：<input id="wcode" class="easyui-searchbox"
+                        data-options="prompt:'请输入关键字进行查询',searcher:_searchMenu,height:28,width:200"></div>
+        <div id="yfqx" style="padding: 2px 4px 2px 10px;">
+            拥有角色：<input id="ycode" class="easyui-searchbox"
+                        data-options="prompt:'请输入关键字进行定位',searcher:_searchPerm,height:28,width:200"></div>
+    </div>
+    <script type="text/javascript" th:inline="none" th:src="@{/static/js/admin/grant.js}"></script>
+</div>
+</html>

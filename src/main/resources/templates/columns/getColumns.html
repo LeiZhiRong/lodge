@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<div class="easyui-navpanel">
+    <table id="tableHeaderGrid"></table>
+    <input type="hidden" id="action" th:value="${action}">
+    <input type="hidden" id="basepath" th:value="${session.basePath}">
+</div>
+<script type="text/javascript" th:src="@{/static/js/admin/columns.js}"></script>
+</html>

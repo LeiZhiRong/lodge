@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout/header}">
+    <div layout:fragment="content">
+        <table id="dg"></table>
+        <div id="top-toolbar">
+            <div class="m-toolbar">
+                <div class="m-left e-icon5 ">
+                    <input class=" easyui-searchbox" data-options="prompt:'输入关键字查询',searcher:f_search"
+                           style="width:200px;height: 28px;">
+                    <button class="easyui-linkbutton"
+                            data-options="plain:true,height:28,iconCls:'e-icon1 fa fa-plus'"
+                            th:onclick="mergeRow(null)">增加
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="content" Style="display: none;padding-top: 30px"></div>
+        <script type="text/javascript" th:src="@{/static/js/plugins/columns-ext.js}"></script>
+        <script type="text/javascript" th:src="@{/static/js/plugins/datagrid-dnd.js}"></script>
+        <script type="text/javascript" th:src="@{/static/js/plugins/jqueryform.js}"></script>
+        <script type="text/javascript" th:inline="none" th:src="@{/static/js/admin/modules.js}"></script>
+    </div>
+
+</html>

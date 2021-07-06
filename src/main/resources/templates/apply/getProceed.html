@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<!--suppress ThymeleafVariablesResolveInspection -->
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<div class="easyui-navpanel">
+    <div id="proceed-toolbar" style="height: 40px;padding-top: 5px;padding-left: 5px;">
+        <div class="m-toolbar">
+            <div class="m-left">
+                快速查询：<input id="proceedValue" class=" easyui-searchbox" th:value="${proceedValue}"
+                            data-options="prompt:'输入关键字过滤',searcher:f_searchProceed,icons:[{
+				iconCls:'icon-clear',
+				handler: function(e){
+					 $(e.data.target).textbox('setValue','');
+				}
+			}]" style="width:200px;height: 28px;">
+            </div>
+        </div>
+    </div>
+    <table id="proceedDG"></table>
+    <div id="proceed-ftools" style="border-bottom: 0;border-left:0;border-right:0;padding: 5px 10px;text-align:right;">
+        <button id="upPageBtn" onclick="upPage();" class="easyui-linkbutton"
+                data-options="plain:true,disabled:true,height:25,iconCls: 'e-icon1 fa fa-level-up fa-1g blue'">返回上级
+        </button>
+        <button id="goHomeBtn" onclick="gotoHome();" class="easyui-linkbutton"
+                data-options="plain:true,disabled:true,height:25,iconCls: 'e-icon1 fa fa-home fa-1g blue'">返回首页
+        </button>
+        <span class="datagrid-btn-separator"
+              style="vertical-align: middle;display:inline-block;float:none"></span>
+        <button id="closeBtn" onclick="closeDialog();" class="easyui-linkbutton"
+                data-options="plain:true,height:25,iconCls: 'e-icon1 fa fa-sign-out fa-1g blue'">关闭
+        </button>
+    </div>
+</div>
+<script th:inline="javascript">var _proceedValue = [[${proceedValue}]];</script>
+<script type="text/javascript" th:inline="none">
+    var parent_id = [];
+    $(function () {
+          let eu = $("#proceedDG").datagrid({
+            url: 'findProceed',
+            queryParams: {
+                keyword: _proceedValue
+            },
+            showHeader:false,
+            loadMsg: false,
+            border: false,
+            singleSelect: true,
+            fitColumns:true,
+            toolbar: '#proceed-toolbar',
+            footer:'#proceed-ftools',
+            fit: true,
+            onLoadSuccess: function () {
+                if(parent_id.length>0) {
+                    $('#upPageBtn').linkbutton('enable');
+                    $('#goHomeBtn').linkbutton('enable');
+                }else{
+                    $('#upPageBtn').linkbutton('disable');
+                    $('#goHomeBtn').linkbutton('disable');
+                }
+            },
+            columns: [[
+                {field: 'name', title: '费项' +
+                        '名称', width: 250,
+                    formatter: function(value,row,index){
+                      return "<div style='padding-left: 10px;'>"+value+"</div>"
+                    }
+                },
+                {field: 'handle', title: '选择', align:'right', width: 80 }
+            ]]
+        }).datagrid('columnMoving').datagrid('getPanel').addClass("lines-no");
+    })
+    function f_search(value) {
+        $("#proceedDG").datagrid("search", value);
+    }
+    // 模块目录跳转
+    function findProceed(id,pid) {
+        parent_id.push(pid);
+        var queryparams = {
+            pid: id
+        };
+        $('#proceedDG').datagrid('options').queryParams = queryparams;
+        $('#proceedDG').datagrid('reload');
+
+    }
+    //选择确认退出窗口
+    function getProceedIdAndBh(id,name) {
+        $("#proceedId").val(id);
+        $("#proceedName").searchbox("setValue",name);
+        $('#proceedContent').dialog('close');
+    }
+    //返回上一级
+    function upPage() {
+        if(parent_id.length>0){
+            var id=parent_id[parent_id.length-1];
+             var queryparams = {
+                pid: id
+            };
+            $('#proceedDG').datagrid('options').queryParams = queryparams;
+            $('#proceedDG').datagrid('reload');
+            var new_parent_id=[];
+            for(var i=0;i<parent_id.length-1;i++){
+                if(!is_eq(id,parent_id[i])){
+                    new_parent_id.push(parent_id[i])
+                }
+            }
+            parent_id=new_parent_id;
+         }
+    }
+
+    //返回首页
+    function gotoHome() {
+        parent_id=[];
+        var queryparams = {
+            pid: null
+        };
+        $('#proceedDG').datagrid('options').queryParams = queryparams;
+        $('#proceedDG').datagrid('reload');
+    }
+
+    //关闭
+    function closeDialog() {
+        $('#proceedContent').dialog('close');
+    }
+
+    //过滤查询
+    function f_searchProceed(value) {
+        parent_id=[];
+        var queryparams = {
+            pid: null,
+            keyword: value
+        };
+        $('#proceedDG').datagrid('options').queryParams = queryparams;
+        $('#proceedDG').datagrid('reload');
+    }
+
+</script>
+
+</html>

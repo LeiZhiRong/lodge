@@ -1,0 +1,327 @@
+body,h1,h2,h3,h4,h5,h6,div,p,dl,dt,dd,ol,ul,li,form,table,th,td,a,img,span,strong,var,em,input,textarea,select,option{margin: 0; padding: 0;}
+ul,ol{list-style: none;}
+img{border: 0;}
+input,select,textarea{outline:0;}
+textarea{resize:none; overflow: auto;}
+table{border-collapse: collapse; border-spacing: 0;}
+th,strong,var,em{font-weight: normal; font-style: normal;}
+a{text-decoration: none;}
+
+.e-icon {
+    padding-top: 3px;
+}
+
+.e-icon1 {
+    padding-top: 1px;
+}
+
+.e-icon2 {
+    padding-top: 2px;
+}
+
+e-icon3 {
+    padding-top: 3px;
+}
+
+.e-icon4 {
+    padding-top: 4px;
+}
+
+.e-icon5 {
+    padding-top: 5px;
+}
+
+.e-icon6 {
+    padding-top: 6px;
+}
+
+.e-icon7 {
+    padding-top: 7px;
+}
+
+.e-icon8 {
+    padding-top: 8px;
+}
+
+.e-icon9 {
+    padding-top: 9px;
+}
+
+.e-icon10 {
+    padding-top: 10px;
+}
+
+.red {
+    color: #f43530;
+}
+
+.info {
+    color: Red;
+    font-size: 16px;
+    margin-right: 5px;
+}
+
+.addTable {
+    margin-top: 10px;
+    margin-left: 15px;
+    font-size: 12px;
+    border-spacing: 2px;
+    border: 0px;
+    padding: 0px;
+}
+
+.addTable tr td {
+    padding: 2px;
+    border: 0px;
+}
+
+.addTable label {
+    width: 80px;
+    margin-left: 10px;
+}
+
+.addTable thead td {
+    background: #336d9b;
+    color: #fff;
+    margin: 0px;
+}
+
+.leftTd {
+    text-align: left;
+    margin: 0;
+    border: 0;
+}
+
+.rightTd {
+    text-align: right;
+    margin: 0;
+    border: 0;
+}
+
+.accordion .accordion-header-selected {
+    background: #5e83b5;
+}
+
+.combobox-item-selected {
+    background-color: #5e83b5;
+    color: #fff;
+}
+
+.tabs-header .tabs-pill li.tabs-selected .tabs-inner {
+    background: #5e83b5;
+    color: #fff;
+    filter: none;
+    border-color: #D4D4D4;
+}
+
+.datalist .datagrid-row-selected {
+    background: #efe39a;
+    color: #333;
+}
+
+.gridlist .datagrid-row-selected {
+    background: #d2f3d8;
+    color: #333;
+}
+
+.datagrid-row-selected {
+    background: #fff;
+    color: #333;
+}
+
+.calendar-selected {
+    background-color: #5e83b5;
+    color: #fff;
+    border: 1px solid #52739f;
+    padding: 0;
+}
+
+progressbar-value,
+.progressbar-value .progressbar-text {
+    background-color: #5e83b5;
+    color: #fff;
+}
+
+.switchbutton-on {
+    background: #5e83b5;
+    color: #fff;
+}
+
+.tree-node-selected {
+    background: #5e83b5;
+    color: #fff;
+}
+
+.sidemenu .tree-node-selected {
+    color: #333;
+    background: #ffffff;
+}
+
+.lines-no .datagrid-body td {
+    border-right: 0px dotted transparent;
+    border-bottom: 0px dotted transparent;
+}
+
+
+.blue {
+    color: #0081c2;
+}
+
+.green {
+    color: #52d689;
+}
+
+.datagrid-cell, .datagrid-cell-group, .datagrid-header-rownumber, .datagrid-cell-rownumber {
+    text-overflow: ellipsis;
+}
+
+.box, .box:hover, .box > .panel-header {
+    color: #333;
+    border-color: #d4d4d4;
+    background: #46a3ff;
+    background: -webkit-linear-gradient(top, #46a3ff 0, #d2e9ff 100%);
+    background: -moz-linear-gradient(top, #46a3ff 0, #d2e9ff 100%);
+    background: -o-linear-gradient(top, #46a3ff 0, #d2e9ff 100%);
+    background: linear-gradient(to bottom, #46a3ff 0, #d2e9ff 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr=#d2e9ff, endColorstr=#d2e9ff, GradientType=0);
+}
+
+a.box:hover {
+    background: #a4e9c1;
+    filter: none;
+}
+
+.box > .panel-body {
+    border-color: #52d689;
+}
+
+.box > .dialog-toolbar, .box > .dialog-button {
+    border-left-color: #52d689;
+    border-right-color: #52d689;
+}
+
+.box > .dialog-button {
+    border-bottom-color: #52d689;
+}
+
+.login1 {
+    position: absolute;
+    width: 595px;
+    height: 240px;
+    background-image: url(../images/2.png);
+}
+
+.login1 label {
+    color: #ffffff;
+    font-size: 13px;
+}
+
+.login {
+    position: absolute;
+    width: 600px;
+    height: 250px;
+    top: 50%;
+    left: 50%;
+    margin-left: -300px;
+    margin-top: -140px;
+    z-index: 1000;
+}
+
+.pd3 {
+    padding: 3px;
+}
+
+.pd5 {
+    padding: 5px;
+}
+
+.pd10 {
+    padding: 10px;
+}
+
+.sidemenu-tree{
+    overflow-x:hidden;
+    overflow-y:hidden;
+}
+
+.loginbackg{
+    background: url(../images/bj.jpg) no-repeat center 0px;
+    background-position:center 0;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top:0;right: 0;left: 0;bottom: 0;margin: auto;
+}
+
+.x-fieldset {
+    border-color: #b5b8c8;
+}
+
+.x-fieldset {
+    overflow: hidden;
+}
+.x-fieldset {
+    border: 1px solid;
+    border-color: #D4D4D4;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+/* make top of checkbox/tools visible in webkit */
+.x-fieldset-header {
+    padding-top: 1px;
+}
+
+.x-fieldset legend {
+    margin-bottom:5px;
+}
+
+.x-fieldset legend.x-fieldset-header {
+    padding-top: 1px;
+}
+
+.x-fieldset {
+    padding-top: 0;
+    padding-bottom:10px;
+}
+
+.x-fieldset legend .x-tool-toggle {
+    margin-right:3px;
+    margin-left:0;
+    float:left !important;
+}
+
+.x-fieldset legend input {
+    margin-right:3px;
+    float:left !important;
+    height:13px;
+    width:13px;
+}
+
+fieldset.x-panel-collapsed {
+    padding-bottom:0 !important;
+    border-width: 1px 1px 0 1px !important;
+    border-left-color: transparent;
+    border-right-color: transparent;
+}
+fieldset .datalist .datagrid-cell, .m-list li {
+    padding: 0 10px;
+}
+
+input.mytext {
+    background-color: #fff;
+    border: 1px solid #d4d4d4;
+    border-radius: 5px;
+    display: inline-block;
+    margin: 0;
+    overflow: hidden;
+    padding: 3px 4px;
+    position: relative;
+    vertical-align: middle;
+    white-space: nowrap;
+    font-size: 12px;
+
+}
+

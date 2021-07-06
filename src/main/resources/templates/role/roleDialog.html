@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <form id="roleForm" th:action="@{saveRole}" th:object="${roleInfo}" method="post">
+            <table cellspacing="0" cellPadding="0" class="addTable">
+                <tr>
+                    <td class="rightTd" width="100px">用户状态：</td>
+                    <td class="leftTd">
+                        <input class="easyui-switchbutton" th:disabled="${disabled}" th:checked="${roleInfo.ztbz=='T'?1:0}"
+                               style="height:28px;"
+                               data-options="onText:'启用',offText:'停用',
+                        onChange:function(checked){
+                        if(checked){
+                        $('#ztbz').val('T');
+                        } else{
+                        $('#ztbz').val('F');
+                        }
+                        }">
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" width="100px">角色名称：</td>
+                    <td>
+                        <input name="roleName" class="easyui-textbox" data-options="required:true,missingMessage:null" style="width:200px;height:28px;"
+                               th:value="*{roleName}"/>
+                    </td>
+                </tr>
+                <tr th:hidden="${hidden}">
+                    <td class="rightTd" width="100px">所属帐套：</td>
+                    <td>
+                        <select name="bookSet" class="easyui-combobox" data-options="panelMaxHeight:200,editable:false"
+                                style="width:200px;height:28px">
+                            <option th:each="item:${bookset}"
+                                    th:value="${item.values}"
+                                    th:selected="${roleInfo.bookSet eq item.values}"
+                                    th:text="${item.name}"></option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" width="100px">角色描述：</td>
+                    <td>
+                        <input name="remarks" class="easyui-textbox" style="width:200px;height:28px;"
+                               th:value="*{remarks}"/>
+                    </td>
+                </tr>
+            </table>
+            <input hidden="true" name="id" id="id" th:value="*{id}"/>
+            <input hidden="true" name="ztbz" id="ztbz" th:value="*{ztbz}"/>
+        </form>
+    </body>
+</html>

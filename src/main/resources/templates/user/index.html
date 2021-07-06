@@ -1,0 +1,52 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout/header}">
+<div layout:fragment="content">
+    <table id="userGrid">
+        <thead>
+        <tr>
+            <th data-options="field:'id',checkbox:true"></th>
+            <th th:each="item:${columns}" th:field="${item.field}" th:width="${item.width}"
+                th:sortable="${item.sortable} " th:hidden="${item.hidden}" th:text="${item.title}"></th>
+        </tr>
+        </thead>
+    </table>
+    <div id="Ptools">
+        <div class="m-toolbar" style="height: 36px;">
+            <div class="m-left e-icon5 ">
+                        <span><input id="pcode" class="easyui-searchbox"
+                                     data-options="prompt:'请输入关键字进行查询',searcher:_searchUserInfo,height:28,width:200"></span>
+                <button id="addUserBtn" onclick="addUser();" class="easyui-linkbutton "
+                        data-options="plain:true,height:25,iconCls: 'e-icon1 fa fa-plus-square fa-1g'">
+                    添加
+                </button>
+                <span class="datagrid-btn-separator"
+                      style="vertical-align: middle;display:inline-block;float:none"></span>
+                <button id="batchDeleteBtn" class="easyui-linkbutton" onclick="batchdeleteUser();"
+                        data-options="plain:true,disabled:true,height:25,iconCls:'e-icon1 fa fa-times fa-1g'">
+                    批量删除
+                </button>
+                <span class="datagrid-btn-separator"
+                      style="vertical-align: middle;display:inline-block;float:none"></span>
+                <button id="importUserBtn" onclick="importUser();" class="easyui-linkbutton "
+                        data-options="plain:true,height:25,iconCls:'e-icon1 fa fa-file-excel-o fa-1g'">导入模板
+                </button>
+                <span class="datagrid-btn-separator"
+                      style="vertical-align: middle;display:inline-block;float:none"></span>
+                <button class="easyui-linkbutton"
+                        data-options="plain:true,height:25,iconCls: 'e-icon1 fa fa-cog fa-1g'"
+                        onclick="headerSetup('userGrid')">列配置
+                </button>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" th:src="@{/static/js/plugins/jqueryform.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/plugins/columns-ext.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/plugins/datagrid-dnd.js}"></script>
+    <script type="text/javascript" th:inline="none" th:src="@{/static/js/admin/userinfo.js}"></script>
+    <script th:inline="javascript">var basepath = [[${session.basePath}]];</script>
+</div>
+</html>

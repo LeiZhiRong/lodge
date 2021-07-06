@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <form id="mergeFrom" th:action="@{save}" th:object="${menuInfo}" method="post">
+            <table cellspacing="0" cellPadding="0" class="addTable">
+                <tr>
+                    <td class="rightTd" width="80px">是否启用：</td>
+                    <td>
+                        <input class="easyui-switchbutton" th:checked="${menuInfo.status==1?1:0}"
+                               style="height:28px;"
+                               data-options="onText:'启用',offText:'停用',
+                        onChange:function(checked){
+                        if(checked){
+                        $('#status').val(1);
+                        } else{
+                        $('#status').val(0);
+                        }
+                        }">
+                    </td>
+                    <td class="rightTd" width="80px">模块名称：</td>
+                    <td>
+                        <input name="name" class="easyui-textbox" data-options="required:true,missingMessage:null"
+                               style="width:200px;height:28px;" th:value="*{name}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" width="80px">所属模块：</td>
+                    <td>
+                        <input id="pid" name="pid" class="easyui-combotree" th:value="${pid!='all'?pid:''}"
+                               th:disabled="${disabled}" style="width:200px;height:30px;"
+                               data-options="prompt:'请选择...', panelMaxHeight : 200,panelWidth : 400,url:'listParent',onLoadSuccess:function (row,data) {
+                }"/>
+                    </td>
+                    <td class="rightTd" width="80px">访问路径：</td>
+                    <td>
+                        <input name="pathUrl" class="easyui-textbox" style="width:200px;height:28px;"
+                               th:value="*{pathUrl}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" width="80px">安全认证：</td>
+                    <td>
+                        <select name="type" class="easyui-combobox" data-options="panelMaxHeight:200,editable:true"
+                                style="width:200px;height:28px">
+                            <option th:each="item:${select}"
+                                    th:value="${item.id}"
+                                    th:selected="${menuInfo.type!=null && menuInfo.type.name eq item.name}"
+                                    th:text="${item.name}"></option>
+                        </select>
+                    </td>
+                    <td class="rightTd" width="80px">显示图标：</td>
+                    <td>
+                        <input name="icons" class="easyui-textbox" style="width:200px;height: 28px"
+                               th:value="*{icons}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" width="80px">首页显示：</td>
+                    <td>
+                        <input class="easyui-switchbutton" th:checked="${menuInfo.hompPage=='T'?1:0}"
+                               style="height:28px;"
+                               data-options="onText:'是',offText:'否',
+                        onChange:function(checked){
+                        if(checked){
+                        $('#hompPage').val('T');
+                        } else{
+                        $('#hompPage').val('F');
+                        }
+                        }">
+                    </td>
+                    <td class="rightTd" width="80px">是否下发：</td>
+                    <td>
+                        <input class="easyui-switchbutton" th:checked="${menuInfo.modelGrant=='T'?1:0}"
+                               style="height:28px;"
+                               data-options="onText:'是',offText:'否',
+                        onChange:function(checked){
+                        if(checked){
+                        $('#modelGrant').val('T');
+                        } else{
+                        $('#modelGrant').val('F');
+                        }
+                        }">
+                    </td>
+                </tr>
+            </table>
+            <input hidden="true" name="status" id="status" th:value="*{status}"/>
+            <input hidden="true" name="id" id="id" th:value="*{id}"/>
+            <input hidden="true" name="contents" id="contents" th:value="*{contents}"/>
+            <input hidden="true" name="hompPage" id="hompPage" th:value="*{hompPage}"/>
+            <input hidden="true" name="modelGrant" id="modelGrant" th:value="*{modelGrant}"/>
+         </form>
+    </body>
+</html>

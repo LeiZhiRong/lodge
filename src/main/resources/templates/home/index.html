@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout/header}">
+<div layout:fragment="content" >
+    <div class="easyui-navpanel" data-options="fit:true" >
+        <div class="oaNav-page">
+            <div class="mod-group" th:each="items:${session.menuShortcut}">
+                <div class="mod-title"  th:text="${items.text}" ></div>
+                <div class="mod-list">
+                    <ul>
+                        <li th:each="item:${items.list}" >
+                            <a href="#" class="easyui-linkbutton" th:url="${item.url}" th:name="${item.text}" onclick="gotoTab(this);"th:iconCls="${item.iconCls}"
+                                data-options="iconAlign:'top',size:'large',width:90,height:90" plain="true"
+                                outline="true"> <div class="modTitle" th:text="${item.text}"></div></a>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        var basepath = [[${session.basePath}]];
+        function gotoTab(obj) {
+            var text=$(obj).attr("name");
+            var url=($(obj).attr("url"));
+            top.addTab(text,basepath+url);
+        }
+    </script>
+
+</div>
+
+</html>

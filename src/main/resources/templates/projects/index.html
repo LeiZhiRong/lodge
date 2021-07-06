@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout"
+      layout:decorate="~{layout/header}">
+<div layout:fragment="content" style="padding: 5px;">
+    <div class="easyui-layout" fit="true">
+        <div data-options="region:'west',title:'项目分类',iconCls: 'e-icon2 fa fa-ellipsis-v fa-1g'"
+             style="width:200px;">
+            <ul id="tlist" style="margin-left: 20px;margin-right: 10px;"></ul>
+        </div>
+        <div data-options="region:'center',title:'项目信息',iconCls: 'e-icon2 fa fa-ellipsis-v fa-1g'" style="padding: 0;">
+            <table id="prototypeDG"></table>
+            <div id="top-toolbar">
+                <div class="m-toolbar">
+                    <div class="m-left e-icon5 ">
+                        <input id="searchbox" class=" easyui-searchbox"
+                               data-options="prompt:'输入关键字查询',searcher:f_search"
+                               style="width:200px;height: 28px;">
+                        <button id="addProjects" class="easyui-linkbutton"
+                                data-options="plain:true,height:28,iconCls:'e-icon1 fa fa-plus'"
+                                th:onclick="addProjects()">增加
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div id="prototype_content" Style="display: none;padding:10px 30px;"></div>
+        </div>
+    </div>
+    <script type="text/javascript" th:src="@{/static/js/plugins/columns-ext.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/plugins/datagrid-dnd.js}"></script>
+    <script type="text/javascript" th:src="@{/static/js/plugins/jqueryform.js}"></script>
+    <script type="text/javascript" th:inline="none" th:src="@{/static/js/admin/prototype.js}"></script>
+</div>
+</html>
