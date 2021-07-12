@@ -117,4 +117,6 @@ public interface IDeptInfoService {
 
     List<TreeJson> listUserSetllDept(String deptIDS);
 
+    void batchSave(List<DeptInfo> list);
+
 }

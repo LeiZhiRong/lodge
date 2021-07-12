@@ -1,12 +1,12 @@
 package com.shgs.lodge.service;
 
-import com.shgs.lodge.auth.AuthMethod;
 import com.shgs.lodge.dto.ManagePointDto;
 import com.shgs.lodge.primary.dao.IManagePointDao;
 import com.shgs.lodge.primary.entity.ManagePoint;
 import com.shgs.lodge.util.Message;
 import com.shgs.lodge.util.Pager;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,13 +16,18 @@ import java.util.Map;
 
 @Service("managePointService")
 public class ManagePointService implements IManagePointService {
-    @AuthMethod
+
     private IManagePointDao managePointDao;
+
+    @Autowired
+    public void setManagePointDao(IManagePointDao managePointDao) {
+        this.managePointDao = managePointDao;
+    }
 
     @Override
     @Transactional(value = "primaryTransactionManager", readOnly = true)
     public ManagePoint queryManagePointByID(String id) {
-        return (ManagePoint) managePointDao.queryObject("from ManagePoint m where m.id =?0 )", id);
+        return (ManagePoint) managePointDao.queryObject("from ManagePoint m where m.id =?0 ", id);
     }
 
     @Override
@@ -62,7 +67,7 @@ public class ManagePointService implements IManagePointService {
         jpql.append(" from ManagePoint m where m.bookSet =:bookSet  ");
         alias.put("bookSet", bookSet);
         if (StringUtils.isNotEmpty(keyword)) {
-            jpql.append(" and ( m.bh like:keyword  or m.name like:keyword ");
+            jpql.append(" and ( m.bh like:keyword  or m.name like:keyword ) ");
             alias.put("keyword", "%" + keyword + "%");
         }
         Pager<ManagePoint> pager = managePointDao.find(jpql.toString(), alias);

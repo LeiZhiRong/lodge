@@ -28,6 +28,11 @@ public class DeptInfo {
     private String deptName;
 
     /**
+     * 部门简称
+     */
+    private String deptJc;
+
+    /**
      * 上级部门
      */
     private DeptInfo parent;
@@ -130,4 +135,11 @@ public class DeptInfo {
         this.contents = contents;
     }
 
+    public String getDeptJc() {
+        return deptJc;
+    }
+
+    public void setDeptJc(String deptJc) {
+        this.deptJc = deptJc;
+    }
 }

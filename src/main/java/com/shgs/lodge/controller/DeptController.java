@@ -28,6 +28,7 @@ import java.util.List;
 
 /**
  * 部门信息管理视图层-View接口
+ *
  * @author 雷智荣
  */
 @RestController
@@ -40,20 +41,22 @@ public class DeptController {
     private IDeptInfoService deptInfoService;
 
     /**
-     *部门管理首页
+     * 部门管理首页
+     *
      * @param model
      * @return String
      * @throws JsonProcessingException
      */
     @AuthMethod(role = "ROLE_DEPT")
     @GetMapping("index")
-    public ModelAndView index(Model model,HttpSession session) throws JsonProcessingException {
+    public ModelAndView index(Model model, HttpSession session) throws JsonProcessingException {
         ModelAndView view = new ModelAndView("dept/index");
         return view;
     }
 
     /**
      * 部门信息编辑页dialog
+     *
      * @param model
      * @return String
      */
@@ -64,9 +67,9 @@ public class DeptController {
         boolean disabled = true;
         if (id != null && !id.isEmpty()) {
             deptInfo = deptInfoService.queryDeptInfo(id);
-            if("all".equals(pid)){
-                disabled=true;
-            }else {
+            if ("all".equals(pid)) {
+                disabled = true;
+            } else {
                 disabled = pid != null && !pid.isEmpty() ? false : true;
             }
         } else {
@@ -87,7 +90,7 @@ public class DeptController {
      *
      * @param deptInfoDto
      * @param br
-     * @param pid 上级目录ID
+     * @param pid         上级目录ID
      * @param session
      * @return Message
      */
@@ -98,7 +101,7 @@ public class DeptController {
             return new Message(0, br.getFieldError().getDefaultMessage());
         }
         try {
-            User user= (User) session.getAttribute("user");
+            User user = (User) session.getAttribute("user");
             DeptInfo deptInfo = new DeptInfoDto().getDeptInfo(deptInfoDto);
             String id = deptInfo.getId();
             if (id == null || deptInfo.getId().isEmpty()) {
@@ -110,6 +113,7 @@ public class DeptController {
                 mast.setDeptID(deptInfo.getDeptID());
                 mast.setDeptName(deptInfo.getDeptName());
                 mast.setStatus(deptInfo.getStatus());
+                mast.setDeptJc(deptInfo.getDeptJc());
                 return deptInfoService.updateDeptInfo(mast, pid);
             }
         } catch (Exception e) {
@@ -120,6 +124,7 @@ public class DeptController {
 
     /**
      * 获取部门分页数据
+     *
      * @param order
      * @param sort
      * @param page
@@ -129,17 +134,18 @@ public class DeptController {
      */
     @AuthMethod(role = "ROLE_DEPT")
     @RequestMapping("list")
-    public Pager<DeptInfoDto> findMenuInfoDto(String order, String sort, int page, int rows, String pid,String value,HttpSession session) {
+    public Pager<DeptInfoDto> findMenuInfoDto(String order, String sort, int page, int rows, String pid, String value, HttpSession session) {
         SystemContext.setPageSize(rows);
         SystemContext.setPageNumber(page);
         SystemContext.setOrder(order);
         SystemContext.setSort(sort);
-        User user= (User) session.getAttribute("user");
-       return deptInfoService.findDeptInfoDto(pid,value);
+        User user = (User) session.getAttribute("user");
+        return deptInfoService.findDeptInfoDto(pid, value);
     }
 
     /**
      * 更新排序
+     *
      * @param ids
      * @param type
      * @return
@@ -157,6 +163,7 @@ public class DeptController {
 
     /**
      * 部门信息目录树
+     *
      * @return
      */
     @AuthMethod(role = "ROLE_DEPT")
@@ -169,6 +176,7 @@ public class DeptController {
 
     /**
      * 删除部门信息
+     *
      * @param id
      * @return
      */
@@ -178,5 +186,6 @@ public class DeptController {
         return deptInfoService.deleteDeptInfo(id);
 
     }
+
 
 }

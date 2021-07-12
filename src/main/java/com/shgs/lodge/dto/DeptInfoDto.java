@@ -22,6 +22,11 @@ public class DeptInfoDto {
      */
     @NotEmpty(message = "部门名称不能为空")
     private String deptName;
+
+    /**
+     * 部门简称
+     */
+    private String deptJc;
     /**
      * 上级部门ID
      */
@@ -140,6 +145,13 @@ public class DeptInfoDto {
         this.contents = contents;
     }
 
+    public String getDeptJc() {
+        return deptJc;
+    }
+
+    public void setDeptJc(String deptJc) {
+        this.deptJc = deptJc;
+    }
 
     public DeptInfoDto(DeptInfo deptInfo) {
         this.setId(deptInfo.getId());
@@ -152,6 +164,7 @@ public class DeptInfoDto {
         }
         this.setOrders(deptInfo.getOrders());
         this.setDeptID(deptInfo.getDeptID());
+        this.setDeptJc(deptInfo.getDeptJc());
          if (deptInfo.getParent() != null) {
             DeptInfo parent = deptInfo.getParent();
             this.setParent_id(parent.getId());
@@ -185,6 +198,7 @@ public class DeptInfoDto {
             deptInfo.setContents(dto.getContents());
             deptInfo.setDeptName(dto.getDeptName());
             deptInfo.setDeptID(dto.getDeptID());
+            deptInfo.setDeptJc(dto.getDeptJc());
          }
         return deptInfo;
 

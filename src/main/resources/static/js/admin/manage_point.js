@@ -25,27 +25,26 @@ function addRow() {
 }
 
 //编辑按钮Click事件
-function editRow() {
-    let row = $("#manage_point_grid").datagrid('getSelected');
-    if(empty(row)){
-        LG.alert("error", "请选择需要修改的数据，然后重试");
+function editRow(id) {
+     if(empty(id)){
+        LG.alert("error", "id-参数错误");
         return false;
     }else {
-        altDialog(row.id);
+        altDialog(id);
     }
 }
 
 //Dialog
 function altDialog(id) {
     $("body").append("<div id='dialog_Content' Style='display: none;'></div>");
-    let title = empty(id) ? "新增管理处信息" : "修改管理处信息";
+    let title = empty(id) ? "新增【管理处信息】" : "修改【管理处信息】";
     $('#dialog_Content').dialog({
         title: title,
         iconCls: 'fa fa-ellipsis-v',
         loadingMessage: '数据加载中,请稍等...',
         modal: true,
-        height: 280,
-        width: 450,
+        height: 240,
+        width: 400,
         top:'10%',
         left:'30%',
         inline:true,
@@ -87,10 +86,9 @@ function altDialog(id) {
 }
 
 //删除
-function deleteRow() {
-    let row = $("#manage_point_grid").datagrid('getSelected');
-    if(empty(row)){
-        LG.alert("error", "请选择需要删除的数据，然后重试");
+function deleteRow(id) {
+     if(empty(id)){
+        LG.alert("error", "id-参数错误");
         return false;
     }
     $.messager.confirm({
@@ -102,7 +100,7 @@ function deleteRow() {
                 LG.ajax({
                     url: 'delete',
                     data: {
-                        id: row.id
+                        id: id
                     },
                     success: function (data) {
                         if (data.code === 1) {

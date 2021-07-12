@@ -1,6 +1,7 @@
 package com.shgs.lodge.dto;
 
 import com.shgs.lodge.primary.entity.ManagePoint;
+import com.shgs.lodge.util.CmsUtils;
 import com.shgs.lodge.util.HeaderEnum;
 import org.apache.commons.lang3.StringUtils;
 
@@ -49,6 +50,9 @@ public class ManagePointDto {
      * 账套编号
      */
     private String bookSet;
+
+    @HeaderEnum(field = "handle", title = "关联操作", width = 150, sortable = false, hidden = false)
+    private String handle;
 
 
     public String getId() {
@@ -99,6 +103,14 @@ public class ManagePointDto {
         this.bookSet = bookSet;
     }
 
+    public String getHandle() {
+        return handle;
+    }
+
+    public void setHandle(String handle) {
+        this.handle = handle;
+    }
+
     public ManagePointDto() {
         super();
     }
@@ -113,6 +125,7 @@ public class ManagePointDto {
         }
         this.setBookSet(managePoint.getBookSet());
         this.setName(managePoint.getName());
+        this.setHandle(CmsUtils.formatHandle(this.id));
     }
 
     public List<ManagePointDto> listManagePointDto(List<ManagePoint> list) {

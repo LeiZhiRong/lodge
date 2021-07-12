@@ -38,7 +38,54 @@ function urldecode(str){return decodeURIComponent((str+"").replace(/%(?![\da-f]{
 /*base64*/
 function base64_encode(data){var b64="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";var o1,o2,o3,h1,h2,h3,h4,bits,i=0,ac=0,enc="",tmp_arr=[];if(!data){return data}data=unescape(encodeURIComponent(data));do{o1=data.charCodeAt(i++);o2=data.charCodeAt(i++);o3=data.charCodeAt(i++);bits=o1<<16|o2<<8|o3;h1=bits>>18&63;h2=bits>>12&63;h3=bits>>6&63;h4=bits&63;tmp_arr[ac++]=b64.charAt(h1)+b64.charAt(h2)+b64.charAt(h3)+b64.charAt(h4)}while(i<data.length);enc=tmp_arr.join("");var r=data.length%3;return(r?enc.slice(0,r-3):enc)+"===".slice(r||3)};
 function base64_decode(data){var b64="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";var o1,o2,o3,h1,h2,h3,h4,bits,i=0,ac=0,dec="",tmp_arr=[];if(!data){return data}data+="";do{h1=b64.indexOf(data.charAt(i++));h2=b64.indexOf(data.charAt(i++));h3=b64.indexOf(data.charAt(i++));h4=b64.indexOf(data.charAt(i++));bits=h1<<18|h2<<12|h3<<6|h4;o1=bits>>16&255;o2=bits>>8&255;o3=bits&255;if(h3==64){tmp_arr[ac++]=String.fromCharCode(o1)}else{if(h4==64){tmp_arr[ac++]=String.fromCharCode(o1,o2)}else{tmp_arr[ac++]=String.fromCharCode(o1,o2,o3)}}}while(i<data.length);dec=tmp_arr.join("");return decodeURIComponent(escape(dec.replace(/\0+$/,"")))};
-
+function str_replace (search, replace, subject, countObj) {
+    let i = 0
+    let j = 0
+    let temp = ''
+    let repl = ''
+    let sl = 0
+    let fl = 0
+    const f = [].concat(search)
+    let r = [].concat(replace)
+    let s = subject
+    let ra = Object.prototype.toString.call(r) === '[object Array]'
+    const sa = Object.prototype.toString.call(s) === '[object Array]'
+    s = [].concat(s)
+    const $global = (typeof window !== 'undefined' ? window : global)
+    $global.$locutus = $global.$locutus || {}
+    const $locutus = $global.$locutus
+    $locutus.php = $locutus.php || {}
+    if (typeof (search) === 'object' && typeof (replace) === 'string') {
+        temp = replace
+        replace = []
+        for (i = 0; i < search.length; i += 1) {
+            replace[i] = temp
+        }
+        temp = ''
+        r = [].concat(replace)
+        ra = Object.prototype.toString.call(r) === '[object Array]'
+    }
+    if (typeof countObj !== 'undefined') {
+        countObj.value = 0
+    }
+    for (i = 0, sl = s.length; i < sl; i++) {
+        if (s[i] === '') {
+            continue
+        }
+        for (j = 0, fl = f.length; j < fl; j++) {
+            if (f[j] === '') {
+                continue
+            }
+            temp = s[i] + ''
+            repl = ra ? (r[j] !== undefined ? r[j] : '') : r[0]
+            s[i] = (temp).split(f[j]).join(repl)
+            if (typeof countObj !== 'undefined') {
+                countObj.value += ((temp.split(f[j])).length - 1)
+            }
+        }
+    }
+    return sa ? s : s[0]
+}
 function preg_replace(pattern,replacement,subject,limit){if(typeof limit==='undefined')limit=-1;if(subject.match(eval(pattern))){if(limit==-1){return subject.replace(eval(pattern+'g'),replacement);}else{for(x=0;x<limit;x++){subject=subject.replace(eval(pattern),replacement);}return subject;}}else{return subject;}}
 var strcut=function(str,iMaxBytes,sSuffix){if(isNaN(iMaxBytes)){return str}if(strlen(str)<=iMaxBytes){return str}var i=0,bytes=0;for(;i<str.length&&bytes<iMaxBytes;++i,++bytes){if(str.charCodeAt(i)>255){++bytes}}sSuffix=sSuffix||"";return(bytes-iMaxBytes==1?str.substr(0,i-1):str.substr(0,i))+sSuffix};
 var strlen=function(str){var bytes=0,i=0;for(;i<str.length;++i,++bytes){if(str.charCodeAt(i)>255){++bytes}}return bytes};

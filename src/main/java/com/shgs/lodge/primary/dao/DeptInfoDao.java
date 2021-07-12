@@ -8,6 +8,7 @@ import com.shgs.lodge.primary.entity.DeptInfo;
 import com.shgs.lodge.util.CmsUtils;
 import com.shgs.lodge.util.Pager;
 import com.shgs.lodge.util.SelectJson;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -63,7 +64,11 @@ public class DeptInfoDao extends BaseDAO<DeptInfo,String> implements IDeptInfoDa
 
     @Override
     public List<DeptInfo> listByParent(String pid) {
-        return super.list("from DeptInfo m where m.parent.id =?0 order by m.orders asc ", pid);
+        if(StringUtils.isNotEmpty(pid)) {
+            return super.list("from DeptInfo m where m.parent.id =?0 order by m.orders asc ", pid);
+        }else{
+            return super.list("from DeptInfo m order by m.orders asc ");
+        }
     }
 
     @Override

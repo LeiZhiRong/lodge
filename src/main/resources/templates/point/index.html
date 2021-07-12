@@ -15,22 +15,17 @@
     </table>
     <div id="Ptools">
         <div class="m-toolbar" style="height: 36px;">
-            <div class="m-left e-icon5 ">
-                <input id="searchbox" class="easyui-searchbox" data-options="prompt:'输入关键字查询',searcher:f_search"
+            <div class="m-left e-icon5 " style="padding-left: 5px;">
+                <input id="searchbox" class="easyui-searchbox" data-options="prompt:'输入关键字查询',searcher:f_search,icons: [{
+                        iconCls:'icon-clear',
+                        handler: function(e){
+                            $(e.data.target).textbox('clear');
+                        }
+                    }]"
                        style="width:200px;height: 28px;">
                 <button id="addBtn" onclick="addRow();" class="easyui-linkbutton "
                         data-options="plain:true,height:25,iconCls: 'e-icon1 fa fa-plus-square fa-1g'">
-                    添加
-                </button>
-                <span class="datagrid-btn-separator"
-                      style="vertical-align: middle;display:inline-block;float:none"></span>
-                <button id="editBtn" onclick="editRow();" class="easyui-linkbutton "
-                        data-options="plain:true,height:25,iconCls: 'e-icon1 fa fa-plus-square fa-1g'">
-                    编辑
-                </button>
-                <button id="delBtn" onclick="deleteRow();" class="easyui-linkbutton "
-                        data-options="plain:true,height:25,iconCls: 'e-icon1 fa fa-plus-square fa-1g'">
-                   删除
+                    新增
                 </button>
             </div>
         </div>

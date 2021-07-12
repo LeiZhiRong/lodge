@@ -1,39 +1,49 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-    </head>
-    <body>
-        <form id="mergeFrom" th:action="@{save}" th:object="${deptInfo}" method="post">
-            <table cellspacing="0" cellPadding="0" class="addTable">
-                <tr>
-                    <td class="rightTd" width="100px">部门编号：</td>
-                    <td>
-                        <input name="deptID" class="easyui-textbox" data-options="required:true,missingMessage:null" style="width:200px;height:28px;"
-                               th:value="*{deptID}"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="rightTd" width="100px">部门名称：</td>
-                    <td>
-                        <input name="deptName" class="easyui-textbox" data-options="required:true,missingMessage:null" style="width:200px;height:28px;" th:value="*{deptName}"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="rightTd" width="100px">所属部门：</td>
-                    <td>
-                        <input id="pid" name="pid" class="easyui-combotree" th:value="${pid!='all'?pid:''}"
-                               th:disabled="${disabled}" style="width:200px;height:30px;"
-                               data-options="prompt:'请选择...', editable:true,panelMaxHeight : 200,panelWidth : 300,url:'listParent',onLoadSuccess:function (row,data) {
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<form id="mergeFrom" th:action="@{save}" th:object="${deptInfo}" method="post">
+    <table cellspacing="0" cellPadding="0" class="addTable">
+        <tr>
+            <td class="rightTd" width="100px">部门编号：</td>
+            <td>
+                <input name="deptID" class="easyui-textbox" data-options="required:true,missingMessage:null"
+                       style="width:200px;height:28px;"
+                       th:value="*{deptID}"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="rightTd" width="100px">部门名称：</td>
+            <td>
+                <input id="deptName" name="deptName" class="easyui-textbox"
+                       data-options="required:true,missingMessage:null" style="width:200px;height:28px;"
+                       th:value="*{deptName}"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="rightTd" width="100px">部门简称：</td>
+            <td>
+                <input id="deptJc" name="deptJc" class="easyui-textbox" style="width:200px;height:28px;"
+                       th:value="*{deptJc}"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="rightTd" width="100px">所属部门：</td>
+            <td>
+                <input id="pid" name="pid" class="easyui-combotree" th:value="${pid!='all'?pid:''}"
+                       th:disabled="${disabled}" style="width:200px;height:30px;"
+                       data-options="prompt:'请选择...', editable:true,panelMaxHeight : 200,panelWidth : 300,url:'listParent',onLoadSuccess:function (row,data) {
                 }"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td class="rightTd" width="100px">是否启用：</td>
-                    <td>
-                        <input class="easyui-switchbutton" th:checked="${deptInfo.status==1?1:0}"
-                               style="height:28px;"
-                               data-options="onText:'启用',offText:'停用',
+            </td>
+        </tr>
+        <tr>
+            <td class="rightTd" width="100px">是否启用：</td>
+            <td>
+                <input class="easyui-switchbutton" th:checked="${deptInfo.status==1?1:0}"
+                       style="height:28px;"
+                       data-options="onText:'启用',offText:'停用',
                         onChange:function(checked){
                         if(checked){
                         $('#status').val(1);
@@ -41,15 +51,32 @@
                         $('#status').val(0);
                         }
                         }">
-                    </td>
-                </tr>
-            </table>
-            <input hidden="true" name="status" id="status" th:value="*{status}"/>
-            <input hidden="true" name="id" id="id" th:value="*{id}"/>
-            <input hidden="true" name="contents" id="contents" th:value="*{contents}"/>
-            <script th:inline="javascript">
-
-            </script>
-        </form>
-    </body>
+            </td>
+        </tr>
+    </table>
+    <input hidden="true" name="status" id="status" th:value="*{status}"/>
+    <input hidden="true" name="id" id="id" th:value="*{id}"/>
+    <input hidden="true" name="contents" id="contents" th:value="*{contents}"/>
+    <script th:inline="javascript">
+        $(function () {
+            $("#deptName").textbox({
+                onChange: function () {
+                    let value = $("#deptName").textbox('getValue');
+                    let newStr;
+                    if (!empty(value)) {
+                        let str = str_replace("-", "-", value);
+                        let array = str.split('-');
+                        if (array.length > 1) {
+                            newStr = array[1];
+                        } else {
+                            newStr = array[0];
+                        }
+                    }
+                    $("#deptJc").textbox("setValue", newStr);
+                }
+            })
+        })
+    </script>
+</form>
+</body>
 </html>

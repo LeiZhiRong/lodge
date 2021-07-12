@@ -7,8 +7,8 @@
 <form id="userForm" th:action="@{saveUserInfo}" th:object="${userInfo}" method="post">
     <table cellspacing="0" cellPadding="0" class="addTable">
         <tr>
-            <td class="rightTd" width="100px">用户状态：</td>
-            <td class="leftTd">
+            <td class="rightTd" style="width:100px;">用户状态：</td>
+            <td class="leftTd" colspan="3">
                 <input class="easyui-switchbutton"  th:checked="${userInfo.status==1?1:0}"
                        style="height:28px;"
                        data-options="onText:'启用',offText:'停用',
@@ -22,24 +22,13 @@
             </td>
         </tr>
         <tr>
-            <td class="rightTd" width="100px">用户编号：</td>
-            <td class="leftTd">
-                <input name="loginAccount" class="easyui-textbox" data-options="required:true,missingMessage:null"
-                       style="width:150px;height:28px;"
-                       th:value="*{loginAccount}"/>
-            </td>
-        </tr>
-
-        <tr>
-            <td class="rightTd" width="100px">用户名称：</td>
+            <td class="rightTd"style="width:100px;">用户名称：</td>
             <td class="leftTd">
                 <input name="userName" class="easyui-textbox" data-options="required:true,missingMessage:null"
                        style="width:150px;height:28px;"
                        th:value="*{userName}"/>
             </td>
-        </tr>
-        <tr>
-            <td class="rightTd" width="120px">岗位：</td>
+            <td class="rightTd" width="120px">工作岗位：</td>
             <td class="leftTd">
                 <select name="station" class="easyui-combobox"
                         data-options="panelMaxHeight:200,editable:false"
@@ -52,22 +41,28 @@
             </td>
         </tr>
         <tr>
-            <td class="rightTd" width="100px">登录密码：</td>
+            <td class="rightTd"style="width:100px;">登录账号：</td>
+            <td class="leftTd">
+                <input name="loginAccount" class="easyui-textbox" data-options="required:true,missingMessage:null"
+                       style="width:150px;height:28px;"
+                       th:value="*{loginAccount}"/>
+            </td>
+            <td class="rightTd"style="width:100px;">登录密码：</td>
             <td class="leftTd">
                 <input name="LoginPassword" class="easyui-passwordbox" style="width:150px;height:28px;"
                        th:value="*{loginPassword}"/>
             </td>
         </tr>
         <tr>
-            <td class="rightTd" width="100px">管理部门：</td>
-            <td class="leftTd">
+            <td class="rightTd"style="width:100px;">管理部门：</td>
+            <td class="leftTd" colspan="3">
                 <input id="deptID" name="deptID" th:value="*{deptID}" class="easyui-searchbox"
                        data-options="prompt:'请选择...',multiline:true,editable:false,searcher:_searchDeptID,height:60,width:400">
             </td>
         </tr>
         <tr>
-            <td class="rightTd" width="100px">结算部门：</td>
-            <td class="leftTd">
+            <td class="rightTd"style="width:100px;">排除部门：</td>
+            <td class="leftTd" colspan="3">
                 <input id="settID" name="settID" th:value="*{settID}" class="easyui-searchbox"
                        data-options="prompt:'请选择...',multiline:true,editable:false,searcher:_searchSettID,height:60,width:400">
             </td>

@@ -145,7 +145,7 @@
         var id = "#" + obj.id;
         var code = id + "Code";
         var str = $(id).combobox("getText");
-        if (is_eq("部门编号", str) || is_eq("客户编号", str)|| is_eq("流水号", str)|| is_eq("无", str)) {
+        if (is_eq("部门编号", str) || is_eq("客户编号", str)|| is_eq("流水号", str)|| is_eq("无", str)|| is_eq("管理处编号", str)) {
             $(code).textbox("clear").textbox("disable").textbox({
                 icons: []
             });
@@ -206,7 +206,7 @@
         var id = "#" + obj.id;
         var code = id + "Code";
         var str = $(id).combobox("getText");
-        if (is_eq("仓库编号", str) || is_eq("往来单位编号", str)) {
+        if (is_eq("部门编号", str) || is_eq("客户编号", str)|| is_eq("流水号", str)|| is_eq("无", str)|| is_eq("管理处编号", str)) {
             $(code).textbox("disable").textbox({
                 icons: []
             });

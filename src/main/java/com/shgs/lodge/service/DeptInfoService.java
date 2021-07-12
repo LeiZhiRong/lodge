@@ -227,5 +227,11 @@ public class DeptInfoService implements IDeptInfoService {
         return deptInfoDao.listUserSetllDept(deptIDS);
     }
 
+    @Override
+    @Transactional(value = "primaryTransactionManager")
+    public void batchSave(List<DeptInfo> list) {
+        deptInfoDao.batchUpdate(list);
+    }
+
 
 }
