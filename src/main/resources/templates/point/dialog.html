@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<form method="post" class="easyui-form" id="manage_point_form" th:object="${managePoint}" action="save">
+    <table cellspacing="0" cellPadding="0" class="addTable">
+        <tr>
+            <td class="rightTd" width="100px">
+                启用状态：
+            </td>
+            <td class="leftTd">
+                <input class="easyui-switchbutton" th:checked="${managePoint.ztbz=='T'?1:0}"
+                       style="height:28px;"
+                       data-options="onText:'启用',offText:'停用',
+                        onChange:function(checked){
+                        if(checked){
+                        $('#ztbz').val('T');
+                        } else{
+                        $('#ztbz').val('F');
+                        }
+                        }">
+            </td>
+        </tr>
+        <tr>
+            <td class="rightTd" width="100px">
+                编号：
+            </td>
+            <td class="leftTd">
+                <input th:value="*{bh}"  name="bh" data-options="required:true,missingMessage:null" class="easyui-textbox"
+                style="width:200px;height:26px;"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="rightTd" width="100px">
+                名称：
+            </td>
+            <td class="leftTd">
+                <input th:value="*{name}"  name="name" data-options="required:true,missingMessage:null" class="easyui-textbox"
+                       style="width:200px;height:26px;"/>
+            </td>
+        </tr>
+        <input hidden="true" name="bookSet" id="bookSet" th:value="*{bookSet}"/>
+        <input hidden="true" name="id" id="id" th:value="*{id}"/>
+        <input hidden="true" name="ztbz" id="ztbz" th:value="*{ztbz}"/>
+    </table>
+</form>
+</body>
+</html>
