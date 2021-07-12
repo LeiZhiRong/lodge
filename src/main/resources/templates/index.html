@@ -29,66 +29,10 @@
     <!--[if lt IE 9]>
     <script type="text/javascript" th:src="@{/static/js/html5.js}"></script>
     <![endif]-->
-    <style type="text/css">
-        .sidemenu .accordion .panel-title {
-            color: #b8c7ce;
-        }
-        .sidemenu .accordion .accordion-header {
-            background: #222d32;
-            color: #b8c7ce;
-        }
-        .sidemenu .accordion .accordion-body {
-            background: #2c3b41;
-            color: #8aa4af;
-        }
-        .sidemenu .accordion .accordion-header-selected {
-            background: #1e282c;
-        }
-        .sidemenu .tree-node-hover {
-            background: #2c3b41;
-            color: #fff;
-        }
-        .sidemenu .tree-node-selected {
-            background: #2c3b41;
-            color: #fff;
-        }
-        .sidemenu .accordion-header .panel-tool {
-            display: none;
-        }
-        .sidemenu .accordion-header::after,
-        .sidemenu .tree-node-nonleaf::after {
-            display: inline-block;
-            vertical-align: top;
-            border-style: solid;
-            transform: rotate(45deg);
-            width: 4px;
-            height: 4px;
-            content: "";
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            margin-top: -3px;
-            border-width: 0 1px 1px 0;
-        }
-        .sidemenu .accordion-header-selected::after {
-            transform: rotate(-135deg);
-        }
-        .sidemenu .tree-node-nonleaf::after {
-            transform: rotate(-135deg);
-        }
-        .sidemenu .tree-node-nonleaf-collapsed::after {
-            transform: rotate(45deg);
-        }
-        .sidemenu-collapsed .accordion-header::after {
-            display: none;
-        }
-        .sidemenu-tooltip .accordion {
-            border-color: #1e282c;
-        }
-    </style>
 
 </head>
-<body class="easyui-layout">
+<body>
+<div id="main" class="easyui-layout" fit="true">
 <div class="c9" data-options="region:'north',border:0" style="overflow-y:hidden;">
     <div class="c9 panel-header" style="height:63px;">
         <div id="m-toolbar">
@@ -113,11 +57,15 @@
         </div>
     </div>
 </div>
-<div data-options="region:'west',split:false,width:48,border:false"
-     style="position: relative; overflow-y:hidden;overflow: hidden;padding: 0;background: #222d32;">
+<div id="west" data-options="region:'west',split:false,width:45,border:false"
+     style="position: relative; overflow-y:hidden;overflow: hidden;padding: 0;">
+    <header style="height: 35px;">
+        <div class="m-toolbar" >
+            <div class="m-left" style="width: 120px;text-align: left;color: #777">&nbsp;<a href="javascript:void(0)" onclick="toggle()" style="color: #777 " ><i class="fa fa-bars fa-lg fa-fw"  aria-hidden="true"></i></a>&nbsp;&nbsp;MENU</div>
+        </div>
+    </header>
     <div id="sm" class="easyui-sidemenu"
-         data-options="data:menu,collapsed:'collapse',width:48,border:false,floatMenuWidth:150,onSelect: onSideMenuSelect"></div>
-
+         data-options="data:menu,collapsed:'collapse',multiple:false,width:45,border:false,floatMenuWidth:150,onSelect: onSideMenuSelect"></div>
 </div>
 <div id="mainPanle" data-options="region:'center',border:true" style="overflow-y:hidden">
     <div id="wu-tabs" class="easyui-tabs" style="position: relative; overflow: hidden;"
@@ -128,7 +76,7 @@
     </div>
     <div class="m-right" id="tabs_menu">
         <a href="javascript:void(0)" class="easyui-menubutton"
-           data-options="menu:'#tb_menu',plain:true,border:false,top:0,iconCls:'e-icon fa fa-bars 2x',hasDownArrow:false"></a>
+           data-options="menu:'#tb_menu',plain:true,border:false,top:0,iconCls:'e-icon fa fa-ellipsis-h',hasDownArrow:false"></a>
     </div>
     <div id="tb_menu" style="display: none;">
         <div data-options="iconCls:'e-icon1 fa fa-refresh'" onclick="reloadTab()">刷新当前页</div>
@@ -143,12 +91,11 @@
 <!--        <span>Copyright©<span id="copy"></span>&nbsp;<span th:text="${session.user.corpName}"></span></span>-->
 <!--    </div>-->
 <!--</div>-->
-
+</div>
 <script th:inline="javascript">
     var basepath = [[${session.basePath}]];
     var menu = JSON.parse([[${session.menuList}]]);
     $("#copy").html(new Date().getFullYear());
-
     //add tabs
     function onSideMenuSelect(item) {
         var title = item.text;
@@ -164,6 +111,19 @@
             useiframe: true,
             closable: true
         });
+    }
+    function toggle(){
+        let opts = $('#sm').sidemenu('options');
+        $('#sm').sidemenu(opts.collapsed ? 'expand' : 'collapse');
+        opts = $('#sm').sidemenu('options');
+        $('#main').layout('panel', 'west').panel('resize',{
+            width: opts.collapsed ? 45 : 120
+        })
+        $('#main').layout("resize");
+        $('#sm').sidemenu('resize', {
+            width: opts.collapsed ? 45 : 120
+        })
+
     }
 </script>
 </body>
