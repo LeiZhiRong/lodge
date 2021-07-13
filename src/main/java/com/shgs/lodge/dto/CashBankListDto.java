@@ -87,7 +87,7 @@ public class CashBankListDto {
     }
 
     public CashBankListDto(CashBank cashBank) {
-        String pid = null;
+        String pid;
         this.setId(cashBank.getId());
         this.setKmBH(cashBank.getKmBH());
         this.setContents(cashBank.getContents());
@@ -113,7 +113,7 @@ public class CashBankListDto {
     }
 
     public List<CashBankListDto> listCashBankListDto(List<CashBank> cashBankList) {
-        List<CashBankListDto> list = new ArrayList<CashBankListDto>();
+        List<CashBankListDto> list = new ArrayList<>();
         if (cashBankList.size() > 0) {
             for (CashBank mast : cashBankList) {
                 list.add(new CashBankListDto(mast));

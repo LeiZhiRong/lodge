@@ -23,40 +23,40 @@ public class ReveExpeItemDto {
     /**
      * 借贷方向
      */
-    @HeaderEnum(field = "balance", title = "借贷", width = 60, sortable = true, hidden = false)
+    @HeaderEnum(field = "balance", title = "借贷", width = 60)
     private String balance;
 
     /**
      * 编号名称组合
      */
-    @HeaderEnum(field = "cashBankBhAndName", title = "科目", width = 200, sortable = false, hidden = false)
+    @HeaderEnum(field = "cashBankBhAndName", title = "科目", width = 200, sortable = false)
     private String cashBankBhAndName;
 
     /**
      * 收支类型
      */
     @NotEmpty(message = "收支类型不能为空")
-    @HeaderEnum(field = "reType", title = "收支类型", width = 80, sortable = true, hidden = true)
+    @HeaderEnum(field = "reType", title = "收支类型", width = 80,  hidden = true)
     private String reType;
 
     /**
      * 客商名称
      */
-    @HeaderEnum(field = "saleCorpName", title = "客商", width = 200, sortable = true, hidden = false)
+    @HeaderEnum(field = "saleCorpName", title = "客商", width = 200)
     private String saleCorpName;
 
 
     /**
      * 收支项目名称
      */
-    @HeaderEnum(field = "szxmName", title = "收支项目", width = 200, sortable = true, hidden = false)
+    @HeaderEnum(field = "szxmName", title = "收支项目", width = 200)
     private String  szxmName;
 
 
     /**
      * 部门名称
      */
-    @HeaderEnum(field = "deptName", title = "部门", width = 200, sortable = true, hidden = false)
+    @HeaderEnum(field = "deptName", title = "部门", width = 200)
     private String deptName;
 
     /**
@@ -121,13 +121,13 @@ public class ReveExpeItemDto {
      */
 
     @JsonIgnore
-    @HeaderEnum(field = "ztbz", title = "状态", width = 60, sortable = false, hidden = false)
+    @HeaderEnum(field = "ztbz", title = "状态", width = 60, sortable = false)
     private String ztbz;
 
     @JsonProperty("ztbz")
     private String formatZtbz;
 
-    @HeaderEnum(field = "handle", title = "关联操作", width = 150, sortable = false, hidden = false)
+    @HeaderEnum(field = "handle", title = "关联操作", width = 150, sortable = false)
     private String handle;
 
     /**
@@ -443,7 +443,7 @@ public class ReveExpeItemDto {
     }
 
     public List<ReveExpeItemDto> listReveExpeItemDto(List<ReveExpeItem> list) {
-        List<ReveExpeItemDto> dto = new ArrayList<ReveExpeItemDto>();
+        List<ReveExpeItemDto> dto = new ArrayList<>();
         if (list != null && list.size() > 0) {
             for (ReveExpeItem mast : list) {
                 dto.add(new ReveExpeItemDto(mast));

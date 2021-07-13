@@ -14,7 +14,7 @@ import java.util.Map;
 public class ReveExpeItemDao extends BaseDAO<ReveExpeItem, String> implements IReveExpeItemDao {
     @Override
     public List<ReveExpeItemListDto> listReveExpeItemListDto(String proceedId, String auditStatus, String onAccount, String paymentMethod) {
-        StringBuffer jpql = new StringBuffer();
+        StringBuilder jpql = new StringBuilder();
         Map<String, Object> alias = new HashMap<>();
         jpql.append(" from ReveExpeItem r where r.proceedType.id =:proceedId  ");
         alias.put("proceedId", proceedId);

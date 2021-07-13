@@ -22,8 +22,13 @@ import java.util.Map;
 @Service("userInfoService")
 public class UserInfoService implements IUserInfoService {
 
-    @Autowired
+
     private IUserInfoDao userInfoDao;
+
+    @Autowired
+    public void setUserInfoDao(IUserInfoDao userInfoDao) {
+        this.userInfoDao = userInfoDao;
+    }
 
     @Override
     @Transactional(value = "primaryTransactionManager")
@@ -60,11 +65,13 @@ public class UserInfoService implements IUserInfoService {
     }
 
     @Override
+    @Transactional(value = "primaryTransactionManager",readOnly = true)
     public Pager<UserInfo> listUserInfo(String keyword,boolean isAdmin) {
         return userInfoDao.listUserInfo( keyword,isAdmin);
     }
 
     @Override
+    @Transactional(value = "primaryTransactionManager",readOnly = true)
     public UserInfo queryUserInfoById(String id) {
         return userInfoDao.queryUserInfoById(id);
     }
@@ -81,17 +88,19 @@ public class UserInfoService implements IUserInfoService {
     }
 
     @Override
+    @Transactional(value = "primaryTransactionManager",readOnly = true)
     public UserInfo queryByAccount(String loginAccount) {
         return userInfoDao.queryByAccount(loginAccount);
     }
 
     @Override
     @Transactional(value = "primaryTransactionManager")
-    public boolean batchSaveUserInfo(List<UserInfo> list) {
-        return userInfoDao.batchSaveUserInfo(list);
+    public void batchSaveUserInfo(List<UserInfo> list) {
+        userInfoDao.batchSaveUserInfo(list);
     }
 
     @Override
+    @Transactional(value = "primaryTransactionManager",readOnly = true)
     public Message loginUser(String loginAccount, String password) {
         Message msg = new Message(0, "登录失败");
         UserInfo userInfo = userInfoDao.queryByAccount(loginAccount);
@@ -115,6 +124,7 @@ public class UserInfoService implements IUserInfoService {
     }
 
     @Override
+    @Transactional(value = "primaryTransactionManager",readOnly = true)
     public List<SelectJson> listToSelectJson(String keyword) {
         return userInfoDao.listToSelectJson(keyword);
     }
@@ -123,7 +133,7 @@ public class UserInfoService implements IUserInfoService {
     @Transactional(value = "primaryTransactionManager")
     public void updateUserStation(String oldStation, String newStation) {
         String jqpl = "update UserInfo u set u.station =:newStation where u.station =:oldStation ";
-        Map<String, Object> alias = new HashMap<String, Object>();
+        Map<String, Object> alias = new HashMap<>();
         alias.put("newStation", newStation);
         alias.put("oldStation", oldStation);
         userInfoDao.executeByAliasJpql(jqpl, alias);

@@ -23,11 +23,21 @@ import java.util.List;
 @Service("permInfoService")
 public class PermInfoService implements IPermInfoService {
 
-    @Autowired
+
     private IPermInfoDao permInfoDao;
 
-    @Autowired
+
     private IMenuInfoDao menuInfoDao;
+
+    @Autowired
+    public void setPermInfoDao(IPermInfoDao permInfoDao) {
+        this.permInfoDao = permInfoDao;
+    }
+
+    @Autowired
+    public void setMenuInfoDao(IMenuInfoDao menuInfoDao) {
+        this.menuInfoDao = menuInfoDao;
+    }
 
     @Override
     @Transactional(value = "primaryTransactionManager")
@@ -37,7 +47,7 @@ public class PermInfoService implements IPermInfoService {
             return msg;
         } else {
             List<MenuInfo> list = menuInfoDao.listMenuInfoByIds(menu_ids);
-            List<PermInfo> mast = new ArrayList<PermInfo>();
+            List<PermInfo> mast = new ArrayList<>();
             if (list != null && list.size() > 0) {
                 for (MenuInfo menuInfo : list) {
                     mast.add(new PermInfo(role_id, menuInfo));
@@ -72,7 +82,7 @@ public class PermInfoService implements IPermInfoService {
     @Transactional(value = "primaryTransactionManager", readOnly = true)
     public List<ListGroup> listPermInfo2ListGroup(String role_id, String keyword) {
         List<PermInfo> list = permInfoDao.listPermInfo(role_id, keyword);
-        List<ListGroup> group = new ArrayList<ListGroup>();
+        List<ListGroup> group = new ArrayList<>();
         if (list != null && list.size() > 0) {
             for (PermInfo temp : list) {
                 group.add(new ListGroup(temp.getId(), temp.getMenuInfo().getName(), temp.getMenuInfo().getParent() != null ? temp.getMenuInfo().getParent().getName() : ""));
@@ -84,19 +94,19 @@ public class PermInfoService implements IPermInfoService {
 
     @Override
     @Transactional(value = "primaryTransactionManager", readOnly = true)
-    public List<ListGroup> ListMeunInfo2ListGroup(List<String> menuIds,String role_id, String keyword,boolean isAdmin) {
+    public List<ListGroup> ListMeunInfo2ListGroup(List<String> menuIds, String role_id, String keyword, boolean isAdmin) {
         List<String> ids = permInfoDao.getMenuIds(role_id);
-        return menuInfoDao.getMenuInfo2ListGroup(menuIds,keyword, ids, true,isAdmin);
+        return menuInfoDao.getMenuInfo2ListGroup(menuIds, keyword, ids, true, isAdmin);
     }
 
     @Override
     @Transactional(value = "primaryTransactionManager", readOnly = true)
     public List<Permissions> listRoleType(String role_id) {
-        List<Permissions> permissions = new ArrayList<Permissions>();
+        List<Permissions> permissions = new ArrayList<>();
         List<PermInfo> permInfoList = permInfoDao.listPermInfo(role_id, null);
         if (permInfoList != null && permInfoList.size() > 0) {
-            for(PermInfo permInfo:permInfoList){
-                permissions.add(new Permissions(permInfo.getId(),permInfo.getMenuInfo().getName(),permInfo.getMenuInfo().getType()!=null?permInfo.getMenuInfo().getType().toString():null,permInfo.getMenuInfo().getIds()));
+            for (PermInfo permInfo : permInfoList) {
+                permissions.add(new Permissions(permInfo.getId(), permInfo.getMenuInfo().getName(), permInfo.getMenuInfo().getType() != null ? permInfo.getMenuInfo().getType().toString() : null, permInfo.getMenuInfo().getIds()));
             }
         }
         return permissions;

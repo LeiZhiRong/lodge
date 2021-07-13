@@ -22,8 +22,13 @@ import java.util.List;
 @Service("cashBankService")
 public class CashBankService implements ICashBankService {
 
-    @Autowired
+
     private ICashBankDao cashBankDao;
+
+    @Autowired
+    public void setCashBankDao(ICashBankDao cashBankDao) {
+        this.cashBankDao = cashBankDao;
+    }
 
     @Override
     @Transactional(value = "primaryTransactionManager")
@@ -35,7 +40,7 @@ public class CashBankService implements ICashBankService {
             msg.setMessage("科目编号:【" + cashBank.getKmBH() + "】已在使用中，请检测后重试！");
             return msg;
         }
-        Integer orders = cashBankDao.getMaxOrderByParent(pid);
+        int orders = cashBankDao.getMaxOrderByParent(pid);
         String ids = null;
         CashBank pc = null;
         if (pid != null && !pid.isEmpty()) {
@@ -97,11 +102,11 @@ public class CashBankService implements ICashBankService {
                 cashBankDao.update(parent);
             }
             if (pid != null && !pid.isEmpty()) {
-                if (oldparent != null && parent != null && oldparent.getId() != parent.getId()) {
+                if (oldparent != null && parent != null && !oldparent.getId().equals(parent.getId())) {
                     cashBankDao.executeIds(cashBank.getId(), oldparent.getIds(), parent.getIds());
                 }
             }
-            if (oldparent != null && oldparent.getId() != pid) {
+            if (oldparent != null && !oldparent.getId().equals(pid)) {
                 if (cashBankDao.getCountCashBankByPid(oldparent.getId()) == 0) {
                     oldparent.setContents("F");
                     cashBankDao.update(oldparent);

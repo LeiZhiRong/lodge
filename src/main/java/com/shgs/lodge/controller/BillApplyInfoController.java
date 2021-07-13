@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 开票申请视图接口层
@@ -46,39 +47,93 @@ import java.util.List;
 @AuthClass("login")
 public class BillApplyInfoController {
 
-    @Autowired
+
     private ITableHeaderService tableHeaderService;
 
-    @Autowired
+
     private IBillApplyInfoService billApplyInfoService;
 
-    @Autowired
+
     private ICustomService customService;
 
-    @Autowired
+
     private IDeptInfoService deptInfoService;
 
-    @Autowired
+
     private IBillCorpInfoService billCorpInfoService;
 
-    @Autowired
+
     private IAccounCodeService accounCodeService;
 
-    @Autowired
+
     private IAccounPeriodService accounPeriodService;
 
-    @Autowired
+
     private IBankAccountService bankAccountService;
 
-    @Autowired
+
     private IReveExpeItemService reveExpeItemService;
 
-    @Autowired
+
     private IPaymentMethodService paymentMethodService;
 
-    @Autowired
+
     private IAncillaryProjectsService ancillaryProjectsService;
 
+    @Autowired
+    public void setTableHeaderService(ITableHeaderService tableHeaderService) {
+        this.tableHeaderService = tableHeaderService;
+    }
+
+    @Autowired
+    public void setBillApplyInfoService(IBillApplyInfoService billApplyInfoService) {
+        this.billApplyInfoService = billApplyInfoService;
+    }
+
+    @Autowired
+    public void setCustomService(ICustomService customService) {
+        this.customService = customService;
+    }
+
+    @Autowired
+    public void setDeptInfoService(IDeptInfoService deptInfoService) {
+        this.deptInfoService = deptInfoService;
+    }
+
+    @Autowired
+    public void setBillCorpInfoService(IBillCorpInfoService billCorpInfoService) {
+        this.billCorpInfoService = billCorpInfoService;
+    }
+
+    @Autowired
+    public void setAccounCodeService(IAccounCodeService accounCodeService) {
+        this.accounCodeService = accounCodeService;
+    }
+
+    @Autowired
+    public void setAccounPeriodService(IAccounPeriodService accounPeriodService) {
+        this.accounPeriodService = accounPeriodService;
+    }
+
+    @Autowired
+    public void setBankAccountService(IBankAccountService bankAccountService) {
+        this.bankAccountService = bankAccountService;
+    }
+
+    @Autowired
+    public void setReveExpeItemService(IReveExpeItemService reveExpeItemService) {
+        this.reveExpeItemService = reveExpeItemService;
+    }
+
+    @Autowired
+    public void setPaymentMethodService(IPaymentMethodService paymentMethodService) {
+        this.paymentMethodService = paymentMethodService;
+    }
+
+    @Autowired
+    public void setAncillaryProjectsService(IAncillaryProjectsService ancillaryProjectsService) {
+        this.ancillaryProjectsService = ancillaryProjectsService;
+    }
 
     /**
      * 首页
@@ -93,13 +148,13 @@ public class BillApplyInfoController {
     public ModelAndView index(Model model, HttpSession session) throws JsonProcessingException {
         String endDate = CmsUtils.getNowDate();
         String starDate = BeanUtil.addDayStart(BeanUtil.formatDate(endDate), -31);
-        String month="";
-        AccounPeriod accounPeriod=accounPeriodService.getNowMonth();
-       if(accounPeriod!=null){
-           endDate=BeanUtil.timestampToStr(accounPeriod.getEndTime(),"yyyy-MM-dd");
-           starDate=BeanUtil.timestampToStr(accounPeriod.getStartTime(),"yyyy-MM-dd");
-           month=accounPeriod.getMonth();
-       }
+        String month = "";
+        AccounPeriod accounPeriod = accounPeriodService.getNowMonth();
+        if (accounPeriod != null) {
+            endDate = BeanUtil.timestampToStr(accounPeriod.getEndTime(), "yyyy-MM-dd");
+            starDate = BeanUtil.timestampToStr(accounPeriod.getStartTime(), "yyyy-MM-dd");
+            month = accounPeriod.getMonth();
+        }
 
         User user = (User) session.getAttribute("user");
         List<HeaderColumns> columns = tableHeaderService.listHeaderColumns(user.getId(), "applyGrid", "com.shgs.lodge.dto.BillApplyInfoDto");
@@ -110,8 +165,7 @@ public class BillApplyInfoController {
         model.addAttribute("endDate", endDate);
         model.addAttribute("month", month);
         model.addAttribute("applyDepts", deptInfoService.listUserByDeptIDS(user.getManageDept()));
-        ModelAndView view = new ModelAndView("apply/index");
-        return view;
+        return new ModelAndView("apply/index");
     }
 
     /**
@@ -137,7 +191,7 @@ public class BillApplyInfoController {
         }
         if ("billMoney".equals(field)) {
             if (!CmsUtils.isNumeric(value))
-                return new Pager<BillApplyInfoDto>();
+                return new Pager<>();
         }
         User user = (User) session.getAttribute("user");
         String bookSet = user.getBookSet();
@@ -146,8 +200,7 @@ public class BillApplyInfoController {
         SystemContext.setPageNumber(page);
         SystemContext.setOrder(order);
         SystemContext.setSort(sort);
-        Pager<BillApplyInfoDto> mast = billApplyInfoService.listBillApplyInfoDto(field, value, "DF", bookSet, userBh);
-        return mast;
+        return billApplyInfoService.listBillApplyInfoDto(field, value, "DF", bookSet, userBh);
     }
 
     /**
@@ -177,9 +230,9 @@ public class BillApplyInfoController {
         }
         if ("billMoney".equals(field)) {
             if (!CmsUtils.isNumeric(value))
-                return new Pager<BillApplyHistoryInfoDto>();
+                return new Pager<>();
         }
-        List<String> _ztbz = new ArrayList<String>();
+        List<String> _ztbz = new ArrayList<>();
         if (ztbz != null && !ztbz.isEmpty())
             _ztbz = CmsUtils.string2Array(ztbz, ",");
         if (starDate != null && !starDate.isEmpty())
@@ -193,8 +246,7 @@ public class BillApplyInfoController {
         SystemContext.setPageNumber(page);
         SystemContext.setOrder(order);
         SystemContext.setSort(sort);
-        Pager<BillApplyHistoryInfoDto> mast = billApplyInfoService.listHistoryInfoDto(field, value, starDate, endDate, _ztbz, bookSet, userBh);
-        return mast;
+        return billApplyInfoService.listHistoryInfoDto(field, value, starDate, endDate, _ztbz, bookSet, userBh);
     }
 
     /**
@@ -234,8 +286,7 @@ public class BillApplyInfoController {
         model.addAttribute("billType", billType);
         model.addAttribute("applyDept", deptInfoService.listUserByDeptIDS(user.getManageDept()));
         model.addAttribute("setllDept", deptInfoService.listUserByDeptIDS(user.getBalanceDept()));
-        ModelAndView view = new ModelAndView("apply/dialog");
-        return view;
+        return new ModelAndView("apply/dialog");
     }
 
     /**
@@ -251,8 +302,7 @@ public class BillApplyInfoController {
     public ModelAndView getCorpInfo(String keyword, String corpType, Model model) {
         model.addAttribute("keyword", keyword);
         model.addAttribute("corpType", corpType);
-        ModelAndView view = new ModelAndView("apply/getCorpInfo");
-        return view;
+        return new ModelAndView("apply/getCorpInfo");
     }
 
     /**
@@ -273,15 +323,14 @@ public class BillApplyInfoController {
         SystemContext.setPageNumber(page);
         SystemContext.setOrder(order);
         SystemContext.setSort(sort);
-        Pager<BillCorpInfo> mast = billCorpInfoService.listBillCorpInfo(corpType, keyword, "T");
-        return mast;
+        return billCorpInfoService.listBillCorpInfo(corpType, keyword, "T");
     }
 
     @AuthMethod(role = "ROLE_APPLY")
     @PostMapping("saveApplyInfo")
     public Message saveApplyInfo(@Validated BillApplyInfoDto dto, BindingResult br, HttpSession session) {
         if (br.hasErrors()) {
-            return new Message(0, br.getFieldError().getDefaultMessage());
+            return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }
         try {
             User user = (User) session.getAttribute("user");
@@ -313,7 +362,7 @@ public class BillApplyInfoController {
                 info.setApplyUserName(user.getUserName());
                 info.setrVTime(CmsUtils.getTimeMillis());
                 List<String> setll = CmsUtils.string2Array(dto.getSetllDeptBH(), ",");
-                List<String> _setll = new ArrayList<String>();
+                List<String> _setll = new ArrayList<>();
                 for (String str : setll) {
                     if (str != null && !str.isEmpty())
                         _setll.add(str);
@@ -430,8 +479,7 @@ public class BillApplyInfoController {
     @GetMapping("importUpload")
     @AuthMethod(role = "ROLE_APPLY")
     public ModelAndView importUpload(Model model) throws JsonProcessingException {
-        ModelAndView view = new ModelAndView("apply/import");
-        return view;
+        return new ModelAndView("apply/import");
     }
 
     /**
@@ -470,7 +518,7 @@ public class BillApplyInfoController {
             msg.setMessage("上传文件不能为空，请重新选择模板文件，然后重试。");
             return JsonUtil.objectToString(msg);
         }
-        List<BillApplyInfoImportVo> vo = new ArrayList<BillApplyInfoImportVo>();
+        List<BillApplyInfoImportVo> vo;
         List<BillApplyInfoImportVo> list = ExcelUtils.importExcel(file, 0, headerRows, BillApplyInfoImportVo.class);
         if (list != null && list.size() > 0) {
             vo = list;
@@ -532,14 +580,14 @@ public class BillApplyInfoController {
             rows = CmsUtils.decryptBASE64(rows);
             JSONArray jsonArray = JSONObject.parseArray(rows);
             List<BillApplyInfoImportVo> dtos = JSONArray.parseArray(jsonArray.toString(), BillApplyInfoImportVo.class);
-            List<BillApplyInfoImportVo> array = new ArrayList<BillApplyInfoImportVo>();
-            List<BillApplyInfo> listInfo = new ArrayList<BillApplyInfo>();
+            List<BillApplyInfoImportVo> array = new ArrayList<>();
+            List<BillApplyInfo> listInfo = new ArrayList<>();
             String month = accounPeriodService.getMonth();
             if (dtos.size() > 0) {
                 int orderNum = billApplyInfoService.getMaxOrders();
                 AccounCode accounCode = accounCodeService.queryAccounCode(user.getBookSet(), "TG");
                 for (BillApplyInfoImportVo temp : dtos) {
-                    List<String> err = new ArrayList<String>();
+                    List<String> err = new ArrayList<>();
                     BillApplyInfo billApplyInfo = new BillApplyInfo();
                     BillApplyInfoImportVo mast = new BillApplyInfoImportVo().formatBillApplyInfoDto(temp);
                     //检测申请部门
@@ -747,8 +795,7 @@ public class BillApplyInfoController {
     @GetMapping("getProceed")
     public ModelAndView getProceed(String value, Model model) {
         model.addAttribute("proceedValue", value);
-        ModelAndView view = new ModelAndView("apply/getProceed");
-        return view;
+        return new ModelAndView("apply/getProceed");
     }
 
     /**
@@ -775,8 +822,7 @@ public class BillApplyInfoController {
     @GetMapping("getPayment")
     public ModelAndView getPayment(String value, Model model) {
         model.addAttribute("paymentValue", value);
-        ModelAndView view = new ModelAndView("apply/getPayment");
-        return view;
+        return new ModelAndView("apply/getPayment");
     }
 
     /**
@@ -808,8 +854,7 @@ public class BillApplyInfoController {
     @GetMapping("getProjects")
     public ModelAndView getProjects(String value, Model model) {
         model.addAttribute("projectType", value);
-        ModelAndView view = new ModelAndView("reve/getProjects");
-        return view;
+        return new ModelAndView("reve/getProjects");
     }
 
     /**
@@ -826,8 +871,7 @@ public class BillApplyInfoController {
         model.addAttribute("bankAccountValue", action);
         List<BankAccountListDto> bankAccountListDtoList = bankAccountService.listBankAccountListDto(corpId);
         model.addAttribute("bankAccountListDtoList", bankAccountListDtoList);
-        ModelAndView view = new ModelAndView("apply/getBankAccount");
-        return view;
+        return new ModelAndView("apply/getBankAccount");
     }
 
 }

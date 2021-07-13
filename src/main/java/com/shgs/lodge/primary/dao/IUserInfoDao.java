@@ -12,7 +12,8 @@ import java.util.List;
  *
  * @author 雷智荣
  */
-public interface IUserInfoDao extends IBaseDAO<UserInfo,String> {
+@SuppressWarnings("UnusedReturnValue")
+public interface IUserInfoDao extends IBaseDAO<UserInfo> {
 
     /**
      * 按用户ID删除实例
@@ -37,16 +38,6 @@ public interface IUserInfoDao extends IBaseDAO<UserInfo,String> {
      * @return
      */
     Pager<UserInfo> listUserInfo(String keyword,boolean isAdmin);
-
-
-    /**
-     * 根据用户登陆帐号和登陆密码获取用户信息
-     *
-     * @param loginAccount  登录帐号
-     * @param LoginPassword 登录密码
-     * @return
-     */
-    UserInfo queryUserInfo(String loginAccount, String LoginPassword);
 
     /**
      *

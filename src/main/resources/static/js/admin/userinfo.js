@@ -143,13 +143,13 @@ function importUser() {
 
 //Dialog
 function altUserDialog(id) {
-    $("body").append("<div id='userContent' Style='display: none;'></div>");
+    $("body").append("<div id='userContent' Style='display: none;padding-left: 5px;padding-right: 5px;'></div>");
     $('#userContent').dialog({
         title: '用户信息',
         iconCls: 'fa fa-ellipsis-v',
         loadingMessage: '数据加载中,请稍等...',
         modal: true,
-        height: 420,
+        height: 360,
         width: 580,
         top: '10%',
         left: '25%',

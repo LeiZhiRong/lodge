@@ -17,11 +17,20 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service("billAccounInfoService")
 public class BillAccounInfoService implements IBillAccounInfoService {
-    @Autowired
+
     private IBillAccounInfoDao billAccounInfoDao;
 
-    @Autowired
     private IAccounCodeDao accounCodeDao;
+
+    @Autowired
+    public void setBillAccounInfoDao(IBillAccounInfoDao billAccounInfoDao) {
+        this.billAccounInfoDao = billAccounInfoDao;
+    }
+
+    @Autowired
+    public void setAccounCodeDao(IAccounCodeDao accounCodeDao) {
+        this.accounCodeDao = accounCodeDao;
+    }
 
     @Override
     @Transactional(value = "primaryTransactionManager")

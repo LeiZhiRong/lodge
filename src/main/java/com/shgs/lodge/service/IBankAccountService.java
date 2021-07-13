@@ -10,6 +10,7 @@ import java.util.List;
  * 银行账号业务接口层
  * @author 雷智荣
  */
+@SuppressWarnings("UnusedReturnValue")
 public interface IBankAccountService {
 
     /**

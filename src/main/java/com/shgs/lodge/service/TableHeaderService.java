@@ -15,8 +15,12 @@ import java.util.List;
 @Service("tableHeaderService")
 public class TableHeaderService implements ITableHeaderService {
 
-    @Autowired
     private ITableHeaderDao tableHeaderDao;
+
+    @Autowired
+    public void setTableHeaderDao(ITableHeaderDao tableHeaderDao) {
+        this.tableHeaderDao = tableHeaderDao;
+    }
 
     @Override
     @Transactional(value = "primaryTransactionManager")
@@ -77,8 +81,9 @@ public class TableHeaderService implements ITableHeaderService {
         if (dto.size() > 0) {
             return new HeaderColumns().listHeaderColumns(dto);
         } else {
-            List<HeaderColumns> temp = new ArrayList<HeaderColumns>();
+            List<HeaderColumns> temp = new ArrayList<>();
             List<HeaderColumns> columns = CmsUtils.getHeaderColumns(clas);
+            assert columns != null;
             for (HeaderColumns mast : columns) {
                 int orders = tableHeaderDao.getMaxOrderByParent(user_id, table_name);
                 TableHeader tableHeader = new TableHeader(mast);

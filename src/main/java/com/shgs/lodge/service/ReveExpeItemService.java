@@ -27,23 +27,48 @@ import java.util.Map;
 @Service("reveExpeItemService")
 public class ReveExpeItemService implements IReveExpeItemService {
 
-    @Autowired
+
     private IProceedTypeDao proceedTypeDao;
 
-    @Autowired
+
     private IReveExpeItemDao reveExpeItemDao;
 
-    @Autowired
+
     private ICashBankDao cashBankDao;
 
-    @Autowired
+
     private IBillCorpInfoDao billCorpInfoDao;
 
-    @Autowired
+
     private IDeptInfoDao deptInfoDao;
 
+
     @Autowired
-    private IAncillaryProjectsDao ancillaryProjectsDao;
+    public void setProceedTypeDao(IProceedTypeDao proceedTypeDao) {
+        this.proceedTypeDao = proceedTypeDao;
+    }
+
+    @Autowired
+    public void setReveExpeItemDao(IReveExpeItemDao reveExpeItemDao) {
+        this.reveExpeItemDao = reveExpeItemDao;
+    }
+
+    @Autowired
+    public void setCashBankDao(ICashBankDao cashBankDao) {
+        this.cashBankDao = cashBankDao;
+    }
+
+    @Autowired
+    public void setBillCorpInfoDao(IBillCorpInfoDao billCorpInfoDao) {
+        this.billCorpInfoDao = billCorpInfoDao;
+    }
+
+    @Autowired
+    public void setDeptInfoDao(IDeptInfoDao deptInfoDao) {
+        this.deptInfoDao = deptInfoDao;
+    }
+
+
 
     @Override
     @Transactional(value = "primaryTransactionManager")
@@ -54,7 +79,7 @@ public class ReveExpeItemService implements IReveExpeItemService {
             msg.setMessage("项目编号【" + proceedType.getProceedBh() + "】已在使用中...，添加失败!");
             return msg;
         }
-        Integer orders = proceedTypeDao.getMaxOrderByParent(pid);
+        int orders = proceedTypeDao.getMaxOrderByParent(pid);
         String ids = null;
         ProceedType pc = null;
         if (pid != null && !pid.isEmpty()) {
@@ -91,7 +116,7 @@ public class ReveExpeItemService implements IReveExpeItemService {
     @Transactional(value = "primaryTransactionManager")
     public Message updateProceedType(ProceedType proceedType, String pid) {
         Message msg = new Message(0, "保存失败");
-        ProceedType temp = (ProceedType) proceedTypeDao.queryObject("from ProceedType p where p.proceedBh =?0 and p.id !=?1", new Object[]{proceedType.getProceedBh(),proceedType.getId()});
+        ProceedType temp = (ProceedType) proceedTypeDao.queryObject("from ProceedType p where p.proceedBh =?0 and p.id !=?1", new Object[]{proceedType.getProceedBh(), proceedType.getId()});
         if (temp != null) {
             msg.setMessage("项目编号【" + proceedType.getProceedBh() + "】已在使用中...，保存失败!");
             return msg;
@@ -116,11 +141,11 @@ public class ReveExpeItemService implements IReveExpeItemService {
                 proceedTypeDao.update(parent);
             }
             if (pid != null && !pid.isEmpty()) {
-                if (oldparent != null && parent != null && oldparent.getId() != parent.getId()) {
+                if (oldparent != null && parent != null && !oldparent.getId().equals(parent.getId())) {
                     proceedTypeDao.executeIds(proceedType.getId(), oldparent.getIds(), parent.getIds());
                 }
             }
-            if (oldparent != null && oldparent.getId() != pid) {
+            if (oldparent != null && !oldparent.getId().equals(pid)) {
                 if (proceedTypeDao.getCountProceedTypeByPid(oldparent.getId()) == 0) {
                     oldparent.setContents("F");
                     proceedTypeDao.update(oldparent);
@@ -164,13 +189,13 @@ public class ReveExpeItemService implements IReveExpeItemService {
     @Override
     @Transactional(value = "primaryTransactionManager", readOnly = true)
     public ProceedType queryProceedTypeByNameAndProceedBh(String keyword) {
-        return (ProceedType) proceedTypeDao.queryObject("from ProceedType p where p.proceedBh =?0 or p.name =?1 ",new Object[]{keyword,keyword});
+        return (ProceedType) proceedTypeDao.queryObject("from ProceedType p where p.proceedBh =?0 or p.name =?1 ", new Object[]{keyword, keyword});
     }
 
     @Override
     @Transactional(value = "primaryTransactionManager", readOnly = true)
     public List<SelectJson> listProceedType() {
-        List<SelectJson> jsonList = new ArrayList<SelectJson>();
+        List<SelectJson> jsonList = new ArrayList<>();
         List<ProceedType> list = proceedTypeDao.list("from ProceedType ");
         if (list != null && list.size() > 0) {
             for (ProceedType mast : list) {
@@ -183,14 +208,14 @@ public class ReveExpeItemService implements IReveExpeItemService {
     @Override
     @Transactional(value = "primaryTransactionManager", readOnly = true)
     public List<TreeJson> listProceedTypeToTreeJson(String keyword) {
-        List<TreeJson> cts = new ArrayList<TreeJson>();
+        List<TreeJson> cts = new ArrayList<>();
         List<Map> dts = proceedTypeDao.listToMapBySql("select m.id as id,m.name as text,m.proceedBh as proceedBh,m.pid as pid,m.contents as contents from proceed_type m  order by m.pid asc,m.orders asc");
         if (dts.size() > 0) {
             List<String> list = CmsUtils.string2Array(keyword, ";");
             for (Map map : dts) {
                 TreeJson temp = new TreeJson();
                 temp.setId((String) map.get("id"));
-                temp.setText((String) map.get("text")+"【"+(String) map.get("proceedBh")+"】");
+                temp.setText(map.get("text") + "【" + map.get("proceedBh") + "】");
                 temp.setPid((String) map.get("pid"));
                 temp.setArg(map.get("deptID"));
                 if (list.contains(map.get("deptID")))
@@ -199,12 +224,12 @@ public class ReveExpeItemService implements IReveExpeItemService {
                 cts.add(temp);
             }
         }
-        return new TreeJson().getfatherNode(cts);
+        return TreeJson.getfatherNode(cts);
     }
 
     @Override
     @Transactional(value = "primaryTransactionManager")
-    public Message addReveExpeItem(ReveExpeItem reveExpeItem, String proceedTypeId, String cashBankId, String saleCorpId,String deptId) {
+    public Message addReveExpeItem(ReveExpeItem reveExpeItem, String proceedTypeId, String cashBankId, String saleCorpId, String deptId) {
         Message msg = new Message(0, "增加失败");
         //费项
         if (StringUtils.isNotEmpty(proceedTypeId)) {
@@ -285,9 +310,9 @@ public class ReveExpeItemService implements IReveExpeItemService {
     @Override
     @Transactional(value = "primaryTransactionManager", readOnly = true)
     public List<ReveExpeItemDto> listReveExpeItemDto(String proceedTypeId) {
-        List<ReveExpeItemDto> dto = new ArrayList<ReveExpeItemDto>();
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        List<ReveExpeItemDto> dto = new ArrayList<>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append(" from ReveExpeItem r where 1=1 ");
         if (StringUtils.isNotEmpty(proceedTypeId) && !"all".equals(proceedTypeId)) {
             jpql.append("and r.proceedType.id =:proceedTypeId  ");
@@ -352,7 +377,6 @@ public class ReveExpeItemService implements IReveExpeItemService {
     public List<ReveExpeItemListDto> listReveExpeItemListDto(String proceedId, String auditStatus, String onAccount, String paymentMethod) {
         return reveExpeItemDao.listReveExpeItemListDto(proceedId, auditStatus, onAccount, paymentMethod);
     }
-
 
 
 }

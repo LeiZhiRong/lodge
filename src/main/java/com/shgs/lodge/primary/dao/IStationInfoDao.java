@@ -12,7 +12,7 @@ import java.util.List;
  * 职位信息持久接口层
  * @author 雷智荣
  */
-public interface IStationInfoDao extends IBaseDAO<StationInfo,String> {
+public interface IStationInfoDao extends IBaseDAO<StationInfo> {
 
       /**
      * 按ID查询对象

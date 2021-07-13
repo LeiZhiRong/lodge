@@ -11,7 +11,7 @@ public class MenuShortcut {
     private String iconCls;
     private String text;
     private Object url;
-    private List<MenuShortcut> list=new ArrayList<MenuShortcut>();
+    private List<MenuShortcut> list= new ArrayList<>();
 
     public String getIconCls() {
         return iconCls;

@@ -24,11 +24,7 @@ public class BillCorpInfoDao extends BaseDAO<BillCorpInfo, String> implements IB
     @Override
     public boolean deleteBillCorpInfo(String id) {
         Object o = super.executeByJpql("delete from BillCorpInfo b where b.id =?0", id);
-        if (o != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return o != null;
     }
 
     @Override
@@ -38,14 +34,14 @@ public class BillCorpInfoDao extends BaseDAO<BillCorpInfo, String> implements IB
 
     @Override
     public Pager<BillCorpInfo> listBillCorpInfo(String corpType, String keyword, String ztbz) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append(" from BillCorpInfo b where 1=1 ");
         if (corpType != null && !corpType.isEmpty()) {
             jpql.append(" and b.corpType =:corpType ");
             alias.put("corpType", corpType);
         }
-        if (ztbz != null && "T".equals(ztbz)) {
+        if ("T".equals(ztbz)) {
             jpql.append(" and b.status =1 ");
         }
         if (keyword != null && !keyword.isEmpty()) {
@@ -59,7 +55,7 @@ public class BillCorpInfoDao extends BaseDAO<BillCorpInfo, String> implements IB
     public int batchDeleteCorp(String ids) {
         if (ids != null && !ids.isEmpty()) {
             List<String> _ids = CmsUtils.string2Array(ids, ",");
-            Map<String, Object> alias = new HashMap<String, Object>();
+            Map<String, Object> alias = new HashMap<>();
             alias.put("ids", _ids);
             Object o = super.executeByAliasJpql("delete from BillCorpInfo b where b.id in( :ids) ", alias);
             if (o != null)
@@ -86,15 +82,13 @@ public class BillCorpInfoDao extends BaseDAO<BillCorpInfo, String> implements IB
     @Override
     public boolean ChickBillCorpOtherByCorpBM(String corpBm, String id) {
         BillCorpInfo info = (BillCorpInfo) super.queryObject("from BillCorpInfo b where b.corpBM =?0 and b.id !=?1", new Object[]{corpBm, id});
-        if (info != null)
-            return true;
-        return false;
+        return info != null;
     }
 
     @Override
     public List<BillCorpInfo> listBillCorpInfo(String corpType, String keyword) {
-        StringBuffer sql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder sql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         List<BillCorpInfo> list=new ArrayList<>();
         sql.append("select b.id,b.corpType,b.corpMC,b.corpBM,b.nsrNum,b.dz,b.lxdh,b.remark,b.status,c.khyh,c.yhzh,b.userID from bill_corp_info b left join (select corpId,MIN(khyh) as khyh,MIN(yhzh) as yhzh from bill_bank_account t group by t.corpId )c on b.id=c.corpId where 1=1 ");
         if (corpType != null && !corpType.isEmpty()) {
@@ -129,9 +123,9 @@ public class BillCorpInfoDao extends BaseDAO<BillCorpInfo, String> implements IB
 
     @Override
     public List<CorpInfoListDto> listCorpInfoListDto(String keyword, String pid) {
-        StringBuffer jpql = new StringBuffer();
-        List<BillCorpInfo> billCorpInfoList = new ArrayList<BillCorpInfo>();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        List<BillCorpInfo> billCorpInfoList;
+        Map<String, Object> alias = new HashMap<>();
         jpql.append(" from BillCorpInfo b where b.status =1 ");
 
         if (StringUtils.isNotEmpty(pid) && !"all".equals(pid)) {
@@ -148,7 +142,7 @@ public class BillCorpInfoDao extends BaseDAO<BillCorpInfo, String> implements IB
         if (billCorpInfoList != null && billCorpInfoList.size() > 0) {
             return new CorpInfoListDto().listCorpInfoListDto(billCorpInfoList, "F");
         } else {
-            return new ArrayList<CorpInfoListDto>();
+            return new ArrayList<>();
         }
     }
 }

@@ -26,7 +26,7 @@ public class BankAccountDao extends BaseDAO<BankAccount, String> implements IBan
     public int batchDeleteCorpBank(String ids) {
         if (ids != null && !ids.isEmpty()) {
             List<String> _ids = CmsUtils.string2Array(ids, ",");
-            Map<String, Object> alias = new HashMap<String, Object>();
+            Map<String, Object> alias = new HashMap<>();
             alias.put("ids", _ids);
             Object o = super.executeByAliasJpql("delete from BankAccount b where b.corpId in( :ids) ", alias);
             if (o != null)
@@ -49,8 +49,8 @@ public class BankAccountDao extends BaseDAO<BankAccount, String> implements IBan
 
     @Override
     public BankAccount queryBankAccount(String corpId, String khyh, String yhzh) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         List<String> str = new ArrayList<>();
         jpql.append(" from BankAccount b where b.corpId =:corpId ");
         alias.put("corpId", corpId);
@@ -63,7 +63,7 @@ public class BankAccountDao extends BaseDAO<BankAccount, String> implements IBan
             alias.put("yhzh", yhzh);
         }
         if (str.size() > 0) {
-            jpql.append(" and ( " + String.join("or", str) + " )");
+            jpql.append(" and ( ").append(String.join("or", str)).append(" )");
         }
         return (BankAccount) super.queryObjectByAlias(jpql.toString(), alias);
     }

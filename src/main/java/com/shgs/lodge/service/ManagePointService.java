@@ -5,11 +5,13 @@ import com.shgs.lodge.primary.dao.IManagePointDao;
 import com.shgs.lodge.primary.entity.ManagePoint;
 import com.shgs.lodge.util.Message;
 import com.shgs.lodge.util.Pager;
+import com.shgs.lodge.util.SelectJson;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -60,8 +62,21 @@ public class ManagePointService implements IManagePointService {
 
     @Override
     @Transactional(value = "primaryTransactionManager", readOnly = true)
+    public List<SelectJson> listManagePointToSelectJson(String bookSet) {
+        List<ManagePoint> list=managePointDao.list("from ManagePoint m where m.bookSet =?0 and m.ztbz =?1  order by m.rVTime asc ",new Object[]{bookSet,"T"});
+        List<SelectJson> jsonList =new ArrayList<>();
+        if(list!=null&& list.size()>0){
+            for(ManagePoint managePoint:list){
+                jsonList.add(new SelectJson(managePoint.getId(),managePoint.getName()));
+            }
+        }
+        return jsonList;
+    }
+
+    @Override
+    @Transactional(value = "primaryTransactionManager", readOnly = true)
     public Pager<ManagePointDto> findManagePointDto(String bookSet, String keyword) {
-        StringBuffer jpql = new StringBuffer();
+        StringBuilder jpql = new StringBuilder();
         Map<String, Object> alias = new HashMap<>();
         Pager<ManagePointDto> managePointDtoPager = new Pager<>();
         jpql.append(" from ManagePoint m where m.bookSet =:bookSet  ");
@@ -96,7 +111,7 @@ public class ManagePointService implements IManagePointService {
     @Override
     @Transactional(value = "primaryTransactionManager", readOnly = true)
     public ManagePoint queryManagePoint(String bookSet, String keyword) {
-        StringBuffer jpql = new StringBuffer();
+        StringBuilder jpql = new StringBuilder();
         Map<String, Object> alias = new HashMap<>();
         jpql.append(" from ManagePoint m where m.ztbz=1 and m.bookSet =:bookSet  ");
         alias.put("bookSet", bookSet);

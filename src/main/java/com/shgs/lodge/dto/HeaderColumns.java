@@ -83,9 +83,9 @@ public class HeaderColumns {
         this.setField(dto.getField());
         this.setTitle(dto.getName());
         this.setWidth(dto.getWidth());
-        this.setSortable(dto.getSortable() == 1 ? true : false);
+        this.setSortable(dto.getSortable() == 1);
         if (dto.getStatus() == 1) {
-            this.setHidden(dto.getHidden() == 1 ? true : false);
+            this.setHidden(dto.getHidden() == 1);
         } else {
             this.setHidden(true);
         }
@@ -93,7 +93,7 @@ public class HeaderColumns {
     }
 
     public List<HeaderColumns> listHeaderColumns(List<TableHeader> dto) {
-        List<HeaderColumns> list = new ArrayList<HeaderColumns>();
+        List<HeaderColumns> list = new ArrayList<>();
         if (dto.size() > 0) {
             for (TableHeader mast : dto) {
                 list.add(new HeaderColumns(mast));

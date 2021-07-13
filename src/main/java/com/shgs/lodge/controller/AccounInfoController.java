@@ -9,7 +9,6 @@ import com.shgs.lodge.dto.User;
 import com.shgs.lodge.primary.entity.AccounInfo;
 import com.shgs.lodge.service.IAccounInfoService;
 import com.shgs.lodge.service.ITableHeaderService;
-import com.shgs.lodge.service.IUserInfoService;
 import com.shgs.lodge.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -24,6 +23,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 账套信息示图接口层
@@ -36,14 +36,21 @@ import java.util.List;
 @AuthClass("login")
 public class AccounInfoController {
 
-    @Autowired
+
     private IAccounInfoService accounInfoService;
 
-    @Autowired
+
     private ITableHeaderService tableHeaderService;
 
     @Autowired
-    private IUserInfoService userInfoService;
+    public void setAccounInfoService(IAccounInfoService accounInfoService) {
+        this.accounInfoService = accounInfoService;
+    }
+
+    @Autowired
+    public void setTableHeaderService(ITableHeaderService tableHeaderService) {
+        this.tableHeaderService = tableHeaderService;
+    }
 
     /**
      * 账套管理首页
@@ -59,8 +66,7 @@ public class AccounInfoController {
         User user = (User) session.getAttribute("user");
         List<HeaderColumns> columns = tableHeaderService.listHeaderColumns(user.getId(), "bookSetGrid", "com.shgs.lodge.dto.AccounInfoDto");
         model.addAttribute("columns", columns);
-        ModelAndView mv = new ModelAndView("bookset/index");
-        return mv;
+        return new ModelAndView("bookset/index");
     }
 
     /**
@@ -107,8 +113,7 @@ public class AccounInfoController {
         }
         model.addAttribute("accounInfo", dto);
         model.addAttribute("disabled", disabled);
-        ModelAndView view = new ModelAndView("bookset/dialog");
-        return view;
+        return new ModelAndView("bookset/dialog");
     }
 
     /**
@@ -123,7 +128,7 @@ public class AccounInfoController {
     @PostMapping("save")
     public Message save(@Validated AccounInfoDto dto, BindingResult br, HttpSession session) {
         if (br.hasErrors()) {
-            return new Message(0, br.getFieldError().getDefaultMessage());
+            return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }
         try {
             AccounInfo info = new AccounInfoDto().getAccounInfo(dto);
@@ -158,12 +163,12 @@ public class AccounInfoController {
     @AuthMethod(role = "ROLE_BOOKSET")
     @PostMapping(value = "delete")
     public Message delete(String id) {
-        AccounInfo accounInfo=accounInfoService.queryAccounInfoByID(id);
-        if(accounInfo!=null){
+        AccounInfo accounInfo = accounInfoService.queryAccounInfoByID(id);
+        if (accounInfo != null) {
             //先检测角色中是否已存在
             return accounInfoService.deleteAccounInfo(id);
-        }else{
-            return new Message(0,"账套不存在或已被删除");
+        } else {
+            return new Message(0, "账套不存在或已被删除");
         }
 
     }

@@ -19,11 +19,21 @@ import java.util.List;
 @Service("roleInfoService")
 public class RoleInfoService implements IRoleInfoService {
 
-    @Autowired
+
     private IRoleInfoDao roleInfoDao;
 
-    @Autowired
+
     private IUserRoleDao userRoleDao;
+
+    @Autowired
+    public void setRoleInfoDao(IRoleInfoDao roleInfoDao) {
+        this.roleInfoDao = roleInfoDao;
+    }
+
+    @Autowired
+    public void setUserRoleDao(IUserRoleDao userRoleDao) {
+        this.userRoleDao = userRoleDao;
+    }
 
     @Override
     @Transactional(value = "primaryTransactionManager")
@@ -52,7 +62,7 @@ public class RoleInfoService implements IRoleInfoService {
     public Message delRoleINfo(String id) {
         Message msg=new Message(0,"角色信息删除失败");
         //检测是否用户角色关联表中被引用，若引用，禁止删除
-        List<String> roleIDS=new ArrayList<String>();
+        List<String> roleIDS= new ArrayList<>();
         roleIDS.add(id);
         List<String> userRoleList=userRoleDao.getUserRoleIDS(null, roleIDS);
         if(userRoleList!=null&& userRoleList.size()>0){

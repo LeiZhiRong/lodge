@@ -89,7 +89,7 @@ public class PaymentMethodListDto {
     }
 
     public PaymentMethodListDto(PaymentMethod mast) {
-        String pid = null;
+        String pid;
         this.setId(mast.getId());
         this.setPaymentBh(mast.getPaymentBh());
         this.setContents(mast.getContents());
@@ -105,14 +105,14 @@ public class PaymentMethodListDto {
         if ("T".equals(mast.getContents())) {
             this.setPaymentName("<a href='javascript:void(0)' onclick='findPayment(&quot;" + mast.getId() + "&quot;,&quot;" + pid + "&quot;);'><i class='fa fa-caret-right fa-lg'></i> " +name + "</a>");
         } else {
-            this.setPaymentName(name.toString());
+            this.setPaymentName(name);
             this.setHandle("<div style='padding-right:10px;'><a href='javascript:void(0)' onclick='getPaymentIdAndName(&quot;" + mast.getPaymentName() + "&quot;);'>选择</a></div>");
         }
 
     }
 
     public List<PaymentMethodListDto> listPaymentMethodListDto(List<PaymentMethod> list) {
-        List<PaymentMethodListDto> cts = new ArrayList<PaymentMethodListDto>();
+        List<PaymentMethodListDto> cts = new ArrayList<>();
         if (list.size() > 0) {
             for (PaymentMethod mast : list) {
                 cts.add(new PaymentMethodListDto(mast));

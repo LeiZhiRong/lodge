@@ -23,7 +23,7 @@ public class CashBankDao extends BaseDAO<CashBank,String> implements ICashBankDa
 
     @Override
     public int getMaxOrderByParent(String pid) {
-        Object obj = null;
+        Object obj;
         if (pid != null && !pid.isEmpty()) {
             obj = super.queryObject("select max(m.orders) from CashBank m where m.parent.id=?0", pid);
         } else {
@@ -37,11 +37,7 @@ public class CashBankDao extends BaseDAO<CashBank,String> implements ICashBankDa
     @Override
     public boolean deleteCashBank(String id) {
         Object o = super.executeByJpql("delete from CashBank m where m.id =?0", id);
-        if (o != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return o != null;
     }
 
     @Override
@@ -65,9 +61,9 @@ public class CashBankDao extends BaseDAO<CashBank,String> implements ICashBankDa
     @Override
     public Pager<CashBankDto> findCashBankDto(String pid, String value) {
         pid = "all".equals(pid) ? null : pid;
-        Pager<CashBankDto> list = new Pager<CashBankDto>();
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        Pager<CashBankDto> list = new Pager<>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append("from CashBank m where 1=1 ");
         if (pid != null && !pid.isEmpty()) {
             jpql.append("and m.parent.id =:pid ");
@@ -93,9 +89,9 @@ public class CashBankDao extends BaseDAO<CashBank,String> implements ICashBankDa
     @Override
     public List<CashBankListDto> listCashBankDto(String pid, String value) {
         pid = "all".equals(pid) ? null : pid;
-        List<CashBankListDto> list = new ArrayList<CashBankListDto>();
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        List<CashBankListDto> list = new ArrayList<>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append("from CashBank m where 1=1 ");
         if (pid != null && !pid.isEmpty()) {
             jpql.append("and m.parent.id =:pid ");
@@ -117,8 +113,8 @@ public class CashBankDao extends BaseDAO<CashBank,String> implements ICashBankDa
     @Override
     public List<CashBank> listCashBank(String pid, String value) {
         pid = "all".equals(pid) ? null : pid;
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append("from CashBank m where 1=1 ");
         if (pid != null && !pid.isEmpty()) {
             jpql.append("and m.parent.id =:pid ");
@@ -146,7 +142,7 @@ public class CashBankDao extends BaseDAO<CashBank,String> implements ICashBankDa
     public int batchDelete(String ids) {
         if (ids != null && !ids.isEmpty()) {
             List<String> list = CmsUtils.string2Array(ids, ",");
-            Map<String, Object> alias = new HashMap<String, Object>();
+            Map<String, Object> alias = new HashMap<>();
             alias.put("ids", list);
             return (int) super.executeByAliasJpql("delete from CashBank where id in(:ids)", alias);
         }
@@ -156,7 +152,7 @@ public class CashBankDao extends BaseDAO<CashBank,String> implements ICashBankDa
     @Override
     public void executeIds(String id, String oldIds, String newIds) {
         List<CashBank> list = super.list("from CashBank m  where m.ids like ?0", "%" + id + "%");
-        List<CashBank> mast = new ArrayList<CashBank>();
+        List<CashBank> mast = new ArrayList<>();
         if (list != null && list.size() > 0) {
             for (CashBank temp : list) {
                 temp.setIds(temp.getIds().replace(oldIds, newIds));
@@ -169,8 +165,8 @@ public class CashBankDao extends BaseDAO<CashBank,String> implements ICashBankDa
 
     @Override
     public Integer countKmBH(String id, String pid, String kmBH) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append(" select count(d) from CashBank d where d.kmBH =:kmBH ");
         alias.put("kmBH", kmBH);
         if (pid != null && !pid.isEmpty()) {
@@ -191,14 +187,14 @@ public class CashBankDao extends BaseDAO<CashBank,String> implements ICashBankDa
 
     @Override
     public List<TreeJson> getCashBank2TreeJson(String keyword) {
-        List<TreeJson> cts = new ArrayList<TreeJson>();
+        List<TreeJson> cts = new ArrayList<>();
         List<Map> dts = super.listToMapBySql("select m.id as id,m.kmBH as kmBH,m.kmMC as text,m.pid as pid,m.contents as contents from cash_bank m  order by m.pid asc,m.orders asc");
         if (dts.size() > 0) {
             List<String> list = CmsUtils.string2Array(keyword, ";");
             for (Map map : dts) {
                 TreeJson temp = new TreeJson();
                 temp.setId((String) map.get("id"));
-                temp.setText((String) map.get("kmBH") + " " + (String) map.get("text"));
+                temp.setText(map.get("kmBH") + " " + map.get("text"));
                 temp.setPid((String) map.get("pid"));
                 temp.setArg(map.get("kmBH"));
                 if (list.contains(map.get("kmBH")))
@@ -207,7 +203,7 @@ public class CashBankDao extends BaseDAO<CashBank,String> implements ICashBankDa
                 cts.add(temp);
             }
         }
-        return new TreeJson().getfatherNode(cts);
+        return TreeJson.getfatherNode(cts);
     }
 
 }

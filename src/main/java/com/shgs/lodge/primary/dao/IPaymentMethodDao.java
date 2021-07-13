@@ -9,7 +9,7 @@ import com.shgs.lodge.util.Pager;
 
 import java.util.List;
 
-public interface IPaymentMethodDao extends IBaseDAO<PaymentMethod,String> {
+public interface IPaymentMethodDao extends IBaseDAO<PaymentMethod> {
 
     /**
      * 获取最大序号

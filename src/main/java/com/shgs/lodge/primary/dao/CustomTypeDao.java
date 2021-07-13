@@ -32,11 +32,7 @@ public class CustomTypeDao extends BaseDAO<CustomType, String> implements ICusto
     @Override
     public boolean deleteCusTomType(String id) {
         Object o = super.executeByJpql("delete from CustomType c where c.id =?0", id);
-        if (o != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return o != null;
     }
 
     @Override
@@ -46,8 +42,8 @@ public class CustomTypeDao extends BaseDAO<CustomType, String> implements ICusto
 
     @Override
     public List<CustomType> listCustomType(String keyword) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append("from CustomType c where 1=1 ");
         if (keyword != null && !keyword.isEmpty()) {
             jpql.append(" and ( c.typeName like:keyword or c.typeCode like:keyword )");
@@ -69,12 +65,12 @@ public class CustomTypeDao extends BaseDAO<CustomType, String> implements ICusto
                 cts.add(temp);
             }
         }
-        return new TreeJson().getfatherNode(cts);
+        return TreeJson.getfatherNode(cts);
     }
 
     @Override
     public int getMaxOrderByParent(String pid) {
-        Object obj = null;
+        Object obj;
         if (StringUtils.isNotEmpty(pid)) {
             obj = super.queryObject("select max(c.orders) from CustomType c where c.parent.id=?0", pid);
         } else {

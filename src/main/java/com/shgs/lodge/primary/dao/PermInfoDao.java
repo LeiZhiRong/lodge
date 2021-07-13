@@ -25,7 +25,7 @@ public class PermInfoDao extends BaseDAO<PermInfo,String> implements IPermInfoDa
     @Override
     public Integer batchDelePermInfo(String role_id,List<String> perm_ids) {
         String jpql = "delete from PermInfo p where p.role_id =:role_id and p.id in(:ids)";
-        Map<String, Object> alias = new HashMap<String, Object>();
+        Map<String, Object> alias = new HashMap<>();
         alias.put("ids", perm_ids);
         alias.put("role_id",role_id);
         Object o = super.executeByAliasJpql(jpql, alias);
@@ -38,8 +38,8 @@ public class PermInfoDao extends BaseDAO<PermInfo,String> implements IPermInfoDa
     public List<PermInfo> listPermInfo(String role_id, String keyword) {
         if (role_id == null || role_id.isEmpty())
             return null;
-        Map<String, Object> alias = new HashMap<String, Object>();
-        StringBuffer jpql = new StringBuffer();
+        Map<String, Object> alias = new HashMap<>();
+        StringBuilder jpql = new StringBuilder();
         jpql.append("from PermInfo p where p.role_id =:role_id ");
         alias.put("role_id", role_id);
         if (keyword != null && !keyword.isEmpty()) {
@@ -49,13 +49,14 @@ public class PermInfoDao extends BaseDAO<PermInfo,String> implements IPermInfoDa
          return super.listByAlias(jpql.toString(), alias);
     }
 
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     @Override
     public List<String> getMenuIds(String role_id) {
         if (role_id == null || role_id.isEmpty())
             return null;
-        List<String> meun_ids = new ArrayList<String>();
+        List<String> meun_ids = new ArrayList<>();
         String jpql = "select menu_id as menu_id from perm_info where role_id =?0 ";
-        Map<String, Object> alias = new HashMap<String, Object>();
+        Map<String, Object> alias = new HashMap<>();
         alias.put("role_id", role_id);
         List<Map> mapList = super.listToMapBySql(jpql, role_id);
         if (mapList != null && mapList.size() > 0) {
@@ -69,7 +70,7 @@ public class PermInfoDao extends BaseDAO<PermInfo,String> implements IPermInfoDa
     @Override
     public Integer delePermInfoBYRoleID(String role_id) {
         String jpql = "delete from PermInfo p where p.role_id =:role_id";
-        Map<String, Object> alias = new HashMap<String, Object>();
+        Map<String, Object> alias = new HashMap<>();
         alias.put("role_id",role_id);
         Object o = super.executeByAliasJpql(jpql, alias);
         if (o == null)

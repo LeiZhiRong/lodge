@@ -24,16 +24,26 @@ import java.util.List;
 @Service("menuService")
 public class MenuService implements IMenuService {
 
-    @Autowired
+
     private IMenuInfoDao menuInfoDao;
 
-    @Autowired
+
     private IPermInfoDao permInfoDao;
+
+    @Autowired
+    public void setMenuInfoDao(IMenuInfoDao menuInfoDao) {
+        this.menuInfoDao = menuInfoDao;
+    }
+
+    @Autowired
+    public void setPermInfoDao(IPermInfoDao permInfoDao) {
+        this.permInfoDao = permInfoDao;
+    }
 
     @Override
     @Transactional(value = "primaryTransactionManager")
     public Message addMenuInfo(MenuInfo menuInfo, String pid) {
-        Integer orders = menuInfoDao.getMaxOrderByParent(pid);
+        int orders = menuInfoDao.getMaxOrderByParent(pid);
         Message msg = new Message(0, "模块添加失败");
         String ids = null;
         MenuInfo pc = null;
@@ -90,11 +100,11 @@ public class MenuService implements IMenuService {
                 menuInfoDao.updateMenuInfo(parent);
             }
             if (pid != null && !pid.isEmpty()) {
-                if (oldparent != null && parent != null && oldparent.getId() != parent.getId()) {
+                if (oldparent != null && parent != null && !oldparent.getId().equals(parent.getId())) {
                     menuInfoDao.executeIds(menuInfo.getId(), oldparent.getIds(), parent.getIds());
                 }
             }
-            if (oldparent != null && oldparent.getId() != pid) {
+            if (oldparent != null && !oldparent.getId().equals(pid)) {
                 if (menuInfoDao.getCountMenuInfoByPid(oldparent.getId()) == 0) {
                     oldparent.setContents("F");
                     menuInfoDao.update(oldparent);
@@ -189,6 +199,6 @@ public class MenuService implements IMenuService {
 
     @Override
     public List<ListGroup> getMenuInfo2ListGroup(String keyword) {
-        return menuInfoDao.getMenuInfo2ListGroup(null,keyword, null, false,false);
+        return menuInfoDao.getMenuInfo2ListGroup(null, keyword, null, false, false);
     }
 }

@@ -10,7 +10,7 @@ import java.util.List;
  * 开票申请持久接口类
  * @author 雷智荣
  */
-public interface IBillApplyInfoDao extends IBaseDAO<BillApplyInfo,String> {
+public interface IBillApplyInfoDao extends IBaseDAO<BillApplyInfo> {
 
     /**
      * 按用户ID删除实例

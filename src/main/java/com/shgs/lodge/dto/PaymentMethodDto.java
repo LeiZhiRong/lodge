@@ -156,7 +156,7 @@ public class PaymentMethodDto {
     }
 
     public List<PaymentMethodDto> listPaymentMethodDto(List<PaymentMethod> list) {
-        List<PaymentMethodDto> cts = new ArrayList<PaymentMethodDto>();
+        List<PaymentMethodDto> cts = new ArrayList<>();
         if (list.size() > 0) {
             for (PaymentMethod mast : list) {
                 cts.add(new PaymentMethodDto(mast));

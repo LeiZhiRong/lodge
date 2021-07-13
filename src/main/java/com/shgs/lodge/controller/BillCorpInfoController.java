@@ -36,6 +36,7 @@ import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/corp/")
@@ -43,17 +44,37 @@ import java.util.List;
 @AuthClass("login")
 public class BillCorpInfoController {
 
-    @Autowired
+
     private IBillCorpInfoService billCorpInfoService;
 
-    @Autowired
+
     private ITableHeaderService tableHeaderService;
 
-    @Autowired
+
     private ICustomService customService;
 
-    @Autowired
+
     private IBankAccountService bankAccountService;
+
+    @Autowired
+    public void setBillCorpInfoService(IBillCorpInfoService billCorpInfoService) {
+        this.billCorpInfoService = billCorpInfoService;
+    }
+
+    @Autowired
+    public void setTableHeaderService(ITableHeaderService tableHeaderService) {
+        this.tableHeaderService = tableHeaderService;
+    }
+
+    @Autowired
+    public void setCustomService(ICustomService customService) {
+        this.customService = customService;
+    }
+
+    @Autowired
+    public void setBankAccountService(IBankAccountService bankAccountService) {
+        this.bankAccountService = bankAccountService;
+    }
 
     @AuthMethod(role = "ROLE_CORP")
     @GetMapping("index")
@@ -64,8 +85,7 @@ public class BillCorpInfoController {
         corpType.add(0, new SelectJson("", "-【全部】", "all"));
         model.addAttribute("columns", columns);
         model.addAttribute("corpType", corpType);
-        ModelAndView view = new ModelAndView("corp/index");
-        return view;
+        return new ModelAndView("corp/index");
     }
 
     @AuthMethod(role = "ROLE_CORP")
@@ -77,8 +97,7 @@ public class BillCorpInfoController {
         SystemContext.setSort(sort);
         if ("all".equals(corpType))
             corpType = null;
-        Pager<BillCorpInfo> mast = billCorpInfoService.listBillCorpInfo(corpType, keyword, null);
-        return mast;
+        return billCorpInfoService.listBillCorpInfo(corpType, keyword, null);
     }
 
     @AuthMethod(role = "ROLE_CORP")
@@ -95,8 +114,7 @@ public class BillCorpInfoController {
         model.addAttribute("billCorpInfo", billCorpInfo);
         model.addAttribute("corpType", coryType);
         model.addAttribute("bankColumns", bankColumns);
-        ModelAndView view = new ModelAndView("corp/dialog");
-        return view;
+        return new ModelAndView("corp/dialog");
     }
 
     /**
@@ -111,7 +129,7 @@ public class BillCorpInfoController {
     @PostMapping("saveCorpInfo")
     public Message saveCorpInfo(@Validated BillCorpInfo billCorpInfo, BindingResult br, String bankAccount, HttpSession session) {
         if (br.hasErrors()) {
-            return new Message(0, br.getFieldError().getDefaultMessage());
+            return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }
         try {
             User user = (User) session.getAttribute("user");
@@ -187,8 +205,7 @@ public class BillCorpInfoController {
     @GetMapping("importUpload")
     @AuthMethod(role = "ROLE_USER")
     public ModelAndView importUpload(Model model) throws JsonProcessingException {
-        ModelAndView view = new ModelAndView("corp/import");
-        return view;
+        return new ModelAndView("corp/import");
     }
 
     /**
@@ -207,7 +224,7 @@ public class BillCorpInfoController {
             msg.setMessage("上传文件不能为空，请重新选择模板文件，然后重试。");
             return JsonUtil.objectToString(msg);
         }
-        List<BillCorpInfoVo> vo = new ArrayList<BillCorpInfoVo>();
+        List<BillCorpInfoVo> vo;
         List<BillCorpInfoVo> list = ExcelUtils.importExcel(file, 0, headerRows, BillCorpInfoVo.class);
         if (list != null && list.size() > 0) {
             vo = list;
@@ -228,7 +245,7 @@ public class BillCorpInfoController {
     @RequestMapping("downloadExcel")
     public void downloadExcel(HttpServletRequest request, HttpServletResponse response) throws IOException {
         //需要导出的数据列表。
-        List<BillCorpInfoVo> list = new ArrayList<BillCorpInfoVo>();
+        List<BillCorpInfoVo> list = new ArrayList<>();
         BillCorpInfoVo vo = new BillCorpInfoVo();
         vo.setCorpType("1=购买方，0=销售方(必填项)");
         vo.setCorpBM("（必填项）");
@@ -251,15 +268,15 @@ public class BillCorpInfoController {
             rows = CmsUtils.decryptBASE64(rows);
             JSONArray jsonArray = JSONObject.parseArray(rows);
             List<BillCorpInfoVo> dtos = JSONArray.parseArray(jsonArray.toString(), BillCorpInfoVo.class);
-            List<BillCorpInfoVo> array = new ArrayList<BillCorpInfoVo>();
-            List<BillCorpInfo> listBillCorpInfo = new ArrayList<BillCorpInfo>();
-            List<BillCorpInfo> listUpdate = new ArrayList<BillCorpInfo>();
+            List<BillCorpInfoVo> array = new ArrayList<>();
+            List<BillCorpInfo> listBillCorpInfo = new ArrayList<>();
+            List<BillCorpInfo> listUpdate = new ArrayList<>();
             List<BankAccount> addBankAccountData = new ArrayList<>();
             List<BankAccount> updateBankAccountData = new ArrayList<>();
             User user = (User) session.getAttribute("user");
             if (dtos.size() > 0) {
                 for (BillCorpInfoVo mast : dtos) {
-                    List<String> err = new ArrayList<String>();
+                    List<String> err = new ArrayList<>();
                     //检测客户类型
                     if (mast.getCorpType() == null || mast.getCorpType().isEmpty()) {
                         err.add("【客户类型】不能为空");
@@ -270,7 +287,7 @@ public class BillCorpInfoController {
                         }
                     }
                     //检测状态标识
-                    if (mast.getStatus() == null && mast.getStatus().isEmpty()) {
+                    if (StringUtils.isEmpty(mast.getStatus())) {
                         err.add("【状态标识】不能为空，应为‘T’或‘F’");
                     }
                     //检测客户编号
@@ -313,11 +330,12 @@ public class BillCorpInfoController {
                                             updateBankAccountData.add(bankAccount);
                                         }
                                     } else {
-                                        bankAccount.setYhzh(mast.getYhzh());
-                                        bankAccount.setKhyh(mast.getKhyh());
-                                        bankAccount.setCorpId(info.getId());
-                                        bankAccount.setZtbz(mast.getStatus());
-                                        addBankAccountData.add(bankAccount);
+                                        BankAccount temp=new BankAccount();
+                                        temp.setYhzh(mast.getYhzh());
+                                        temp.setKhyh(mast.getKhyh());
+                                        temp.setCorpId(info.getId());
+                                        temp.setZtbz(mast.getStatus());
+                                        addBankAccountData.add(temp);
                                     }
                                 }
                                 continue;
@@ -339,13 +357,13 @@ public class BillCorpInfoController {
                     }
                 }
                 //更新客商信息
-                if (listUpdate != null && listUpdate.size() > 0)
+                if (listUpdate.size() > 0)
                     billCorpInfoService.batchUpdateBillCorpInfo(listUpdate);
                 //更新银行信息
-                if (updateBankAccountData != null && updateBankAccountData.size() > 0)
+                if (updateBankAccountData.size() > 0)
                     bankAccountService.batchUpdateBankAccount(updateBankAccountData);
                 //新增客商信息并增加银行信息
-                if (listBillCorpInfo != null && listBillCorpInfo.size() > 0) {
+                if (listBillCorpInfo.size() > 0) {
                     for (BillCorpInfo billCorpInfo : listBillCorpInfo) {
                         Message msg = billCorpInfoService.saveBillCorpInfo(billCorpInfo);
                         if (msg.getCode() == 1) {
@@ -357,7 +375,7 @@ public class BillCorpInfoController {
                     }
                 }
                 //新增银行信息
-                if (addBankAccountData != null && addBankAccountData.size() > 0)
+                if (addBankAccountData.size() > 0)
                     bankAccountService.batchSaveBankAccount(addBankAccountData);
                 return new Message(1, "检测完成", array);
             } else {
@@ -370,10 +388,10 @@ public class BillCorpInfoController {
 
     @AuthMethod(role = "ROLE_CORP")
     @RequestMapping("exportDown")
-    public void exportDown(String keyword,String corpType,HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void exportDown(String keyword, String corpType, HttpServletRequest request, HttpServletResponse response) throws IOException {
         //需要导出的数据列表。
         try {
-            List<BillCorpInfo> mast = billCorpInfoService.listBillCorpInfoByKeyWord(corpType,keyword);
+            List<BillCorpInfo> mast = billCorpInfoService.listBillCorpInfoByKeyWord(corpType, keyword);
             List<BillCorpInfoVo> list = new BillCorpInfoVo().listBillCorpInfoVo(mast);
             ExcelUtils.exportExcel(list, null, "客商基本信息", BillCorpInfoVo.class, "客商基本信息", response);
         } catch (Exception e) {
@@ -403,8 +421,7 @@ public class BillCorpInfoController {
             bankAccount.setMoren("F");
         }
         model.addAttribute("bankAccount", bankAccount);
-        ModelAndView view = new ModelAndView("corp/corpBankdialog");
-        return view;
+        return new ModelAndView("corp/corpBankdialog");
     }
 
     /**
@@ -419,7 +436,7 @@ public class BillCorpInfoController {
     @PostMapping("saveCorpBank")
     public Message saveCorpBank(@Validated BankAccount bankAccount, BindingResult br, HttpSession session) {
         if (br.hasErrors()) {
-            return new Message(0, br.getFieldError().getDefaultMessage());
+            return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }
         try {
             String id = bankAccount.getId();

@@ -10,7 +10,7 @@ import com.shgs.lodge.util.Pager;
 
 import java.util.List;
 
-public interface IMenuInfoDao extends IBaseDAO<MenuInfo,String> {
+public interface IMenuInfoDao extends IBaseDAO<MenuInfo> {
     int getMaxOrderByParent(String pid);
 
     MenuInfo addMenuInfo(MenuInfo menuInfo);

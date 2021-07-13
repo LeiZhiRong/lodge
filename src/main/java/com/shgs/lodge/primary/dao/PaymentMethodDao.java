@@ -20,7 +20,7 @@ public class PaymentMethodDao extends BaseDAO<PaymentMethod, String> implements 
 
     @Override
     public int getMaxOrderByParent(String pid) {
-        Object obj = null;
+        Object obj;
         if (pid != null && !pid.isEmpty()) {
             obj = super.queryObject("select max(m.orders) from PaymentMethod m where m.parent.id=?0", pid);
         } else {
@@ -34,11 +34,7 @@ public class PaymentMethodDao extends BaseDAO<PaymentMethod, String> implements 
     @Override
     public boolean deletePaymentMethod(String id) {
         Object o = super.executeByJpql("delete from PaymentMethod m where m.id =?0", id);
-        if (o != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return o != null;
     }
 
     @Override
@@ -63,9 +59,9 @@ public class PaymentMethodDao extends BaseDAO<PaymentMethod, String> implements 
     @Override
     public Pager<PaymentMethodDto> findPaymentMethodDto(String pid, String value) {
         pid = "all".equals(pid) ? null : pid;
-        Pager<PaymentMethodDto> list = new Pager<PaymentMethodDto>();
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        Pager<PaymentMethodDto> list = new Pager<>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append("from PaymentMethod m where 1=1 ");
         if (pid != null && !pid.isEmpty()) {
             jpql.append("and m.parent.id =:pid ");
@@ -90,7 +86,7 @@ public class PaymentMethodDao extends BaseDAO<PaymentMethod, String> implements 
 
     @Override
     public List<PaymentMethodListDto> listPaymentMethodListDto(String pid, String value) {
-        List<PaymentMethodListDto> list = new ArrayList<PaymentMethodListDto>();
+        List<PaymentMethodListDto> list = new ArrayList<>();
         List<PaymentMethod> mast = this.listPaymentMethod(pid, value);
         if (mast != null) {
             list = new PaymentMethodListDto().listPaymentMethodListDto(mast);
@@ -101,8 +97,8 @@ public class PaymentMethodDao extends BaseDAO<PaymentMethod, String> implements 
     @Override
     public List<PaymentMethod> listPaymentMethod(String pid, String value) {
         pid = "all".equals(pid) ? null : pid;
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append("from PaymentMethod m where 1=1 ");
         if (pid != null && !pid.isEmpty()) {
             jpql.append("and m.parent.id =:pid ");
@@ -131,7 +127,7 @@ public class PaymentMethodDao extends BaseDAO<PaymentMethod, String> implements 
     public int batchDelete(String ids) {
         if (ids != null && !ids.isEmpty()) {
             List<String> list = CmsUtils.string2Array(ids, ",");
-            Map<String, Object> alias = new HashMap<String, Object>();
+            Map<String, Object> alias = new HashMap<>();
             alias.put("ids", list);
             return (int) super.executeByAliasJpql("delete from PaymentMethod where id in(:ids)", alias);
         }
@@ -141,7 +137,7 @@ public class PaymentMethodDao extends BaseDAO<PaymentMethod, String> implements 
     @Override
     public void executeIds(String id, String oldIds, String newIds) {
         List<PaymentMethod> list = super.list("from PaymentMethod m  where m.ids like ?0", "%" + id + "%");
-        List<PaymentMethod> mast = new ArrayList<PaymentMethod>();
+        List<PaymentMethod> mast = new ArrayList<>();
         if (list != null && list.size() > 0) {
             for (PaymentMethod temp : list) {
                 temp.setIds(temp.getIds().replace(oldIds, newIds));
@@ -155,8 +151,8 @@ public class PaymentMethodDao extends BaseDAO<PaymentMethod, String> implements 
 
     @Override
     public Integer countProjectsBh(String id, String pid, String paymentBh) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append(" select count(d) from PaymentMethod d where d.paymentBh =:paymentBh ");
         alias.put("paymentBh", paymentBh);
         if (pid != null && !pid.isEmpty()) {
@@ -177,7 +173,7 @@ public class PaymentMethodDao extends BaseDAO<PaymentMethod, String> implements 
 
     @Override
     public List<TreeJson> getPaymentMethod2TreeJson(String keyword) {
-        List<TreeJson> cts = new ArrayList<TreeJson>();
+        List<TreeJson> cts = new ArrayList<>();
         List<Map> dts = super.listToMapBySql("select m.id as id,m.paymentBh as paymentBh,m.paymentName as text,m.pid as pid,m.contents as contents from payment_method m  order by m.pid asc,m.orders asc");
         if (dts.size() > 0) {
             List<String> list = CmsUtils.string2Array(keyword, ";");
@@ -186,7 +182,7 @@ public class PaymentMethodDao extends BaseDAO<PaymentMethod, String> implements 
                 temp.setId((String) map.get("id"));
                 String paymentBh = (String) map.get("paymentBh");
                 if (StringUtils.isNotEmpty(paymentBh)) {
-                    temp.setText(paymentBh + "\\" + (String) map.get("text"));
+                    temp.setText(paymentBh + "\\" + map.get("text"));
                 } else {
                     temp.setText((String) map.get("text"));
                 }
@@ -198,7 +194,7 @@ public class PaymentMethodDao extends BaseDAO<PaymentMethod, String> implements 
                 cts.add(temp);
             }
         }
-        return new TreeJson().getfatherNode(cts);
+        return TreeJson.getfatherNode(cts);
     }
 
     @Override
@@ -215,6 +211,6 @@ public class PaymentMethodDao extends BaseDAO<PaymentMethod, String> implements 
                 cts.add(temp);
             }
         }
-        return new TreeJson().getfatherNode(cts);
+        return TreeJson.getfatherNode(cts);
     }
 }

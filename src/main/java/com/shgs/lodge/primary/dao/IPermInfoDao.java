@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 角色权限持久层Dao接口类
  */
-public interface IPermInfoDao extends IBaseDAO<PermInfo,String> {
+public interface IPermInfoDao extends IBaseDAO<PermInfo> {
     /**
      * 批量添加角色权限
      *

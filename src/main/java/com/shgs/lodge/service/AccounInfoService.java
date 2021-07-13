@@ -19,8 +19,13 @@ import java.util.List;
  */
 @Service("accounInfoService")
 public class AccounInfoService implements IAccounInfoService {
-    @Autowired
+
     private IAccounInfoDao accounInfoDao;
+
+    @Autowired
+    public void setAccounInfoDao(IAccounInfoDao accounInfoDao) {
+        this.accounInfoDao = accounInfoDao;
+    }
 
     @Override
     @Transactional(value = "primaryTransactionManager")

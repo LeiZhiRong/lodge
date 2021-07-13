@@ -89,7 +89,7 @@ public class ProceedTypeListDto {
     }
 
     public ProceedTypeListDto(ProceedType proceedType) {
-        String pid = null;
+        String pid;
         this.setId(proceedType.getId());
         this.setProceedBh(proceedType.getProceedBh());
         this.setContents(proceedType.getContents());
@@ -111,7 +111,7 @@ public class ProceedTypeListDto {
     }
 
     public List<ProceedTypeListDto> listProceedTypeListDto(List<ProceedType> proceedTypeList) {
-        List<ProceedTypeListDto> list = new ArrayList<ProceedTypeListDto>();
+        List<ProceedTypeListDto> list = new ArrayList<>();
         if (proceedTypeList.size() > 0) {
             for (ProceedType mast : proceedTypeList) {
                 list.add(new ProceedTypeListDto(mast));

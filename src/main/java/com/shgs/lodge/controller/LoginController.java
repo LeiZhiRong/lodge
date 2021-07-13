@@ -35,30 +35,19 @@ import java.util.List;
 @RequestMapping("/login/")
 public class LoginController {
 
-    @Autowired
-    private IUserInfoService userInfoService;
-
-    @Autowired
-    private IRoleInfoService roleInfoService;
-
-    @Autowired
-    private IPermInfoService permInfoService;
-
-    @Autowired
-    private IMenuService menuService;
-
-    @Autowired
-    private ICustomService customService;
-
-    @Autowired
-    private IUserRoleService userRoleService;
-
-    @Autowired
     private IAccounInfoService accounInfoService;
 
-    @Autowired
     private IUserService userService;
 
+    @Autowired
+    public void setAccounInfoService(IAccounInfoService accounInfoService) {
+        this.accounInfoService = accounInfoService;
+    }
+
+    @Autowired
+    public void setUserService(IUserService userService) {
+        this.userService = userService;
+    }
 
     /**
      * 普通登录页面
@@ -121,7 +110,7 @@ public class LoginController {
     @ResponseBody
     public RSAPublicDto getKey(HttpServletRequest request, HttpSession session) {
         RSAPublicDto client = new RSAPublicDto();
-        HashMap<String, Object> keys = null;
+        HashMap<String, Object> keys;
         try {
             keys = RSAUtils.getKeys();
         } catch (NoSuchAlgorithmException e) {
@@ -154,22 +143,22 @@ public class LoginController {
     @ResponseBody
     @PostMapping(value = "login")
     public Message login(String userName, String password, String bookSet, String check, Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception {
-        Message msg=userService.loginUser(userName, password, bookSet, request, response);
-        if(msg.getCode()==1){
-                if ("T".equals(check)) {
-                    String token = JWTTokenUtil.createAccessToken((User) msg.getData());
-                    CookieUtil.setCookie(response, JWTConfig.tokenHeader, token, 7 * 24 * 60 * 60);
-                } else {
-                    CookieUtil.deleteCookie(response, JWTConfig.tokenHeader);
-                }
+        Message msg = userService.loginUser(userName, password, bookSet, request, response);
+        if (msg.getCode() == 1) {
+            if ("T".equals(check)) {
+                String token = JWTTokenUtil.createAccessToken((User) msg.getData());
+                CookieUtil.setCookie(response, JWTConfig.tokenHeader, token, 7 * 24 * 60 * 60);
+            } else {
+                CookieUtil.deleteCookie(response, JWTConfig.tokenHeader);
+            }
             String basePath = request.getContextPath();
             String url = basePath + "/main/index";
             session.setAttribute("basePath", basePath);
             msg.setData(url);
-            } else {
-                msg.setCode(0);
-                msg.setMessage("系统初始化错误");
-            }
+        } else {
+            msg.setCode(0);
+            msg.setMessage("系统初始化错误");
+        }
         return msg;
     }
 

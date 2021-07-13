@@ -20,8 +20,13 @@ import java.util.Map;
  */
 @Service("bankAccountService")
 public class BankAccountService implements IBankAccountService {
-    @Autowired
+
     private IBankAccountDao bankAccountDao;
+
+    @Autowired
+    public void setBankAccountDao(IBankAccountDao bankAccountDao) {
+        this.bankAccountDao = bankAccountDao;
+    }
 
     @Override
     @Transactional(value = "primaryTransactionManager")
@@ -83,7 +88,7 @@ public class BankAccountService implements IBankAccountService {
     @Override
     @Transactional(value = "primaryTransactionManager", readOnly = true)
     public List<BankAccount> listBankAccount(String corpId, String ztbz) {
-        StringBuffer jpql = new StringBuffer();
+        StringBuilder jpql = new StringBuilder();
         Map<String, Object> alias = new HashMap<>();
         jpql.append(" from BankAccount b where b.corpId =:corpId ");
         alias.put("corpId", corpId);
@@ -121,7 +126,7 @@ public class BankAccountService implements IBankAccountService {
     @Override
     @Transactional(value = "primaryTransactionManager", readOnly = true)
     public BankAccount queryBankAccountByCorpId(String corpId) {
-        return (BankAccount) bankAccountDao.queryObject("from BankAccount b where b.corpId =?0 and b.ztbz =?1 order by b.moren desc ",new Object[]{corpId,"T"});
+        return (BankAccount) bankAccountDao.queryObject("from BankAccount b where b.corpId =?0 and b.ztbz =?1 order by b.moren desc ", new Object[]{corpId, "T"});
     }
 
 }

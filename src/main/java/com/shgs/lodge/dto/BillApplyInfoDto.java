@@ -18,14 +18,14 @@ public class BillApplyInfoDto {
     /**
      * 单据编号
      */
-    @HeaderEnum(field = "applyBH", title = "单据编号", width = 180, sortable = true, hidden = false)
+    @HeaderEnum(field = "applyBH", title = "单据编号", width = 180)
     private String applyBH;
 
     /**
      * 申请部门编号
      */
     @NotEmpty(message = "申请部门不能为空")
-    @HeaderEnum(field = "applyDeptBH", title = "申请部门", width = 80, sortable = true, hidden = true)
+    @HeaderEnum(field = "applyDeptBH", title = "申请部门", width = 80, hidden = true)
     private String applyDeptBH;
 
     /**
@@ -37,26 +37,26 @@ public class BillApplyInfoDto {
     /**
      * 申请人编号
      */
-    @HeaderEnum(field = "applyUserName", title = "申请人", width = 80, sortable = true, hidden = true)
+    @HeaderEnum(field = "applyUserName", title = "申请人", width = 80, hidden = true)
     private String applyUserName;
 
     /**
      * 结算部门编号
      */
     @NotEmpty(message = "可结算部门不能为空")
-    @HeaderEnum(field = "setllDeptBH", title = "可结算部门", width = 150, sortable = true, hidden = true)
+    @HeaderEnum(field = "setllDeptBH", title = "可结算部门", width = 150, hidden = true)
     private String setllDeptBH;
 
     /**
      * 申请时间
      */
-    @HeaderEnum(field = "applyDate", title = "申请时间", width = 150, sortable = true, hidden = false)
+    @HeaderEnum(field = "applyDate", title = "申请时间", width = 150)
     private String applyDate;
 
     /**
      * 会计期间
      */
-    @HeaderEnum(field = "periodMonth", title = "会计期间", width = 100, sortable = true, hidden = true)
+    @HeaderEnum(field = "periodMonth", title = "会计期间", hidden = true)
     private String periodMonth;
 
     /**
@@ -68,7 +68,7 @@ public class BillApplyInfoDto {
     /**
      * 销售方名称
      */
-    @HeaderEnum(field = "saleCorpName", title = "销售方", width = 150, sortable = true, hidden = false)
+    @HeaderEnum(field = "saleCorpName", title = "销售方", width = 150)
     private String saleCorpName;
 
 
@@ -80,7 +80,7 @@ public class BillApplyInfoDto {
     /**
      * 销售方银行账号
      */
-    @HeaderEnum(field = "saleYhzh", title = "销售方银行账号", width = 150, sortable = true, hidden = true)
+    @HeaderEnum(field = "saleYhzh", title = "销售方银行账号", width = 150,  hidden = true)
     private String saleYhzh;
 
 
@@ -93,13 +93,13 @@ public class BillApplyInfoDto {
     /**
      * 购买方名称
      */
-    @HeaderEnum(field = "buyerCorpName", title = "购买方", width = 150, sortable = true, hidden = false)
+    @HeaderEnum(field = "buyerCorpName", title = "购买方", width = 150)
     private String buyerCorpName;
 
     /**
      * 购买方开户银行
      */
-    @HeaderEnum(field = "buyKhyh", title = "购买方银行账号", width = 150, sortable = true, hidden = true)
+    @HeaderEnum(field = "buyKhyh", title = "购买方银行账号", width = 150,  hidden = true)
     private String buyKhyh;
 
     /**
@@ -110,7 +110,7 @@ public class BillApplyInfoDto {
     /**
      * 收支费项名称
      */
-    @HeaderEnum(field = "proceedName", title = "收支费项", width = 150, sortable = true, hidden = true)
+    @HeaderEnum(field = "proceedName", title = "收支费项", width = 150,  hidden = true)
     private String  proceedName;
 
     /**
@@ -122,13 +122,13 @@ public class BillApplyInfoDto {
     /**
      * 发票类型
      */
-    @HeaderEnum(field = "billType", title = "发票类型", width = 120, sortable = true, hidden = false)
+    @HeaderEnum(field = "billType", title = "发票类型", width = 120 )
     private String billType;
 
     /**
      * 发票金额
      */
-    @HeaderEnum(field = "billMoney", title = "发票金额", width = 120, sortable = true, hidden = false)
+    @HeaderEnum(field = "billMoney", title = "发票金额", width = 120 )
     private Double billMoney;
 
     /**
@@ -184,7 +184,7 @@ public class BillApplyInfoDto {
     /**
      * 单据状态
      */
-    @HeaderEnum(field = "ztbz", title = "单据状态", width = 80, sortable = true, hidden = true)
+    @HeaderEnum(field = "ztbz", title = "单据状态", width = 80,  hidden = true)
     private String ztbz;
 
     /**
@@ -194,7 +194,7 @@ public class BillApplyInfoDto {
     private String remarks;
 
 
-    @HeaderEnum(field = "handle", title = "关联操作", width = 150, sortable = false, hidden = false)
+    @HeaderEnum(field = "handle", title = "关联操作", width = 150, sortable = false)
     private String handle;
 
 
@@ -514,7 +514,7 @@ public class BillApplyInfoDto {
     }
 
     public List<BillApplyInfoDto> listBillApplyInfoDto(List<BillApplyInfo> billApplyInfoList) {
-        List<BillApplyInfoDto> dto = new ArrayList<BillApplyInfoDto>();
+        List<BillApplyInfoDto> dto = new ArrayList<>();
         if (billApplyInfoList.size() > 0) {
             for (BillApplyInfo mast : billApplyInfoList) {
                 dto.add(new BillApplyInfoDto(mast));

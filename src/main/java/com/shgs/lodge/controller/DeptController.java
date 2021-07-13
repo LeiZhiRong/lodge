@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 部门信息管理视图层-View接口
@@ -37,8 +38,13 @@ import java.util.List;
 @AuthClass("login")
 public class DeptController {
 
-    @Autowired
+
     private IDeptInfoService deptInfoService;
+
+    @Autowired
+    public void setDeptInfoService(IDeptInfoService deptInfoService) {
+        this.deptInfoService = deptInfoService;
+    }
 
     /**
      * 部门管理首页
@@ -50,8 +56,7 @@ public class DeptController {
     @AuthMethod(role = "ROLE_DEPT")
     @GetMapping("index")
     public ModelAndView index(Model model, HttpSession session) throws JsonProcessingException {
-        ModelAndView view = new ModelAndView("dept/index");
-        return view;
+        return new ModelAndView("dept/index");
     }
 
     /**
@@ -64,13 +69,13 @@ public class DeptController {
     @GetMapping("dialog")
     public ModelAndView dialog(String id, String pid, Model model) throws JsonProcessingException {
         DeptInfo deptInfo = new DeptInfo();
-        boolean disabled = true;
+        boolean disabled;
         if (id != null && !id.isEmpty()) {
             deptInfo = deptInfoService.queryDeptInfo(id);
             if ("all".equals(pid)) {
                 disabled = true;
             } else {
-                disabled = pid != null && !pid.isEmpty() ? false : true;
+                disabled = pid == null || pid.isEmpty();
             }
         } else {
             deptInfo.setStatus(1);
@@ -81,8 +86,7 @@ public class DeptController {
         model.addAttribute("deptInfo", deptInfo);
         model.addAttribute("pid", deptInfo.getParent() != null ? deptInfo.getParent().getId() : pid);
         model.addAttribute("select", CmsUtils.getRoleType());
-        ModelAndView view = new ModelAndView("dept/dialog");
-        return view;
+        return new ModelAndView("dept/dialog");
     }
 
     /**
@@ -98,7 +102,7 @@ public class DeptController {
     @PostMapping("save")
     public Message save(@Validated DeptInfoDto deptInfoDto, BindingResult br, String pid, HttpSession session) {
         if (br.hasErrors()) {
-            return new Message(0, br.getFieldError().getDefaultMessage());
+            return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }
         try {
             User user = (User) session.getAttribute("user");

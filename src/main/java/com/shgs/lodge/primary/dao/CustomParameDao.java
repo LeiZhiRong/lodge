@@ -31,19 +31,15 @@ public class CustomParameDao extends BaseDAO<CustomParame,String> implements ICu
     @Override
     public boolean deleteCustomParame(String id) {
         Object o = super.executeByJpql("delete from CustomParame c where c.id =?0", id);
-        if (o != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return o != null;
     }
 
     @Override
     public Integer batchDeleCustomParame(String type_id, List<String> ids) {
         if (type_id == null || type_id.isEmpty())
             return 0;
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append("delete from CustomParame c where c.typeId =:type_id ");
         alias.put("type_id", type_id);
         if (ids != null && ids.size() > 0) {
@@ -63,9 +59,9 @@ public class CustomParameDao extends BaseDAO<CustomParame,String> implements ICu
 
     @Override
     public List<CustomParame> listCustomParame(String type_id, String keyword) {
-        List<CustomParame> mast = new ArrayList<CustomParame>();
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        List<CustomParame> mast = new ArrayList<>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append("from CustomParame c where 1=1 ");
         if (type_id != null && !type_id.isEmpty()) {
             jpql.append(" and c.typeId =:typeId ");
@@ -102,9 +98,9 @@ public class CustomParameDao extends BaseDAO<CustomParame,String> implements ICu
 
     @Override
     public List<SelectJson> listCustomParame(String typeCode, String keyword, boolean status) {
-        List<SelectJson> selectJsons = new ArrayList<SelectJson>();
-        StringBuffer sql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        List<SelectJson> selectJsons = new ArrayList<>();
+        StringBuilder sql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         sql.append(" select a.id as id, a.parameCode as code, a.parameName as name  from custom_parame a left join custom_type b on a.typeId =b.id where b.typeCode =:typeCode ");
         alias.put("typeCode", typeCode);
         if (keyword != null && !keyword.isEmpty()) {
@@ -119,7 +115,7 @@ public class CustomParameDao extends BaseDAO<CustomParame,String> implements ICu
         if (list != null && list.size() > 0) {
             for (Map map : list) {
                 String id = (String) map.get("id");
-                selectJsons.add(new SelectJson((String) map.get("id"), (String) map.get("code")+":"+ (String) map.get("name"), (String) map.get("name")));
+                selectJsons.add(new SelectJson((String) map.get("id"), map.get("code") +":"+ map.get("name"), (String) map.get("name")));
             }
         }
         return selectJsons;
@@ -127,9 +123,9 @@ public class CustomParameDao extends BaseDAO<CustomParame,String> implements ICu
 
     @Override
     public List<SelectJson> listCustomParameByCode(String typeCode) {
-        List<SelectJson> selectJsons = new ArrayList<SelectJson>();
-        StringBuffer sql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        List<SelectJson> selectJsons = new ArrayList<>();
+        StringBuilder sql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         sql.append(" select a.id as id, a.parameCode as code, a.parameName as name  from custom_parame a left join custom_type b on a.typeId =b.id where b.typeCode =:typeCode ");
         alias.put("typeCode", typeCode);
         sql.append(" order by a.orders asc ");
@@ -145,12 +141,9 @@ public class CustomParameDao extends BaseDAO<CustomParame,String> implements ICu
 
     @Override
     public CustomParame queryCustomParame(String typeCode, String keyword) {
-
-        StringBuffer sql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
-        sql.append(" select a from CustomParame  a left join CustomType b on a.typeId =b.id where b.typeCode =:typeCode and ( a.parameName =:keyword or a.parameCode =:keyword ) ");
+        Map<String, Object> alias = new HashMap<>();
         alias.put("typeCode", typeCode);
         alias.put("keyword",keyword);
-        return (CustomParame) super.queryObjectByAlias(sql.toString(),alias);
+        return (CustomParame) super.queryObjectByAlias(" select a from CustomParame  a left join CustomType b on a.typeId =b.id where b.typeCode =:typeCode and ( a.parameName =:keyword or a.parameCode =:keyword ) ",alias);
     }
 }

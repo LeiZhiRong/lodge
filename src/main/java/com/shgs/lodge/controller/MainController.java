@@ -21,7 +21,6 @@ public class MainController {
     @AuthMethod
     @GetMapping("index")
     public ModelAndView list(Model model, HttpSession session) throws JsonProcessingException {
-         ModelAndView view = new ModelAndView("index");
-        return view;
+        return new ModelAndView("index");
     }
 }

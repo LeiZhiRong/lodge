@@ -24,6 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/role/")
@@ -31,16 +32,29 @@ import java.util.List;
 @AuthClass("login")
 public class RoleController {
 
-    @Autowired
+
     private IRoleInfoService roleInfoService;
 
-    @Autowired
+
     private IPermInfoService permInfoService;
 
 
-    @Autowired
     private IAccounInfoService accounInfoService;
 
+    @Autowired
+    public void setRoleInfoService(IRoleInfoService roleInfoService) {
+        this.roleInfoService = roleInfoService;
+    }
+
+    @Autowired
+    public void setPermInfoService(IPermInfoService permInfoService) {
+        this.permInfoService = permInfoService;
+    }
+
+    @Autowired
+    public void setAccounInfoService(IAccounInfoService accounInfoService) {
+        this.accounInfoService = accounInfoService;
+    }
 
     /**
      * 角色管理首页
@@ -52,8 +66,7 @@ public class RoleController {
     @AuthMethod(role = "ROLE_ROLE")
     @GetMapping("index")
     public ModelAndView index(Model model, HttpSession session) throws JsonProcessingException {
-        ModelAndView view = new ModelAndView("role/index");
-        return view;
+        return new ModelAndView("role/index");
     }
 
     /**
@@ -62,11 +75,10 @@ public class RoleController {
      * @param id
      * @param model
      * @return
-     * @throws JsonProcessingException
      */
     @AuthMethod(role = "ROLE_ROLE")
     @GetMapping("roleDialog")
-    public ModelAndView roleDialog(String id, Model model, HttpSession session) throws JsonProcessingException {
+    public ModelAndView roleDialog(String id, Model model, HttpSession session) {
         User user = (User) session.getAttribute("user");
         boolean hidden = true;
         boolean disabled = false;
@@ -91,8 +103,7 @@ public class RoleController {
         model.addAttribute("bookset", select);
         model.addAttribute("hidden", hidden);
         model.addAttribute("disabled", disabled);
-        ModelAndView view = new ModelAndView("role/roleDialog");
-        return view;
+        return new ModelAndView("role/roleDialog");
     }
 
     /**
@@ -107,7 +118,7 @@ public class RoleController {
     @PostMapping("saveRole")
     public Message saveRole(@Validated RoleInfo roleInfo, BindingResult br, HttpSession session) {
         if (br.hasErrors()) {
-            return new Message(0, br.getFieldError().getDefaultMessage());
+            return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }
         try {
             User user = (User) session.getAttribute("user");
@@ -191,6 +202,7 @@ public class RoleController {
      * @param keyword 关键字
      * @return arrayJson
      */
+    @SuppressWarnings("unchecked")
     @AuthMethod(role = "ROLE_ROLE")
     @RequestMapping("getMenuInfo")
     public List<ListGroup> getMenuInfo(String role_id, String keyword, HttpSession session) {

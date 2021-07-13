@@ -15,11 +15,11 @@ public enum Status {
 	/**
 	 * 状态码
 	 */
-	private Integer code;
+	private final Integer code;
 	/**
 	 * 内容
 	 */
-	private String message;
+	private final String message;
 
 	Status(Integer code, String message) {
 		this.code = code;

@@ -76,7 +76,7 @@ public class AncillaryProjectsListDto {
     }
 
     public AncillaryProjectsListDto(AncillaryProjects mast) {
-        String pid = null;
+        String pid;
         String name = mast.getProjectsName().replace("\\", "\\\\");
         this.setId(mast.getId());
         this.setContents(mast.getContents());
@@ -103,7 +103,7 @@ public class AncillaryProjectsListDto {
     }
 
     public List<AncillaryProjectsListDto> listAncillaryProjectsListDto(List<AncillaryProjects> list) {
-        List<AncillaryProjectsListDto> cts = new ArrayList<AncillaryProjectsListDto>();
+        List<AncillaryProjectsListDto> cts = new ArrayList<>();
         if (list.size() > 0) {
             for (AncillaryProjects mast : list) {
                 cts.add(new AncillaryProjectsListDto(mast));

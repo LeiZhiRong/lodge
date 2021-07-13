@@ -20,14 +20,29 @@ import java.util.List;
 @Service("userRoleService")
 public class UserRoleService implements IUserRoleService {
 
-    @Autowired
+
     private IUserRoleDao userRoleDao;
 
-    @Autowired
+
     private IUserInfoDao userInfoDao;
 
-    @Autowired
+
     private IRoleInfoDao roleInfoDao;
+
+    @Autowired
+    public void setUserRoleDao(IUserRoleDao userRoleDao) {
+        this.userRoleDao = userRoleDao;
+    }
+
+    @Autowired
+    public void setUserInfoDao(IUserInfoDao userInfoDao) {
+        this.userInfoDao = userInfoDao;
+    }
+
+    @Autowired
+    public void setRoleInfoDao(IRoleInfoDao roleInfoDao) {
+        this.roleInfoDao = roleInfoDao;
+    }
 
     @Override
     @Transactional(value = "primaryTransactionManager")
@@ -44,7 +59,7 @@ public class UserRoleService implements IUserRoleService {
         List<String> list = CmsUtils.string2Array(role_ids, ",");
         UserInfo userInfo = userInfoDao.queryUserInfoById(user_id);
         List<RoleInfo> roleInfoList = roleInfoDao.listRoleInfo(list);
-        List<UserRole> userRoleList = new ArrayList<UserRole>();
+        List<UserRole> userRoleList = new ArrayList<>();
         if (roleInfoList != null && roleInfoList.size() > 0 && userInfo != null) {
             for (RoleInfo roleInfo : roleInfoList) {
                 userRoleList.add(new UserRole(roleInfo, userInfo));
@@ -99,7 +114,7 @@ public class UserRoleService implements IUserRoleService {
             List<String> u_ids = CmsUtils.string2Array(userIds, ",");
             List<RoleInfo> roleInfoList = roleInfoDao.listRoleInfo(r_ids);
             List<UserInfo> userInfoList = userInfoDao.lisetUserInfo(u_ids);
-            List<UserRole> userRoleList = new ArrayList<UserRole>();
+            List<UserRole> userRoleList = new ArrayList<>();
             for (UserInfo userInfo : userInfoList) {
                 for (RoleInfo roleInfo : roleInfoList) {
                     userRoleList.add(new UserRole(roleInfo, userInfo));

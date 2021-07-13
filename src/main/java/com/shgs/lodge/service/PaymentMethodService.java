@@ -17,8 +17,13 @@ import java.util.List;
 @Service("paymentMethodService")
 public class PaymentMethodService implements IPaymentMethodService {
 
-    @Autowired
+
     private IPaymentMethodDao paymentMethodDao;
+
+    @Autowired
+    public void setPaymentMethodDao(IPaymentMethodDao paymentMethodDao) {
+        this.paymentMethodDao = paymentMethodDao;
+    }
 
     @Override
     @Transactional(value = "primaryTransactionManager")
@@ -32,7 +37,7 @@ public class PaymentMethodService implements IPaymentMethodService {
                 return msg;
             }
         }
-        Integer orders = paymentMethodDao.getMaxOrderByParent(pid);
+        int orders = paymentMethodDao.getMaxOrderByParent(pid);
         String ids = null;
         PaymentMethod pc = null;
         if (pid != null && !pid.isEmpty()) {
@@ -96,11 +101,11 @@ public class PaymentMethodService implements IPaymentMethodService {
                 paymentMethodDao.update(parent);
             }
             if (pid != null && !pid.isEmpty()) {
-                if (oldparent != null && parent != null && oldparent.getId() != parent.getId()) {
+                if (oldparent != null && parent != null && !oldparent.getId().equals(parent.getId())) {
                     paymentMethodDao.executeIds(paymentMethod.getId(), oldparent.getIds(), parent.getIds());
                 }
             }
-            if (oldparent != null && oldparent.getId() != pid) {
+            if (oldparent != null && !oldparent.getId().equals(pid)) {
                 if (paymentMethodDao.getCountPaymentMethodByPid(oldparent.getId()) == 0) {
                     oldparent.setContents("F");
                     paymentMethodDao.update(oldparent);

@@ -12,13 +12,14 @@ import java.util.List;
  *
  * @author 雷智荣
  */
-public interface IBankAccountDao extends IBaseDAO<BankAccount, String> {
+public interface IBankAccountDao extends IBaseDAO<BankAccount> {
 
     /**
      * 批量删除
      * @param ids  *银行账号ID，多个以“,”号隔开
      * @return
      */
+    @SuppressWarnings("UnusedReturnValue")
     int batchDeleteCorpBank(String ids);
 
     /**

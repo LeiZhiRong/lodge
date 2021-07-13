@@ -7,7 +7,7 @@ import com.shgs.lodge.primary.entity.BillAccounInfo;
  * 团购挂单账务明细持久层接口类
  * @author 雷智荣
  */
-public interface IBillAccounInfoDao extends IBaseDAO<BillAccounInfo,String> {
+public interface IBillAccounInfoDao extends IBaseDAO<BillAccounInfo> {
 
     /**
      * 按ID查询实体对象

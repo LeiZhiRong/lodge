@@ -24,11 +24,16 @@ import java.util.Map;
 @Service("accounPeriodService")
 public class AccounPeriodService implements IAccounPeriodService {
 
-    @Autowired
+
     private IAccounPeriodDao accounPeriodDao;
 
+    @Autowired
+    public void setAccounPeriodDao(IAccounPeriodDao accounPeriodDao) {
+        this.accounPeriodDao = accounPeriodDao;
+    }
+
     @Override
-    @Transactional(value = "primaryTransactionManager", readOnly = false)
+    @Transactional(value = "primaryTransactionManager")
     public Message addAccounPeriod(AccounPeriod accounPeriod) {
         Message msg = new Message(0, "新增失败");
         AccounPeriod mast = (AccounPeriod) accounPeriodDao.queryObject("from AccounPeriod a where a.month =?0 ", accounPeriod.getMonth());
@@ -44,7 +49,7 @@ public class AccounPeriodService implements IAccounPeriodService {
     }
 
     @Override
-    @Transactional(value = "primaryTransactionManager", readOnly = false)
+    @Transactional(value = "primaryTransactionManager")
     public Message updateAccounPeriod(AccounPeriod accounPeriod) {
         Message msg = new Message(0, "更新失败");
         AccounPeriod mast = (AccounPeriod) accounPeriodDao.queryObject("from AccounPeriod a where a.month =?0 and a.id !=?1 ", new Object[]{accounPeriod.getMonth(), accounPeriod.getId()});
@@ -61,7 +66,7 @@ public class AccounPeriodService implements IAccounPeriodService {
 
 
     @Override
-    @Transactional(value = "primaryTransactionManager", readOnly = false)
+    @Transactional(value = "primaryTransactionManager")
     public Message deleteAccounPeriod(String id) {
         Message msg = new Message(0, "删除失败");
         if (accounPeriodDao.delete(id)) {
@@ -75,7 +80,7 @@ public class AccounPeriodService implements IAccounPeriodService {
     @Override
     @Transactional(value = "primaryTransactionManager", readOnly = true)
     public Pager<AccounPeriodDto> findAccounPeriodDto() {
-        Pager<AccounPeriodDto> pager = new Pager<AccounPeriodDto>();
+        Pager<AccounPeriodDto> pager = new Pager<>();
         Pager<AccounPeriod> accounPeriodPager = accounPeriodDao.find(" from AccounPeriod ");
         if (accounPeriodPager != null) {
             pager.setPageNumber(accounPeriodPager.getPageNumber());
@@ -108,7 +113,7 @@ public class AccounPeriodService implements IAccounPeriodService {
     @Override
     @Transactional(value = "primaryTransactionManager", readOnly = true)
     public String getMonth() {
-        StringBuffer jpql = new StringBuffer();
+        StringBuilder jpql = new StringBuilder();
         Map<String, Object> alias = new HashMap<>();
         String nowDate = CmsUtils.getNowDate();
         jpql.append("from AccounPeriod a where a.startTime <=:nowdate  and a.endTime >=:nowdate");
@@ -124,15 +129,12 @@ public class AccounPeriodService implements IAccounPeriodService {
     @Override
     @Transactional(value = "primaryTransactionManager", readOnly = true)
     public AccounPeriod getNowMonth() {
-        StringBuffer jpql = new StringBuffer();
+        StringBuilder jpql = new StringBuilder();
         Map<String, Object> alias = new HashMap<>();
         String nowDate = CmsUtils.getNowDate();
         jpql.append("from AccounPeriod a where a.startTime <=:nowdate  and a.endTime >=:nowdate");
         alias.put("nowdate", BeanUtil.strToTimestampTime(nowDate));
-        AccounPeriod accounPeriod = (AccounPeriod) accounPeriodDao.queryObjectByAlias(jpql.toString(), alias);
-        if (accounPeriod != null)
-            return accounPeriod;
-        return null;
+        return (AccounPeriod) accounPeriodDao.queryObjectByAlias(jpql.toString(), alias);
     }
 
 

@@ -28,12 +28,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 用户信息视图层接口
@@ -46,20 +46,42 @@ import java.util.List;
 @AuthClass("login")
 public class UserController {
 
-    @Autowired
     private IUserInfoService userInfoService;
-
-    @Autowired
     private IDeptInfoService deptInfoService;
-
-    @Autowired
     private ITableHeaderService tableHeaderService;
-
-    @Autowired
     private IUserRoleService userRoleService;
+    private IStationInfoService stationInfoService;
+    private IManagePointService managePointService;
 
     @Autowired
-    private IStationInfoService stationInfoService;
+    public void setUserInfoService(IUserInfoService userInfoService) {
+        this.userInfoService = userInfoService;
+    }
+
+    @Autowired
+    public void setDeptInfoService(IDeptInfoService deptInfoService) {
+        this.deptInfoService = deptInfoService;
+    }
+
+    @Autowired
+    public void setTableHeaderService(ITableHeaderService tableHeaderService) {
+        this.tableHeaderService = tableHeaderService;
+    }
+
+    @Autowired
+    public void setUserRoleService(IUserRoleService userRoleService) {
+        this.userRoleService = userRoleService;
+    }
+
+    @Autowired
+    public void setStationInfoService(IStationInfoService stationInfoService) {
+        this.stationInfoService = stationInfoService;
+    }
+
+    @Autowired
+    public void setManagePointService(IManagePointService managePointService) {
+        this.managePointService = managePointService;
+    }
 
     /**
      * 首页
@@ -74,8 +96,7 @@ public class UserController {
         User user = (User) session.getAttribute("user");
         List<HeaderColumns> columns = tableHeaderService.listHeaderColumns(user.getId(), "userGrid", "com.shgs.lodge.primary.entity.UserInfo");
         model.addAttribute("columns", columns);
-        ModelAndView view = new ModelAndView("user/index");
-        return view;
+        return new ModelAndView("user/index");
     }
 
 
@@ -111,6 +132,7 @@ public class UserController {
     @AuthMethod(role = "ROLE_USER")
     @GetMapping("dialog")
     public ModelAndView dialog(String id, Model model, HttpSession session) throws JsonProcessingException {
+        User user = (User) session.getAttribute("user");
         UserInfo userInfo = new UserInfo();
         if (id != null && !id.isEmpty()) {
             userInfo = userInfoService.queryUserInfoById(id);
@@ -118,12 +140,15 @@ public class UserController {
         } else {
             userInfo.setStatus(1);
         }
+        //岗位
         List<SelectJson> stations = stationInfoService.listStationInfoToSelectJson(null, "T");
         stations.add(0, new SelectJson("", "请选择...", ""));
+        //管理处
+        List<SelectJson> managePointList = managePointService.listManagePointToSelectJson(user.getBookSet());
         model.addAttribute("userInfo", userInfo);
         model.addAttribute("stations", stations);
-        ModelAndView view = new ModelAndView("user/dialog");
-        return view;
+        model.addAttribute("managePointList", managePointList);
+        return new ModelAndView("user/dialog");
     }
 
     /**
@@ -132,14 +157,12 @@ public class UserController {
      * @param keyword 已选择部门编号
      * @param model
      * @return
-     * @throws JsonProcessingException
      */
     @AuthMethod(role = "ROLE_USER")
     @GetMapping("getDeptInfo")
-    public ModelAndView deptDialog(String keyword, Model model) throws JsonProcessingException {
+    public ModelAndView deptDialog(String keyword, Model model) {
         model.addAttribute("keyword", keyword);
-        ModelAndView view = new ModelAndView("user/getDeptInfo");
-        return view;
+        return new ModelAndView("user/getDeptInfo");
     }
 
     /**
@@ -159,17 +182,15 @@ public class UserController {
      *
      * @param userInfo
      * @param br
-     * @param session
      * @return
      */
     @AuthMethod(role = "ROLE_USER")
     @PostMapping("saveUserInfo")
-    public Message saveUserInfo(@Validated UserInfo userInfo, BindingResult br, HttpSession session) {
+    public Message saveUserInfo(@Validated UserInfo userInfo, BindingResult br) {
         if (br.hasErrors()) {
-            return new Message(0, br.getFieldError().getDefaultMessage());
+            return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }
         try {
-            User user = (User) session.getAttribute("user");
             String id = userInfo.getId();
             String pwd = userInfo.getLoginPassword();
             if (id == null || userInfo.getId().isEmpty()) {
@@ -216,8 +237,7 @@ public class UserController {
     @GetMapping("getColumns")
     public ModelAndView getColumns(String action, Model model) throws JsonProcessingException {
         model.addAttribute("action", action);
-        ModelAndView view = new ModelAndView("columns/getColumns");
-        return view;
+        return new ModelAndView("columns/getColumns");
     }
 
     /**
@@ -254,13 +274,12 @@ public class UserController {
      * 更新列排序
      *
      * @param rows
-     * @param session
      * @return
      */
     @AuthMethod(role = "ROLE_USER")
     @PostMapping(value = "saveTableHeader")
-    public Message saveTableHeader(String rows, HttpSession session) {
-        if (rows != null && !rows.isEmpty()) {
+    public Message saveTableHeader(String rows) {
+        if (StringUtils.isNotEmpty(rows)) {
             rows = CmsUtils.decryptBASE64(rows);
             JSONArray jsonArray = JSONObject.parseArray(rows);
             List<TableHeader> dtos = JSONArray.parseArray(jsonArray.toString(), TableHeader.class);
@@ -291,9 +310,8 @@ public class UserController {
 
     @GetMapping("importUser")
     @AuthMethod(role = "ROLE_USER")
-    public ModelAndView importUser(Model model) throws JsonProcessingException {
-        ModelAndView view = new ModelAndView("user/import");
-        return view;
+    public ModelAndView importUser() {
+        return new ModelAndView("user/import");
     }
 
     /**
@@ -328,7 +346,7 @@ public class UserController {
             msg.setMessage("上传文件不能为空，请重新选择模板文件，然后重试。");
             return JsonUtil.objectToString(msg);
         }
-        List<UserInfoVo> vo = new ArrayList<UserInfoVo>();
+        List<UserInfoVo> vo;
         List<UserInfoVo> list = ExcelUtils.importExcel(file, 0, headerRows, UserInfoVo.class);
         if (list != null && list.size() > 0) {
             vo = list;
@@ -342,14 +360,13 @@ public class UserController {
     /**
      * 下载模板
      *
-     * @param request
      * @param response
      */
     @AuthMethod(role = "ROLE_USER")
     @RequestMapping("downloadExcel")
-    public void downloadExcel(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void downloadExcel(HttpServletResponse response) throws IOException {
         //需要导出的数据列表。
-        List<UserInfoVo> list = new ArrayList<UserInfoVo>();
+        List<UserInfoVo> list = new ArrayList<>();
         UserInfoVo vo = new UserInfoVo();
         vo.setBh("职工工号或手机号码（必填项）");
         vo.setName("用户名（必填项）");
@@ -369,17 +386,16 @@ public class UserController {
      */
     @AuthMethod(role = "ROLE_USER")
     @PostMapping(value = "batchsaveExcel")
-    public Message batchsaveExcel(String rows, HttpSession session) {
-        User user = (User) session.getAttribute("user");
+    public Message batchsaveExcel(String rows) {
         if (rows != null && !rows.isEmpty()) {
             rows = CmsUtils.decryptBASE64(rows);
             JSONArray jsonArray = JSONObject.parseArray(rows);
             List<UserInfoVo> dtos = JSONArray.parseArray(jsonArray.toString(), UserInfoVo.class);
-            List<UserInfoVo> array = new ArrayList<UserInfoVo>();
-            List<UserInfo> listUserInfo = new ArrayList<UserInfo>();
+            List<UserInfoVo> array = new ArrayList<>();
+            List<UserInfo> listUserInfo = new ArrayList<>();
             if (dtos.size() > 0) {
                 for (UserInfoVo mast : dtos) {
-                    List<String> err = new ArrayList<String>();
+                    List<String> err = new ArrayList<>();
                     UserInfo userInfo = new UserInfo();
                     //检测用户编号
                     if (mast.getBh() == null || mast.getBh().isEmpty()) {

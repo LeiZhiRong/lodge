@@ -4,6 +4,7 @@ import com.shgs.lodge.dto.ManagePointDto;
 import com.shgs.lodge.primary.entity.ManagePoint;
 import com.shgs.lodge.util.Message;
 import com.shgs.lodge.util.Pager;
+import com.shgs.lodge.util.SelectJson;
 
 import java.util.List;
 
@@ -41,6 +42,13 @@ public interface IManagePointService {
     List<ManagePoint> listManagePoint(String bookSet);
 
     /**
+     * 获取列表
+     * @param bookSet
+     * @return
+     */
+    List<SelectJson> listManagePointToSelectJson(String bookSet);
+
+    /**
      * 获取分页数据
      * @param bookSet 账套编号
      * @param keyword 过滤关键字
@@ -64,6 +72,8 @@ public interface IManagePointService {
      * @return
      */
     ManagePoint queryManagePoint(String bookSet,String keyword);
+
+
 
 
 }

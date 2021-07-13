@@ -99,6 +99,7 @@ public interface IBillApplyInfoService {
      * @param list
      * @return
      */
+    @SuppressWarnings("UnusedReturnValue")
     boolean batchSaveBillApplyInfo(List<BillApplyInfo> list);
 
     /**

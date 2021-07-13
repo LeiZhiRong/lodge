@@ -200,7 +200,7 @@ public class MenuInfoDto {
     }
 
     public List<MenuInfoDto> listMenuInfoDto(List<MenuInfo> menuInfoList) {
-        List<MenuInfoDto> list = new ArrayList<MenuInfoDto>();
+        List<MenuInfoDto> list = new ArrayList<>();
         if (menuInfoList.size() > 0) {
             for (MenuInfo mast : menuInfoList) {
                 list.add(new MenuInfoDto(mast));

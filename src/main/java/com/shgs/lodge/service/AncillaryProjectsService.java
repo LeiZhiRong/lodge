@@ -19,17 +19,27 @@ import java.util.List;
 @Service("ancillaryProjectsService")
 public class AncillaryProjectsService implements IAncillaryProjectsService {
 
-    @Autowired
+
     private IAncillaryProjectsDao ancillaryProjectsDao;
 
-    @Autowired
+
     private ICustomParameDao customParameDao;
+
+    @Autowired
+    public void setAncillaryProjectsDao(IAncillaryProjectsDao ancillaryProjectsDao) {
+        this.ancillaryProjectsDao = ancillaryProjectsDao;
+    }
+
+    @Autowired
+    public void setCustomParameDao(ICustomParameDao customParameDao) {
+        this.customParameDao = customParameDao;
+    }
 
     @Override
     @Transactional(value = "primaryTransactionManager")
-    public Message addAncillaryProjects(AncillaryProjects ancillaryProjects, String pid,String t_id) {
+    public Message addAncillaryProjects(AncillaryProjects ancillaryProjects, String pid, String t_id) {
         Message msg = new Message(0, "添加失败");
-        Integer orders = ancillaryProjectsDao.getMaxOrderByParent(pid);
+        int orders = ancillaryProjectsDao.getMaxOrderByParent(pid);
         String ids = null;
         AncillaryProjects pc = null;
         if (pid != null && !pid.isEmpty()) {
@@ -40,9 +50,9 @@ public class AncillaryProjectsService implements IAncillaryProjectsService {
             ids = pc.getIds();
             ancillaryProjects.setParent(pc);
         }
-        if(StringUtils.isNotEmpty(t_id)){
-            CustomParame customParame=customParameDao.queryCustomParame(t_id);
-            if(customParame!=null)
+        if (StringUtils.isNotEmpty(t_id)) {
+            CustomParame customParame = customParameDao.queryCustomParame(t_id);
+            if (customParame != null)
                 ancillaryProjects.setProjectType(customParame);
         }
         ancillaryProjects.setOrders(orders + 1);
@@ -68,7 +78,7 @@ public class AncillaryProjectsService implements IAncillaryProjectsService {
 
     @Override
     @Transactional(value = "primaryTransactionManager")
-    public Message updateAncillaryProjects(AncillaryProjects ancillaryProjects, String pid,String t_id) {
+    public Message updateAncillaryProjects(AncillaryProjects ancillaryProjects, String pid, String t_id) {
         Message msg = new Message(0, "更新失败");
         //复制原科目上级科目
         AncillaryProjects oldparent = ancillaryProjects.getParent();
@@ -81,9 +91,9 @@ public class AncillaryProjectsService implements IAncillaryProjectsService {
                 ancillaryProjects.setOrders(ancillaryProjectsDao.getMaxOrderByParent(pid) + 1);
             }
         }
-        if(StringUtils.isNotEmpty(t_id)){
-            CustomParame customParame=customParameDao.queryCustomParame(t_id);
-            if(customParame!=null)
+        if (StringUtils.isNotEmpty(t_id)) {
+            CustomParame customParame = customParameDao.queryCustomParame(t_id);
+            if (customParame != null)
                 ancillaryProjects.setProjectType(customParame);
         }
         //更新项目信息，上级项目处理
@@ -95,11 +105,11 @@ public class AncillaryProjectsService implements IAncillaryProjectsService {
                 ancillaryProjectsDao.update(parent);
             }
             if (pid != null && !pid.isEmpty()) {
-                if (oldparent != null && parent != null && oldparent.getId() != parent.getId()) {
+                if (oldparent != null && parent != null && !oldparent.getId().equals(parent.getId())) {
                     ancillaryProjectsDao.executeIds(ancillaryProjects.getId(), oldparent.getIds(), parent.getIds());
                 }
             }
-            if (oldparent != null && oldparent.getId() != pid) {
+            if (oldparent != null && !oldparent.getId().equals(pid)) {
                 if (ancillaryProjectsDao.getCountAncillaryProjectsByPid(oldparent.getId()) == 0) {
                     oldparent.setContents("F");
                     ancillaryProjectsDao.update(oldparent);
@@ -155,15 +165,15 @@ public class AncillaryProjectsService implements IAncillaryProjectsService {
     }
 
     @Override
-    public Pager<AncillaryProjectsDto> findAncillaryProjectsDto(String pid, String value,String t_id) {
+    public Pager<AncillaryProjectsDto> findAncillaryProjectsDto(String pid, String value, String t_id) {
 
-        return ancillaryProjectsDao.findAncillaryProjectsDto(pid, value,t_id);
+        return ancillaryProjectsDao.findAncillaryProjectsDto(pid, value, t_id);
     }
 
     @Override
-    public List<AncillaryProjectsListDto> listAncillaryProjectsDto(String pid, String value,String t_id) {
+    public List<AncillaryProjectsListDto> listAncillaryProjectsDto(String pid, String value, String t_id) {
 
-        return ancillaryProjectsDao.listAncillaryProjectsListDto(pid, value,t_id);
+        return ancillaryProjectsDao.listAncillaryProjectsListDto(pid, value, t_id);
     }
 
     @Override
@@ -175,7 +185,7 @@ public class AncillaryProjectsService implements IAncillaryProjectsService {
 
     @Override
     @Transactional(value = "primaryTransactionManager", readOnly = true)
-    public List<TreeJson> getAncillaryProjects2TreeJson(String keyword,String t_id) {
-        return ancillaryProjectsDao.getAncillaryProjects2TreeJson(keyword,t_id);
+    public List<TreeJson> getAncillaryProjects2TreeJson(String keyword, String t_id) {
+        return ancillaryProjectsDao.getAncillaryProjects2TreeJson(keyword, t_id);
     }
 }

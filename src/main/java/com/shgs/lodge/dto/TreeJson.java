@@ -12,7 +12,7 @@ public class TreeJson {
   private Object arg;
   private Object arg1;
   private boolean checked;
-  private List<TreeJson> children = new ArrayList<TreeJson>();
+  private List<TreeJson> children = new ArrayList<>();
 
   public TreeJson() {
     super();
@@ -128,8 +128,8 @@ public class TreeJson {
 
 
 
-  public final static List<TreeJson> getfatherNode(List<TreeJson> treeDataList) {
-    List<TreeJson> newTreeDataList = new ArrayList<TreeJson>();
+  public static List<TreeJson> getfatherNode(List<TreeJson> treeDataList) {
+    List<TreeJson> newTreeDataList = new ArrayList<>();
     for (TreeJson jsonTreeData : treeDataList) {
       if (jsonTreeData.getPid() == null || jsonTreeData.getPid().isEmpty()) {
         jsonTreeData.setChildren(getChildrenNode(jsonTreeData.getId(), treeDataList));
@@ -139,10 +139,10 @@ public class TreeJson {
     return newTreeDataList;
   }
 
-  public final static List<TreeJson> getfatherNode( String pid,List<TreeJson> treeDataList) {
-    List<TreeJson> newTreeDataList = new ArrayList<TreeJson>();
+  public static List<TreeJson> getfatherNode(String pid, List<TreeJson> treeDataList) {
+    List<TreeJson> newTreeDataList = new ArrayList<>();
     for (TreeJson jsonTreeData : treeDataList) {
-      if (jsonTreeData.getId() == pid) {
+      if (jsonTreeData.getId().equals(pid)) {
         jsonTreeData.setChildren(getChildrenNode(jsonTreeData.getId(), treeDataList));
         newTreeDataList.add(jsonTreeData);
       }
@@ -150,8 +150,8 @@ public class TreeJson {
     return newTreeDataList;
   }
 
-  private final static List<TreeJson> getChildrenNode(String pid, List<TreeJson> treeDataList) {
-    List<TreeJson> newTreeDataList = new ArrayList<TreeJson>();
+  private static List<TreeJson> getChildrenNode(String pid, List<TreeJson> treeDataList) {
+    List<TreeJson> newTreeDataList = new ArrayList<>();
     for (TreeJson jsonTreeData : treeDataList) {
       if (jsonTreeData.getPid() == null || jsonTreeData.getPid().isEmpty()) continue;
       //这是一个子节点

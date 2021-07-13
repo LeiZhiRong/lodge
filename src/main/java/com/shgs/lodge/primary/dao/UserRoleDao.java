@@ -19,11 +19,7 @@ public class UserRoleDao extends BaseDAO<UserRole,String> implements IUserRoleDa
     @Override
     public boolean deleteUserRole(String id) {
         Object o = super.executeByJpql("delete from UserRole u where u.id =?0", id);
-        if (o != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return o != null;
     }
 
     @Override
@@ -33,8 +29,8 @@ public class UserRoleDao extends BaseDAO<UserRole,String> implements IUserRoleDa
 
     @Override
     public Pager<UserRole> listUserRole(String bookSet_code, String role_id, String keyword) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append(" from UserRole u where 1=1 ");
         if (bookSet_code != null && !bookSet_code.isEmpty()) {
             jpql.append(" and u.role.bookSet =:bookSet ");
@@ -53,9 +49,9 @@ public class UserRoleDao extends BaseDAO<UserRole,String> implements IUserRoleDa
 
     @Override
     public List<SelectJson> listRoleInfo(String userId, String bookSet_code, String keyword) {
-        List<SelectJson> selects = new ArrayList<SelectJson>();
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        List<SelectJson> selects = new ArrayList<>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append(" from UserRole u where 1=1 ");
         if (userId != null && !userId.isEmpty()) {
             jpql.append(" and u.user.id =:userId ");
@@ -84,9 +80,9 @@ public class UserRoleDao extends BaseDAO<UserRole,String> implements IUserRoleDa
 
     @Override
     public List<String> getUserRoleID(String userId, String bookSet_code) {
-        List<String> selects = new ArrayList<String>();
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        List<String> selects = new ArrayList<>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append(" from UserRole u where 1=1 ");
         if (userId != null && !userId.isEmpty()) {
             jpql.append(" and u.user.id =:userId ");
@@ -108,9 +104,9 @@ public class UserRoleDao extends BaseDAO<UserRole,String> implements IUserRoleDa
 
     @Override
     public List<Role> getRoleById(String userId, String bookSet_code) {
-        List<Role> roles = new ArrayList<Role>();
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        List<Role> roles = new ArrayList<>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append(" from UserRole u where 1=1 ");
         if (userId != null && !userId.isEmpty()) {
             jpql.append(" and u.user.id =:userId ");
@@ -137,7 +133,7 @@ public class UserRoleDao extends BaseDAO<UserRole,String> implements IUserRoleDa
     public int batchDeleteUserRole(String ids, String user_id) {
         if (ids != null && !ids.isEmpty()) {
             List<String> _ids = CmsUtils.string2Array(ids, ",");
-            Map<String, Object> alias = new HashMap<String, Object>();
+            Map<String, Object> alias = new HashMap<>();
             alias.put("ids", _ids);
             alias.put("userId", user_id);
             Object o = super.executeByAliasJpql("delete from UserRole u where u.user.id =:userId  and u.id in( :ids) ", alias);
@@ -149,7 +145,7 @@ public class UserRoleDao extends BaseDAO<UserRole,String> implements IUserRoleDa
 
     @Override
     public int batchDeleteUserRole(List<String> IDS) {
-        Map<String, Object> alias = new HashMap<String, Object>();
+        Map<String, Object> alias = new HashMap<>();
         if (IDS != null && IDS.size() > 0) {
             alias.put("ids", IDS);
             Object o = super.executeByAliasSql(" delete from user_role  where id in(:ids) ", alias);
@@ -166,9 +162,9 @@ public class UserRoleDao extends BaseDAO<UserRole,String> implements IUserRoleDa
 
     @Override
     public List<String> getUserRoleIDS(List<String> userIDS, List<String> roleIDS) {
-        List<String> ids = new ArrayList<String>();
-        StringBuffer sql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        List<String> ids = new ArrayList<>();
+        StringBuilder sql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         sql.append("select id  from user_role  where 1=1 ");
         if (userIDS != null && userIDS.size() > 0) {
             sql.append(" and userID in(:ids) ");

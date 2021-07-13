@@ -41,7 +41,7 @@ public class PrimaryDataSourceConfig {
     @Primary
     @Bean(name = "primaryEntityManager")
     public EntityManager primaryEntityManager(EntityManagerFactoryBuilder builder) {
-        return primaryEntityManagerFactory(builder).getObject().createEntityManager();
+        return Objects.requireNonNull(primaryEntityManagerFactory(builder).getObject()).createEntityManager();
     }
 
     @Primary

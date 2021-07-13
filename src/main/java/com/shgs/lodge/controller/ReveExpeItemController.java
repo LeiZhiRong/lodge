@@ -22,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 收支项目视图接口类
@@ -34,29 +35,69 @@ import java.util.List;
 @AuthClass("login")
 public class ReveExpeItemController {
 
-    @Autowired
+
     private IReveExpeItemService reveExpeItemService;
 
-    @Autowired
+
     private ICashBankService cashBankService;
 
-    @Autowired
+
     private ITableHeaderService tableHeaderService;
 
-    @Autowired
+
     private ICustomService customService;
 
-    @Autowired
+
     private IBillCorpInfoService billCorpInfoService;
 
-    @Autowired
+
     private IAncillaryProjectsService ancillaryProjectsService;
 
-    @Autowired
+
     private IDeptInfoService deptInfoService;
 
-    @Autowired
+
     private IPaymentMethodService paymentMethodService;
+
+    @Autowired
+    public void setReveExpeItemService(IReveExpeItemService reveExpeItemService) {
+        this.reveExpeItemService = reveExpeItemService;
+    }
+
+    @Autowired
+    public void setCashBankService(ICashBankService cashBankService) {
+        this.cashBankService = cashBankService;
+    }
+
+    @Autowired
+    public void setTableHeaderService(ITableHeaderService tableHeaderService) {
+        this.tableHeaderService = tableHeaderService;
+    }
+
+    @Autowired
+    public void setCustomService(ICustomService customService) {
+        this.customService = customService;
+    }
+
+    @Autowired
+    public void setBillCorpInfoService(IBillCorpInfoService billCorpInfoService) {
+        this.billCorpInfoService = billCorpInfoService;
+    }
+
+    @Autowired
+    public void setAncillaryProjectsService(IAncillaryProjectsService ancillaryProjectsService) {
+        this.ancillaryProjectsService = ancillaryProjectsService;
+    }
+
+    @Autowired
+    public void setDeptInfoService(IDeptInfoService deptInfoService) {
+        this.deptInfoService = deptInfoService;
+    }
+
+    @Autowired
+    public void setPaymentMethodService(IPaymentMethodService paymentMethodService) {
+        this.paymentMethodService = paymentMethodService;
+    }
 
     /**
      * 首页
@@ -70,8 +111,7 @@ public class ReveExpeItemController {
         User user = (User) session.getAttribute("user");
         List<HeaderColumns> columns = tableHeaderService.listHeaderColumns(user.getId(), "reveExpeItemGrid", "com.shgs.lodge.dto.ReveExpeItemDto");
         model.addAttribute("columns", columns);
-        ModelAndView view = new ModelAndView("reve/index");
-        return view;
+        return new ModelAndView("reve/index");
     }
 
     /**
@@ -85,13 +125,13 @@ public class ReveExpeItemController {
     @GetMapping("proceedTypeDialog")
     public ModelAndView proceedTypeDialog(String id, String pid, Model model) {
         ProceedType proceedType = new ProceedType();
-        boolean disabled = true;
+        boolean disabled;
         if (id != null && !id.isEmpty()) {
             proceedType = reveExpeItemService.queryProceedTypeById(id);
             if ("all".equals(pid)) {
                 disabled = true;
             } else {
-                disabled = pid != null && !pid.isEmpty() ? false : true;
+                disabled = pid == null || pid.isEmpty();
             }
         } else {
             proceedType.setContents("F");
@@ -100,8 +140,7 @@ public class ReveExpeItemController {
         model.addAttribute("disabled", disabled);
         model.addAttribute("proceedType", proceedType);
         model.addAttribute("pid", proceedType.getParent() != null ? proceedType.getParent().getId() : pid);
-        ModelAndView view = new ModelAndView("reve/proceedTypeDialog");
-        return view;
+        return new ModelAndView("reve/proceedTypeDialog");
     }
 
     /**
@@ -115,7 +154,7 @@ public class ReveExpeItemController {
      */
     @AuthMethod(role = "ROLE_REVE_EXPE_ITEM")
     @GetMapping("reveExpeItemDialog")
-    public ModelAndView reveExpeItemDialog(String id, String proceedTypeId,  String action, Model model) {
+    public ModelAndView reveExpeItemDialog(String id, String proceedTypeId, String action, Model model) {
         ReveExpeItemDto reveExpeItemDto = new ReveExpeItemDto();
         if (id != null && !id.isEmpty()) {
             reveExpeItemDto = reveExpeItemService.queryReveExpeItemDtoById(id);
@@ -138,8 +177,7 @@ public class ReveExpeItemController {
         model.addAttribute("projectTypes", projectTypes);
         model.addAttribute("balance", balance);
         model.addAttribute("auditStatus", auditStatus);
-        ModelAndView view = new ModelAndView("reve/reveExpeItemDialog");
-        return view;
+        return new ModelAndView("reve/reveExpeItemDialog");
     }
 
     /**
@@ -154,7 +192,7 @@ public class ReveExpeItemController {
     @PostMapping("saveProceedType")
     public Message saveProceedType(@Validated ProceedType proceedType, BindingResult br, String pid, HttpSession session) {
         if (br.hasErrors()) {
-            return new Message(0, br.getFieldError().getDefaultMessage());
+            return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }
         try {
             ProceedType mast = new ProceedType();
@@ -227,7 +265,7 @@ public class ReveExpeItemController {
     @PostMapping("saveReveExpeItem")
     public Message saveReveExpeItem(@Validated ReveExpeItemDto reveExpeItemDto, BindingResult br, String[] auditStatus) {
         if (br.hasErrors()) {
-            return new Message(0, br.getFieldError().getDefaultMessage());
+            return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }
         try {
             if (auditStatus.length > 0)
@@ -284,8 +322,7 @@ public class ReveExpeItemController {
     @GetMapping("getCashBank")
     public ModelAndView getCashBank(String value, Model model) {
         model.addAttribute("cashBankValue", value);
-        ModelAndView view = new ModelAndView("reve/getCashBank");
-        return view;
+        return new ModelAndView("reve/getCashBank");
     }
 
     /**
@@ -310,8 +347,7 @@ public class ReveExpeItemController {
     @AuthMethod(role = "ROLE_REVE_EXPE_ITEM")
     @GetMapping("getCorpInfo")
     public ModelAndView getCorpInfo(Model model) {
-        ModelAndView view = new ModelAndView("reve/getCorpInfo");
-        return view;
+        return new ModelAndView("reve/getCorpInfo");
     }
 
 
@@ -338,8 +374,7 @@ public class ReveExpeItemController {
     @GetMapping("getProjects")
     public ModelAndView getProjects(String value, Model model) {
         model.addAttribute("projectType", value);
-        ModelAndView view = new ModelAndView("reve/getProjects");
-        return view;
+        return new ModelAndView("reve/getProjects");
     }
 
     @AuthMethod(role = "ROLE_REVE_EXPE_ITEM")
@@ -357,8 +392,7 @@ public class ReveExpeItemController {
     @AuthMethod(role = "ROLE_REVE_EXPE_ITEM")
     @GetMapping("getDeptInfo")
     public ModelAndView getDeptInfo(Model model) {
-        ModelAndView view = new ModelAndView("reve/getDeptInfo");
-        return view;
+        return new ModelAndView("reve/getDeptInfo");
     }
 
     /**
@@ -382,18 +416,18 @@ public class ReveExpeItemController {
     @AuthMethod(role = "ROLE_REVE_EXPE_ITEM")
     @RequestMapping("getDescribe")
     public List<SelectJson> getDescribe() {
-        List<SelectJson> cts = customService.listCustomParameByCode("describe");
-        return cts;
+        return customService.listCustomParameByCode("describe");
     }
 
     /**
      * 获取结算方式
+     *
      * @return
      */
     @AuthMethod(role = "ROLE_REVE_EXPE_ITEM")
     @RequestMapping("getPaymentMethod")
-    public List<TreeJson> getPaymentMethod(){
-        return  paymentMethodService.listPaymentMethod();
+    public List<TreeJson> getPaymentMethod() {
+        return paymentMethodService.listPaymentMethod();
     }
 
 

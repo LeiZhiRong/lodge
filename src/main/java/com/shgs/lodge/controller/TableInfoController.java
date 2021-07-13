@@ -27,16 +27,19 @@ import java.util.List;
 @Scope("prototype")
 @AuthClass("login")
 
-/**
- * 列表
- */
 public class TableInfoController {
 
-    @Autowired
+
     private TableHeaderService tableHeaderService;
+
+    @Autowired
+    public void setTableHeaderService(TableHeaderService tableHeaderService) {
+        this.tableHeaderService = tableHeaderService;
+    }
 
     /**
      * 列设置页跳转
+     *
      * @param action
      * @param model
      * @return
@@ -46,8 +49,7 @@ public class TableInfoController {
     @GetMapping("getColumns")
     public ModelAndView getColumns(String action, Model model) throws JsonProcessingException {
         model.addAttribute("action", action);
-        ModelAndView view = new ModelAndView("columns/getColumns");
-        return view;
+        return new ModelAndView("columns/getColumns");
     }
 
     /**
@@ -60,15 +62,14 @@ public class TableInfoController {
     @RequestMapping("getColumnsInfo")
     public List<TableHeader> getColumnsInfo(String action, HttpSession session) {
         User user = (User) session.getAttribute("user");
-        List<TableHeader> tableHeaders=tableHeaderService.listTableHeader(user.getId(), action);
-        return tableHeaders;
+        return tableHeaderService.listTableHeader(user.getId(), action);
     }
 
     @AuthMethod
     @RequestMapping("resetTableHeader")
-    public Message resetTableHeader(String action, HttpSession session){
+    public Message resetTableHeader(String action, HttpSession session) {
         User user = (User) session.getAttribute("user");
-        return  tableHeaderService.deleteTableHeader(user.getId(),action);
+        return tableHeaderService.deleteTableHeader(user.getId(), action);
     }
 
     /**

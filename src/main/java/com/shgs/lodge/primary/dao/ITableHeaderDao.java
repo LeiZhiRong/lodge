@@ -6,7 +6,7 @@ import com.shgs.lodge.primary.entity.TableHeader;
 
 import java.util.List;
 
-public interface ITableHeaderDao extends IBaseDAO<TableHeader,String> {
+public interface ITableHeaderDao extends IBaseDAO<TableHeader> {
 
   /**
    * 获取列表排序号

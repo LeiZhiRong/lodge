@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/accoun/")
@@ -32,15 +33,29 @@ import java.util.List;
 @AuthClass("login")
 public class AccounCodeController {
 
-    @Autowired
+
     private IAccounCodeService accounCodeService;
 
-    @Autowired
+
     private ICustomService customService;
 
-    @Autowired
+
     private ITableHeaderService tableHeaderService;
 
+    @Autowired
+    public void setAccounCodeService(IAccounCodeService accounCodeService) {
+        this.accounCodeService = accounCodeService;
+    }
+
+    @Autowired
+    public void setCustomService(ICustomService customService) {
+        this.customService = customService;
+    }
+
+    @Autowired
+    public void setTableHeaderService(ITableHeaderService tableHeaderService) {
+        this.tableHeaderService = tableHeaderService;
+    }
 
     /**
      * 首页
@@ -53,8 +68,7 @@ public class AccounCodeController {
         User user = (User) session.getAttribute("user");
         List<HeaderColumns> columns = tableHeaderService.listHeaderColumns(user.getId(), "accounGrid", "com.shgs.lodge.dto.AccounCodeDto");
         model.addAttribute("columns", columns);
-        ModelAndView mv = new ModelAndView("accoun/index");
-        return mv;
+        return new ModelAndView("accoun/index");
     }
 
 
@@ -98,12 +112,12 @@ public class AccounCodeController {
     @RequestMapping(value = "saveAccounCode")
     public Message saveAccounCode(@Validated AccounCodeDto dto, BindingResult br, HttpSession session) {
         if (br.hasErrors()) {
-            return new Message(0, br.getFieldError().getDefaultMessage());
+            return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }
         try {
             AccounCode accoun = new AccounCodeDto().getAccounCode(dto);
 
-            if(dto.getCodeType()!=null&& !dto.getCodeType().isEmpty()){
+            if (dto.getCodeType() != null && !dto.getCodeType().isEmpty()) {
                 CustomParame type = customService.queryCustomParame(dto.getCodeType());
                 accoun.setCodeType(type);
             }
@@ -134,12 +148,12 @@ public class AccounCodeController {
             }
             String id = accoun.getId();
             if (id == null || id.isEmpty()) {
-                User user= (User) session.getAttribute("user");
+                User user = (User) session.getAttribute("user");
                 accoun.setBookSet(user.getBookSet());
                 accoun.setId(null);
                 return accounCodeService.addAccounCode(accoun);
             } else {
-                AccounCode accounCode=accounCodeService.queryAccounCodeByID(id);
+                AccounCode accounCode = accounCodeService.queryAccounCodeByID(id);
                 accoun.setCodeType(accounCode.getCodeType());
                 return accounCodeService.updateAccounCode(accoun);
             }
@@ -161,31 +175,30 @@ public class AccounCodeController {
     @RequestMapping("addAccounCode")
     public ModelAndView addAccounCode(String id, Model model, HttpSession session) {
         AccounCodeDto dto = new AccounCodeDto();
-        boolean edit=false;
+        boolean edit = false;
         if (id != null && !id.isEmpty()) {
             AccounCode accounCode = accounCodeService.queryAccounCodeByID(id);
             if (accounCode != null) {
                 dto = new AccounCodeDto(accounCode);
-                edit=true;
+                edit = true;
             }
         }
         List<SelectJson> separator = customService.listCustomParameByCode("Separator");
         List<SelectJson> documentNumber = customService.listCustomParameByCode("DocumentNumber");
-        List<SelectJson> codeType = customService.listCustomParame("DOCUMENT-CODE-TYPE",null,true);
-        codeType.add(0,new SelectJson("","请选择..."));
+        List<SelectJson> codeType = customService.listCustomParame("DOCUMENT-CODE-TYPE", null, true);
+        codeType.add(0, new SelectJson("", "请选择..."));
         model.addAttribute("accounCodeDto", dto);
         model.addAttribute("documentNumber", documentNumber);
         model.addAttribute("separator", separator);
         model.addAttribute("codeType", codeType);
-        model.addAttribute("edit",edit);
-        ModelAndView mv = new ModelAndView("accoun/addAccounCode");
-        return mv;
+        model.addAttribute("edit", edit);
+        return new ModelAndView("accoun/addAccounCode");
     }
 
     @AuthMethod(role = "ROLE_ACCOUN")
     @PostMapping("deleteAccoun")
     public Message deleteAccoun(String id) {
-         return accounCodeService.deleteAccounCodeByID(id);
+        return accounCodeService.deleteAccounCodeByID(id);
     }
 
 }

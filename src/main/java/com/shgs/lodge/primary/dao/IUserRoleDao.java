@@ -12,7 +12,7 @@ import java.util.List;
  * 用户角色关联持久类接口
  * @author 雷智荣
  */
-public interface IUserRoleDao extends IBaseDAO<UserRole,String> {
+public interface IUserRoleDao extends IBaseDAO<UserRole> {
 
     /**
      * 按ID删除用户角色关联信息

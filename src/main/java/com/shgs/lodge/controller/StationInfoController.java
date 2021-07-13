@@ -7,7 +7,6 @@ import com.shgs.lodge.dto.HeaderColumns;
 import com.shgs.lodge.dto.User;
 import com.shgs.lodge.primary.entity.StationInfo;
 import com.shgs.lodge.service.IStationInfoService;
-import com.shgs.lodge.service.ITableHeaderService;
 import com.shgs.lodge.service.IUserInfoService;
 import com.shgs.lodge.util.CmsUtils;
 import com.shgs.lodge.util.Message;
@@ -26,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 职务信息示图接口层
@@ -38,23 +38,30 @@ import java.util.List;
 @AuthClass("login")
 public class StationInfoController {
 
-    @Autowired
+
     private IStationInfoService stationInfoService;
 
-    @Autowired
-    private ITableHeaderService tableHeaderService;
+
+    private IUserInfoService userInfoService;
 
     @Autowired
-    private IUserInfoService userInfoService;
+    public void setStationInfoService(IStationInfoService stationInfoService) {
+        this.stationInfoService = stationInfoService;
+    }
+
+
+    @Autowired
+    public void setUserInfoService(IUserInfoService userInfoService) {
+        this.userInfoService = userInfoService;
+    }
 
     @AuthMethod(role = "ROLE_STATION")
     @RequestMapping("index")
     public ModelAndView index(Model model, HttpSession session) throws JsonProcessingException {
         User user = (User) session.getAttribute("user");
-        List<HeaderColumns> columns = CmsUtils.getHeaderColumns( "com.shgs.lodge.primary.entity.StationInfo");
+        List<HeaderColumns> columns = CmsUtils.getHeaderColumns("com.shgs.lodge.primary.entity.StationInfo");
         model.addAttribute("columns", columns);
-        ModelAndView mv = new ModelAndView("station/index");
-        return mv;
+        return new ModelAndView("station/index");
     }
 
 
@@ -98,8 +105,7 @@ public class StationInfoController {
             dto.setZtbz("T");
         }
         model.addAttribute("stationInfo", dto);
-        ModelAndView view = new ModelAndView("station/dialog");
-        return view;
+        return new ModelAndView("station/dialog");
     }
 
 
@@ -115,7 +121,7 @@ public class StationInfoController {
     @PostMapping("save")
     public Message save(@Validated StationInfo info, BindingResult br, HttpSession session) {
         if (br.hasErrors()) {
-            return new Message(0, br.getFieldError().getDefaultMessage());
+            return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }
         try {
             String id = info.getId();

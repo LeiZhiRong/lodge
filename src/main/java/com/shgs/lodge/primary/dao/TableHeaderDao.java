@@ -31,23 +31,19 @@ public class TableHeaderDao extends BaseDAO<TableHeader,String> implements ITabl
 
     @Override
     public List<TableHeader> listTableHeader(String user_id, String table_name) {
-        StringBuffer hql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
-        hql.append(" from TableHeader t where  t.user_id =:user_id  and t.table_name =:table_name  order by t.orders asc ");
+        Map<String, Object> alias = new HashMap<>();
         alias.put("user_id", user_id);
         alias.put("table_name", table_name);
-        return super.listByAlias(hql.toString(), alias);
+        return super.listByAlias(" from TableHeader t where  t.user_id =:user_id  and t.table_name =:table_name  order by t.orders asc ", alias);
     }
 
     @Override
     public boolean deleteTableHeader(String user_id, String table_name) {
-        Map<String, Object> alias = new HashMap<String, Object>();
+        Map<String, Object> alias = new HashMap<>();
         alias.put("user_id",user_id);
         alias.put("table_name",table_name);
         Object o=super.executeByAliasJpql("delete from TableHeader t where t.table_name =:table_name and t.user_id =:user_id ", alias);
-        if(o!=null)
-            return true;
-        return false;
+        return o != null;
     }
 
     @Override
@@ -63,7 +59,7 @@ public class TableHeaderDao extends BaseDAO<TableHeader,String> implements ITabl
     @Override
     public int batchDeleteTableHeader(String[] ids) {
         if (ids != null && ids.length>0) {
-            Map<String, Object> alias = new HashMap<String, Object>();
+            Map<String, Object> alias = new HashMap<>();
             alias.put("ids",  Arrays.asList(ids));
             Object o=super.executeByAliasJpql("delete from TableHeader t where t.id in( :ids) ", alias);
             if(o!=null)
@@ -79,7 +75,7 @@ public class TableHeaderDao extends BaseDAO<TableHeader,String> implements ITabl
 
     @Override
     public boolean addHeaderColumns(String user_id, String table_name, String clas) {
-        List<TableHeader> temp = new ArrayList<TableHeader>();
+        List<TableHeader> temp = new ArrayList<>();
         List<HeaderColumns> columns = CmsUtils.getHeaderColumns(clas);
         if (columns != null && columns.size() > 0) {
             for (HeaderColumns mast : columns) {
@@ -92,7 +88,7 @@ public class TableHeaderDao extends BaseDAO<TableHeader,String> implements ITabl
                 temp.add(tableHeader);
             }
         }
-        if (temp != null && temp.size() > 0) {
+        if (temp.size() > 0) {
             return super.batchSave(temp);
         } else {
             return false;

@@ -23,11 +23,7 @@ public class BillApplyInfoDao extends BaseDAO<BillApplyInfo,String> implements I
     @Override
     public boolean deleteBillApplyInfo(String id) {
         Object o = super.executeByJpql("delete from BillApplyInfo b where b.id =?0", id);
-        if (o != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return o != null;
     }
 
     @Override
@@ -37,8 +33,8 @@ public class BillApplyInfoDao extends BaseDAO<BillApplyInfo,String> implements I
 
     @Override
     public Pager<BillApplyInfo> listBillApplyInfo(String field, String value, String starDate, String endDate, List<String> ztbz, String bookSet, String userBh) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         String values = "%" + value + "%";
         jpql.append(" from BillApplyInfo b where b.bookSet =:bookSet ");
         alias.put("bookSet", bookSet);
@@ -48,11 +44,11 @@ public class BillApplyInfoDao extends BaseDAO<BillApplyInfo,String> implements I
         }
         if (null != field && !"".equals(field) && !"all".equals(field)) {
             if ("billMoney".equals(field)) {
-                jpql.append(" and " + field + " =:value ");
+                jpql.append(" and ").append(field).append(" =:value ");
                 alias.put("value", new Double(value));
 
             } else if (value != null && !value.isEmpty()) {
-                jpql.append(" and " + field + " like:value");
+                jpql.append(" and ").append(field).append(" like:value");
                 alias.put("value", values);
             }
         }
@@ -84,19 +80,19 @@ public class BillApplyInfoDao extends BaseDAO<BillApplyInfo,String> implements I
 
     @Override
     public Pager<BillApplyInfo> listBillApplyInfo(String field, String value, String starDate, String endDate, String ztbz, String bookSet, String applyDeptBH, String saleCorpID, String buyerCorpID) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         String values = "%" + value + "%";
         jpql.append(" from BillApplyInfo b where b.bookSet =:bookSet ");//账套必须
         alias.put("bookSet", bookSet);
 
         if (null != field && !"".equals(field) && !"all".equals(field)) {//按字段查询处理
             if ("billMoney".equals(field)) {
-                jpql.append(" and " + field + " =:value ");
+                jpql.append(" and ").append(field).append(" =:value ");
                 alias.put("value", new Double(value));
 
             } else if (value != null && !value.isEmpty()) {
-                jpql.append(" and " + field + " like:value");
+                jpql.append(" and ").append(field).append(" like:value");
                 alias.put("value", values);
             }
         }
@@ -143,19 +139,19 @@ public class BillApplyInfoDao extends BaseDAO<BillApplyInfo,String> implements I
 
     @Override
     public List<BillApplyInfo> listToBillApplyInfo(String field, String value, String starDate, String endDate, String ztbz, String bookSet, String applyDeptBH, String saleCorpID, String buyerCorpID) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         String values = "%" + value + "%";
         jpql.append(" from BillApplyInfo b where b.bookSet =:bookSet ");//账套必须
         alias.put("bookSet", bookSet);
 
         if (null != field && !"".equals(field) && !"all".equals(field)) {//按字段查询处理
             if ("billMoney".equals(field)) {
-                jpql.append(" and " + field + " =:value ");
+                jpql.append(" and ").append(field).append(" =:value ");
                 alias.put("value", new Double(value));
 
             } else if (value != null && !value.isEmpty()) {
-                jpql.append(" and " + field + " like:value");
+                jpql.append(" and ").append(field).append(" like:value");
                 alias.put("value", values);
             }
         }
@@ -204,7 +200,7 @@ public class BillApplyInfoDao extends BaseDAO<BillApplyInfo,String> implements I
     public int batchDeleteApply(String ids) {
         if (ids != null && !ids.isEmpty()) {
             List<String> _ids = CmsUtils.string2Array(ids, ",");
-            Map<String, Object> alias = new HashMap<String, Object>();
+            Map<String, Object> alias = new HashMap<>();
             alias.put("ids", _ids);
             Object o = super.executeByAliasJpql("delete from BillApplyInfo b where b.id in( :ids) ", alias);
             if (o != null)
@@ -225,12 +221,10 @@ public class BillApplyInfoDao extends BaseDAO<BillApplyInfo,String> implements I
 
     @Override
     public Integer getMaxOrders() {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
-        jpql.append("select max(m.orders) from BillApplyInfo m where m.applyDate between :stardate  and  :enddate ");
+        Map<String, Object> alias = new HashMap<>();
         alias.put("stardate", BeanUtil.strToTimestampTime(BeanUtil.getTodayStart(CmsUtils.getNowDate())));
         alias.put("enddate", BeanUtil.strToTimestampTime(BeanUtil.getTodayEnd(CmsUtils.getNowDate())));
-        Object obj = super.queryObjectByAlias(jpql.toString(), alias);
+        Object obj = super.queryObjectByAlias("select max(m.orders) from BillApplyInfo m where m.applyDate between :stardate  and  :enddate ", alias);
         if (obj == null)
             return 0;
         return (Integer) obj;
@@ -238,8 +232,8 @@ public class BillApplyInfoDao extends BaseDAO<BillApplyInfo,String> implements I
 
     @Override
     public List<BillApplyInfo> exportBillApplyInfo(String field, String value, String starDate, String endDate, String ztbz, String bookSet, String userBh) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         String values = "%" + value + "%";
         jpql.append(" from BillApplyInfo b where b.bookSet =:bookSet ");
         alias.put("bookSet", bookSet);
@@ -249,11 +243,11 @@ public class BillApplyInfoDao extends BaseDAO<BillApplyInfo,String> implements I
         }
         if (null != field && !"".equals(field) && !"all".equals(field)) {
             if ("billMoney".equals(field)) {
-                jpql.append(" and " + field + " =:value ");
+                jpql.append(" and ").append(field).append(" =:value ");
                 alias.put("value", new Double(value));
 
             } else if (value != null && !value.isEmpty()) {
-                jpql.append(" and " + field + " like:value");
+                jpql.append(" and ").append(field).append(" like:value");
                 alias.put("value", values);
             }
         }
@@ -287,7 +281,7 @@ public class BillApplyInfoDao extends BaseDAO<BillApplyInfo,String> implements I
     public int batchExamine(String ids, String ztbz) {
         if (ids != null && !ids.isEmpty()) {
             List<String> _ids = CmsUtils.string2Array(ids, ",");
-            Map<String, Object> alias = new HashMap<String, Object>();
+            Map<String, Object> alias = new HashMap<>();
             alias.put("ids", _ids);
             alias.put("ztbz", ztbz);
             Object o = super.executeByAliasJpql("update BillApplyInfo b set b.ztbz =:ztbz  where b.id in( :ids) ", alias);

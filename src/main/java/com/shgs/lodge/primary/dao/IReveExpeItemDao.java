@@ -6,7 +6,7 @@ import com.shgs.lodge.primary.entity.ReveExpeItem;
 
 import java.util.List;
 
-public interface IReveExpeItemDao extends IBaseDAO<ReveExpeItem,String> {
+public interface IReveExpeItemDao extends IBaseDAO<ReveExpeItem> {
     /**
      * 按费项获取入账规则
      * @param proceedId  *费项ID*

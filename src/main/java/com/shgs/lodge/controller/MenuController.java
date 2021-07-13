@@ -21,11 +21,12 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 模块管理 角色权限 开发人员
- * @author 雷智荣
  *
+ * @author 雷智荣
  */
 @RestController
 @RequestMapping("/module/")
@@ -33,8 +34,13 @@ import java.util.List;
 @AuthClass("login")
 public class MenuController {
 
-    @Autowired
+
     private IMenuService menuService;
+
+    @Autowired
+    public void setMenuService(IMenuService menuService) {
+        this.menuService = menuService;
+    }
 
     /**
      * 模块管理首页跳转
@@ -45,9 +51,8 @@ public class MenuController {
      */
     @GetMapping("index")
     @AuthMethod(role = "ROLE_MENU")
-    public ModelAndView list(Model model,HttpSession session) throws JsonProcessingException {
-        ModelAndView view = new ModelAndView("menu/index");
-        return view;
+    public ModelAndView list(Model model, HttpSession session) throws JsonProcessingException {
+        return new ModelAndView("menu/index");
     }
 
     /**
@@ -60,26 +65,25 @@ public class MenuController {
     @AuthMethod(role = "ROLE_MENU")
     public ModelAndView mergeRow(String id, String pid, Model model) throws JsonProcessingException {
         MenuInfo menuInfo = new MenuInfo();
-        boolean disabled = true;
+        boolean disabled;
         if (id != null && !id.isEmpty()) {
             menuInfo = menuService.queryMenuInfo(id);
-            if("all".equals(pid)){
-                disabled=true;
-            }else {
-                disabled = pid != null && !pid.isEmpty() ? false : true;
+            if ("all".equals(pid)) {
+                disabled = true;
+            } else {
+                disabled = pid == null || pid.isEmpty();
             }
         } else {
             menuInfo.setStatus(1);
             menuInfo.setContents("F");
             disabled = false;
         }
-        List<SelectJson> select=CmsUtils.getRoleType();
+        List<SelectJson> select = CmsUtils.getRoleType();
         model.addAttribute("disabled", disabled);
         model.addAttribute("menuInfo", menuInfo);
         model.addAttribute("pid", menuInfo.getParent() != null ? menuInfo.getParent().getId() : pid);
         model.addAttribute("select", select);
-        ModelAndView view = new ModelAndView("menu/mergeFrom");
-        return view;
+        return new ModelAndView("menu/mergeFrom");
     }
 
     /**
@@ -95,7 +99,7 @@ public class MenuController {
     @AuthMethod(role = "ROLE_MENU")
     public Message save(@Validated MenuInfoDto menuInfoDto, BindingResult br, String pid, HttpSession session) {
         if (br.hasErrors()) {
-            return new Message(0, br.getFieldError().getDefaultMessage());
+            return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }
         try {
             MenuInfo menuInfo = new MenuInfoDto().getMenuInfo(menuInfoDto);
@@ -134,13 +138,12 @@ public class MenuController {
      */
     @RequestMapping("list")
     @AuthMethod(role = "ROLE_MENU")
-    public Pager<MenuInfoDto> findMenuInfo(String order, String sort, int page, int rows, String pid,String value) {
+    public Pager<MenuInfoDto> findMenuInfo(String order, String sort, int page, int rows, String pid, String value) {
         SystemContext.setPageSize(rows);
         SystemContext.setPageNumber(page);
         SystemContext.setOrder(order);
         SystemContext.setSort(sort);
-        Pager<MenuInfoDto> test = menuService.findMenuInfoDto(pid,value);
-        return test;
+        return menuService.findMenuInfoDto(pid, value);
 
     }
 

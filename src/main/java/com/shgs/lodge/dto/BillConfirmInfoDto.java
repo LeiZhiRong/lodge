@@ -21,31 +21,31 @@ public class BillConfirmInfoDto {
     /**
      * 申请单编号
      */
-    @HeaderEnum(field = "applyBH", title = "单据编号", width = 150, sortable = true, hidden = false)
+    @HeaderEnum(field = "applyBH", title = "单据编号", width = 150)
     private String applyBH;
 
     /**
      * 申请部门编号
      */
-    @HeaderEnum(field = "applyDeptBH", title = "申请部门", width = 80, sortable = true, hidden = false)
+    @HeaderEnum(field = "applyDeptBH", title = "申请部门", width = 80)
     private String applyDeptBH;
 
     /**
      * 申请人编号
      */
-    @HeaderEnum(field = "applyUserBH", title = "申请人", width = 80, sortable = true, hidden = true)
+    @HeaderEnum(field = "applyUserBH", title = "申请人", width = 80,  hidden = true)
     private String applyUserBH;
 
     /**
      * 结算部门编号
      */
-    @HeaderEnum(field = "setllDeptBH", title = "可结算部门", width = 150, sortable = true, hidden = true)
+    @HeaderEnum(field = "setllDeptBH", title = "可结算部门", width = 150,  hidden = true)
     private String setllDeptBH;
 
     /**
      * 申请时间
      */
-    @HeaderEnum(field = "applyDate", title = "申请时间", width = 150, sortable = true, hidden = false)
+    @HeaderEnum(field = "applyDate", title = "申请时间", width = 150)
     private String applyDate;
 
     /**
@@ -57,7 +57,7 @@ public class BillConfirmInfoDto {
     /**
      * 销售方名称
      */
-    @HeaderEnum(field = "saleCorpName", title = "销售方", width = 200, sortable = true, hidden = false)
+    @HeaderEnum(field = "saleCorpName", title = "销售方", width = 200)
     private String saleCorpName;
 
     /**
@@ -69,55 +69,55 @@ public class BillConfirmInfoDto {
     /**
      * 购买方名称
      */
-    @HeaderEnum(field = "buyerCorpName", title = "购买方", width = 200, sortable = true, hidden = false)
+    @HeaderEnum(field = "buyerCorpName", title = "购买方", width = 200)
     private String buyerCorpName;
 
     /**
      * 发票类型
      */
-    @HeaderEnum(field = "billType", title = "发票类型", width = 120, sortable = true, hidden = false)
+    @HeaderEnum(field = "billType", title = "发票类型", width = 120)
     private String billType;
 
     /**
      * 发票金额
      */
-    @HeaderEnum(field = "billMoney", title = "发票金额", width = 120, sortable = true, hidden = false)
+    @HeaderEnum(field = "billMoney", title = "发票金额", width = 120)
     private double billMoney;
 
     /**
      * 发票代码
      */
-    @HeaderEnum(field = "billCode", title = "发票代码", width = 120, sortable = true, hidden = true)
+    @HeaderEnum(field = "billCode", title = "发票代码", width = 120,  hidden = true)
     private String billCode;
 
     /**
      * 发票号码
      */
-    @HeaderEnum(field = "billNumber", title = "发票号码", width = 120, sortable = true, hidden = true)
+    @HeaderEnum(field = "billNumber", title = "发票号码", width = 120,  hidden = true)
     private String billNumber;
 
     /**
      * 税率
      */
-    @HeaderEnum(field = "taxRate", title = "税率(%)", width = 80, sortable = true, hidden = true)
+    @HeaderEnum(field = "taxRate", title = "税率(%)", width = 80,  hidden = true)
     private Double taxRate;
 
     /**
      * 税额
      */
-    @HeaderEnum(field = "taxMoney", title = "税额", width = 100, sortable = true, hidden = true)
+    @HeaderEnum(field = "taxMoney", title = "税额",   hidden = true)
     private Double taxMoney;
 
     /**
      * 不含税金额
      */
-    @HeaderEnum(field = "amountMoney", title = "不含税金额", width = 120, sortable = true, hidden = true)
+    @HeaderEnum(field = "amountMoney", title = "不含税金额", width = 120,  hidden = true)
     private Double amountMoney;
 
     /**
      * 单据状态
      */
-    @HeaderEnum(field = "ztbz", title = "单据状态", width = 80, sortable = true, hidden = true)
+    @HeaderEnum(field = "ztbz", title = "单据状态", width = 80,  hidden = true)
     private String ztbz;
 
     /**
@@ -126,7 +126,7 @@ public class BillConfirmInfoDto {
     @HeaderEnum(field = "remarks", title = "备注", width = 150, sortable = false, hidden = true)
     private String remarks;
 
-    @HeaderEnum(field = "handle", title = "关联操作", width = 150, sortable = false, hidden = false)
+    @HeaderEnum(field = "handle", title = "关联操作", width = 150, sortable = false)
     private String handle;
 
     public String getId() {
@@ -321,7 +321,7 @@ public class BillConfirmInfoDto {
     }
 
     public List<BillConfirmInfoDto> listBillConfirmInfoDto(List<BillApplyInfo> billApplyInfoList) {
-        List<BillConfirmInfoDto> dto = new ArrayList<BillConfirmInfoDto>();
+        List<BillConfirmInfoDto> dto = new ArrayList<>();
         if (billApplyInfoList.size() > 0) {
             for (BillApplyInfo mast : billApplyInfoList) {
                 dto.add(new BillConfirmInfoDto(mast));

@@ -19,8 +19,12 @@ import java.util.List;
 @Service("stationInfoService")
 public class StationInfoService implements IStationInfoService {
 
-    @Autowired
     private IStationInfoDao stationInfoDao;
+
+    @Autowired
+    public void setStationInfoDao(IStationInfoDao stationInfoDao) {
+        this.stationInfoDao = stationInfoDao;
+    }
 
     @Override
     @Transactional(value = "primaryTransactionManager")

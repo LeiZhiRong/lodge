@@ -51,7 +51,7 @@ public class ManagePointDto {
      */
     private String bookSet;
 
-    @HeaderEnum(field = "handle", title = "关联操作", width = 150, sortable = false, hidden = false)
+    @HeaderEnum(field = "handle", title = "关联操作", width = 150, sortable = false)
     private String handle;
 
 

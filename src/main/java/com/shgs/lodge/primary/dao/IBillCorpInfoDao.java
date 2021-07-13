@@ -11,7 +11,7 @@ import java.util.List;
  * 团购挂单-公司信息持久接口类Dao
  * @author 雷智荣
  */
-public interface IBillCorpInfoDao extends IBaseDAO<BillCorpInfo,String> {
+public interface IBillCorpInfoDao extends IBaseDAO<BillCorpInfo> {
 
     /**
      * 按用户ID删除实例

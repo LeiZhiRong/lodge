@@ -27,11 +27,7 @@ public class BillAccounInfoDao extends BaseDAO<BillAccounInfo,String> implements
     @Override
     public boolean deleteBillAccounInfoByID(String id) {
         Object o = super.executeByJpql("delete from BillAccounInfo b where b.id =?0", id);
-        if (o != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return o != null;
     }
 
     @Override
@@ -46,12 +42,10 @@ public class BillAccounInfoDao extends BaseDAO<BillAccounInfo,String> implements
 
     @Override
     public Integer getMaxOrders() {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
-        jpql.append("select max(b.orders) from BillAccounInfo b where b.entryTime between :stardate  and  :enddate ");
+        Map<String, Object> alias = new HashMap<>();
         alias.put("stardate", BeanUtil.strToTimestampTime(BeanUtil.getTodayStart(CmsUtils.getNowDate())));
         alias.put("enddate", BeanUtil.strToTimestampTime(BeanUtil.getTodayEnd(CmsUtils.getNowDate())));
-        Object obj = super.queryObjectByAlias(jpql.toString(), alias);
+        Object obj = super.queryObjectByAlias("select max(b.orders) from BillAccounInfo b where b.entryTime between :stardate  and  :enddate ", alias);
         if (obj == null)
             return 0;
         return (Integer) obj;

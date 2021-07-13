@@ -166,7 +166,7 @@ public class AncillaryProjectsDto {
     }
 
     public List<AncillaryProjectsDto> listAncillaryProjectsDto(List<AncillaryProjects> ancillaryProjects) {
-        List<AncillaryProjectsDto> list = new ArrayList<AncillaryProjectsDto>();
+        List<AncillaryProjectsDto> list = new ArrayList<>();
         if (ancillaryProjects.size() > 0) {
             for (AncillaryProjects mast : ancillaryProjects) {
                 list.add(new AncillaryProjectsDto(mast));

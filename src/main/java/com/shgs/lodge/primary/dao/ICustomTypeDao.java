@@ -10,7 +10,7 @@ import java.util.List;
  * 自定义参数类型持久层Dao接口类
  * @author 雷智荣
  */
-public interface ICustomTypeDao extends IBaseDAO<CustomType,String> {
+public interface ICustomTypeDao extends IBaseDAO<CustomType> {
 
     /**
      * 保存

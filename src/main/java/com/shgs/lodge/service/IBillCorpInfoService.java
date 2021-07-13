@@ -72,6 +72,7 @@ public interface IBillCorpInfoService {
      * @param list
      * @return
      */
+    @SuppressWarnings("UnusedReturnValue")
     boolean batchUpdateBillCorpInfo(List<BillCorpInfo> list);
 
     /**

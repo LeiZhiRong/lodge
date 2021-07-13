@@ -26,11 +26,7 @@ public class AccounCodeDao extends BaseDAO<AccounCode,String> implements IAccoun
     @Override
     public boolean deleteAccounCodeByID(String id) {
         Object o = super.executeByJpql("delete from AccounCode a where a.id =?0", id);
-        if (o != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return o != null;
     }
 
     @Override

@@ -73,9 +73,8 @@ public interface IUserInfoService {
     /**
      * 批量添加用户信息
      * @param list
-     * @return
      */
-    boolean batchSaveUserInfo(List<UserInfo> list);
+    void batchSaveUserInfo(List<UserInfo> list);
 
     /**
      * 登录验证

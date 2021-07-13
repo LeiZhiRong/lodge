@@ -216,7 +216,7 @@ public class CashBankDto {
     }
 
     public List<CashBankDto> listCashBankDto(List<CashBank> cashBankList) {
-        List<CashBankDto> list = new ArrayList<CashBankDto>();
+        List<CashBankDto> list = new ArrayList<>();
         if (cashBankList.size() > 0) {
             for (CashBank mast : cashBankList) {
                 list.add(new CashBankDto(mast));

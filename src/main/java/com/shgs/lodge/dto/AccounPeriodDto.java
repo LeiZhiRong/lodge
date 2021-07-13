@@ -22,21 +22,21 @@ public class AccounPeriodDto {
     /**
      * 会计月份
      */
-    @HeaderEnum(field = "month", title = "会计期间", width = 100, sortable = true, hidden = false)
+    @HeaderEnum(field = "month", title = "会计期间")
     @NotEmpty(message = "会计期间不能为空")
     private String month;
 
     /**
      * 开始时间
      */
-    @HeaderEnum(field = "startTime", title = "开始日期", width = 120, sortable = true, hidden = false)
+    @HeaderEnum(field = "startTime", title = "开始日期", width = 120)
     @NotEmpty(message = "开始日期不能为空")
     private String startTime;
 
     /**
      * 结束时间
      */
-    @HeaderEnum(field = "endTime", title = "结束日期", width = 120, sortable = true, hidden = false)
+    @HeaderEnum(field = "endTime", title = "结束日期", width = 120)
     @NotEmpty(message = "开始日期不能为空")
     private String endTime;
 
@@ -48,11 +48,11 @@ public class AccounPeriodDto {
 
 
     @JsonProperty("ztbz")
-    @HeaderEnum(field = "ztbz", title = "状态", width = 60, sortable = true, hidden = false)
+    @HeaderEnum(field = "ztbz", title = "状态", width = 60)
     private String formatter;
 
 
-    @HeaderEnum(field = "handle", title = "关联操作", width = 120, sortable = false, hidden = false)
+    @HeaderEnum(field = "handle", title = "关联操作", width = 120, sortable = false)
     private String handle;
 
     public AccounPeriodDto() {

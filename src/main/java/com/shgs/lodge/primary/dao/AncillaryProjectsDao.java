@@ -20,7 +20,7 @@ public class AncillaryProjectsDao extends BaseDAO<AncillaryProjects,String> impl
 
     @Override
     public int getMaxOrderByParent(String pid) {
-        Object obj = null;
+        Object obj;
         if (pid != null && !pid.isEmpty()) {
             obj = super.queryObject("select max(m.orders) from AncillaryProjects m where m.parent.id=?0", pid);
         } else {
@@ -34,11 +34,7 @@ public class AncillaryProjectsDao extends BaseDAO<AncillaryProjects,String> impl
     @Override
     public boolean deleteAncillaryProjects(String id) {
         Object o = super.executeByJpql("delete from AncillaryProjects m where m.id =?0", id);
-        if (o != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return o != null;
     }
 
     @Override
@@ -58,9 +54,9 @@ public class AncillaryProjectsDao extends BaseDAO<AncillaryProjects,String> impl
     @Override
     public Pager<AncillaryProjectsDto> findAncillaryProjectsDto(String pid, String value,String t_id) {
         pid = "all".equals(pid) ? null : pid;
-        Pager<AncillaryProjectsDto> list = new Pager<AncillaryProjectsDto>();
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        Pager<AncillaryProjectsDto> list = new Pager<>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append("from AncillaryProjects m where 1=1 ");
         if (pid != null && !pid.isEmpty()) {
             jpql.append("and m.parent.id =:pid ");
@@ -89,10 +85,10 @@ public class AncillaryProjectsDao extends BaseDAO<AncillaryProjects,String> impl
 
     @Override
     public List<AncillaryProjectsListDto> listAncillaryProjectsListDto(String pid, String value,String t_id) {
-       List<AncillaryProjectsListDto> list = new ArrayList<AncillaryProjectsListDto>();
+       List<AncillaryProjectsListDto> list = new ArrayList<>();
         pid = "all".equals(pid) ? null : pid;
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append("from AncillaryProjects m where m.ztbz =:ztbz ");
         alias.put("ztbz","T");
         if (pid != null && !pid.isEmpty()) {
@@ -119,8 +115,8 @@ public class AncillaryProjectsDao extends BaseDAO<AncillaryProjects,String> impl
     @Override
     public List<AncillaryProjects> listAncillaryProjects(String pid, String value) {
         pid = "all".equals(pid) ? null : pid;
-          StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+          StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append("from AncillaryProjects m where 1=1 ");
         if (pid != null && !pid.isEmpty()) {
             jpql.append("and m.parent.id =:pid ");
@@ -148,7 +144,7 @@ public class AncillaryProjectsDao extends BaseDAO<AncillaryProjects,String> impl
     public int batchDelete(String ids) {
         if (ids != null && !ids.isEmpty()) {
             List<String> list = CmsUtils.string2Array(ids, ",");
-            Map<String, Object> alias = new HashMap<String, Object>();
+            Map<String, Object> alias = new HashMap<>();
             alias.put("ids", list);
             return (int) super.executeByAliasJpql("delete from AncillaryProjects where id in(:ids)", alias);
         }
@@ -158,7 +154,7 @@ public class AncillaryProjectsDao extends BaseDAO<AncillaryProjects,String> impl
     @Override
     public void executeIds(String id, String oldIds, String newIds) {
         List<AncillaryProjects> list = super.list("from AncillaryProjects m  where m.ids like ?0", "%" + id + "%");
-        List<AncillaryProjects> mast = new ArrayList<AncillaryProjects>();
+        List<AncillaryProjects> mast = new ArrayList<>();
         if (list != null && list.size() > 0) {
             for (AncillaryProjects temp : list) {
                 temp.setIds(temp.getIds().replace(oldIds, newIds));
@@ -173,12 +169,12 @@ public class AncillaryProjectsDao extends BaseDAO<AncillaryProjects,String> impl
 
     @Override
     public List<TreeJson> getAncillaryProjects2TreeJson(String keyword,String t_id) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append("select m.id as id,m.projectsName as text,m.pid as pid,m.contents as contents from ancillary_projects m  where m.t_id =:t_id  ");
         alias.put("t_id",t_id);
         jpql.append(" order by m.pid asc,m.orders asc ");
-        List<TreeJson> cts = new ArrayList<TreeJson>();
+        List<TreeJson> cts = new ArrayList<>();
         List<Map> dts = super.listToMapByAliasSql(jpql.toString(),alias);
         if (dts.size() > 0) {
             List<String> list = CmsUtils.string2Array(keyword, ";");
@@ -191,6 +187,6 @@ public class AncillaryProjectsDao extends BaseDAO<AncillaryProjects,String> impl
                 cts.add(temp);
             }
         }
-        return new TreeJson().getfatherNode(cts);
+        return TreeJson.getfatherNode(cts);
     }
 }

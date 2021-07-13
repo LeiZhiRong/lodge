@@ -87,7 +87,7 @@ public class DeptInfoListDto {
     }
 
     public DeptInfoListDto(DeptInfo deptInfo) {
-        String pid = null;
+        String pid;
         this.setId(deptInfo.getId());
         this.setDeptName(deptInfo.getDeptName());
         this.setDeptID(deptInfo.getDeptID());
@@ -104,17 +104,16 @@ public class DeptInfoListDto {
         String _str=str.replace("\\","\\\\");
         if ("T".equals(deptInfo.getContents())) {
             this.setDeptName("<a href='javascript:void(0)' onclick='findDeptInfo(&quot;" + deptInfo.getId() + "&quot;,&quot;" + pid + "&quot;);'><i class='fa fa-caret-right fa-lg'></i> " + str + "</a>");
-            this.setHandle("<div style='padding-right:10px;'><a href='javascript:void(0)' onclick='getDeptInfoIdAndName(&quot;" + deptInfo.getId() + "&quot;,&quot;" +  _str + "&quot;);'>选择</a></div>");
         } else {
             this.setDeptName(str);
-            this.setHandle("<div style='padding-right:10px;'><a href='javascript:void(0)' onclick='getDeptInfoIdAndName(&quot;" + deptInfo.getId() + "&quot;,&quot;" + _str + "&quot;);'>选择</a></div>");
         }
+        this.setHandle("<div style='padding-right:10px;'><a href='javascript:void(0)' onclick='getDeptInfoIdAndName(&quot;" + deptInfo.getId() + "&quot;,&quot;" +  _str + "&quot;);'>选择</a></div>");
 
 
     }
 
     public List<DeptInfoListDto> listDeptInfoListDto(List<DeptInfo> deptInfoList) {
-        List<DeptInfoListDto> list = new ArrayList<DeptInfoListDto>();
+        List<DeptInfoListDto> list = new ArrayList<>();
         if (deptInfoList.size() > 0) {
             for (DeptInfo mast : deptInfoList) {
                 list.add(new DeptInfoListDto(mast));

@@ -19,14 +19,29 @@ import java.util.List;
 @Service("billCorpInfoService")
 public class BillCorpInfoService implements IBillCorpInfoService {
 
-    @Autowired
+
     private IBillCorpInfoDao billCorpInfoDao;
 
-    @Autowired
+
     private ICustomParameDao customParameDao;
 
-    @Autowired
+
     private IBankAccountDao bankAccountDao;
+
+    @Autowired
+    public void setBillCorpInfoDao(IBillCorpInfoDao billCorpInfoDao) {
+        this.billCorpInfoDao = billCorpInfoDao;
+    }
+
+    @Autowired
+    public void setCustomParameDao(ICustomParameDao customParameDao) {
+        this.customParameDao = customParameDao;
+    }
+
+    @Autowired
+    public void setBankAccountDao(IBankAccountDao bankAccountDao) {
+        this.bankAccountDao = bankAccountDao;
+    }
 
     @Override
     @Transactional(value = "primaryTransactionManager")
@@ -128,7 +143,7 @@ public class BillCorpInfoService implements IBillCorpInfoService {
         if (StringUtils.isNotEmpty(pid)) {
             return billCorpInfoDao.listCorpInfoListDto(keyword, pid);
         } else {
-            List<BillCorpInfo> billCorpInfoList = new ArrayList<BillCorpInfo>();
+            List<BillCorpInfo> billCorpInfoList = new ArrayList<>();
             List<SelectJson> temp = customParameDao.listCustomParameByCode("CORPTYPE");
             for (SelectJson mast : temp) {
                 billCorpInfoList.add(new BillCorpInfo(mast.getValues(), null, mast.getValues(), mast.getName()));

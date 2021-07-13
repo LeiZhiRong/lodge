@@ -12,6 +12,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * JWT工具类
@@ -37,7 +38,7 @@ public class JWTTokenUtil {
     public static String createAccessToken(User user) {
         // 登陆成功生成JWT
         try {
-            String token = Jwts.builder()
+            return Jwts.builder()
                     .setHeaderParam("typ", "JWT")
                     .setHeaderParam("alg", "HS512")
                     // 用户ID
@@ -55,7 +56,6 @@ public class JWTTokenUtil {
                     // 签名算法和密钥
                     .signWith(SignatureAlgorithm.HS512, JWTConfig.secret)
                     .compact();
-            return token;
         } catch (Exception e) {
             throw new JsonException(500, e.getMessage());
         }
@@ -119,8 +119,7 @@ public class JWTTokenUtil {
      * @return
      */
     public static String getCurrentToken() {
-        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-        String token = request.getHeader("Token");
-        return token;
+        HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
+        return request.getHeader("Token");
     }
 }

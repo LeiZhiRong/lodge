@@ -17,8 +17,13 @@ import java.util.List;
 @Service("accounCodeService")
 public class AccounCodeService implements IAccounCodeService{
 
-    @Autowired
+
     private IAccounCodeDao accounCodeDao;
+
+    @Autowired
+    public void setAccounCodeDao(IAccounCodeDao accounCodeDao) {
+        this.accounCodeDao = accounCodeDao;
+    }
 
     @Override
     public AccounCode queryAccounCodeByID(String id) {

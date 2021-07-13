@@ -6,7 +6,6 @@ import com.shgs.lodge.auth.AuthMethod;
 import com.shgs.lodge.dto.PaymentMethodDto;
 import com.shgs.lodge.dto.TreeJson;
 import com.shgs.lodge.primary.entity.PaymentMethod;
-import com.shgs.lodge.service.ICustomService;
 import com.shgs.lodge.service.IPaymentMethodService;
 import com.shgs.lodge.util.Message;
 import com.shgs.lodge.util.Pager;
@@ -24,9 +23,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 收款方式VIEW接口
+ *
  * @author 雷智荣
  */
 @RestController
@@ -35,35 +36,38 @@ import java.util.List;
 @AuthClass("login")
 public class PaymentMethodController {
 
-    @Autowired
+
     private IPaymentMethodService paymentMethodService;
 
     @Autowired
-    private ICustomService customService;
+    public void setPaymentMethodService(IPaymentMethodService paymentMethodService) {
+        this.paymentMethodService = paymentMethodService;
+    }
+
 
     /**
-     *首页
+     * 首页
+     *
      * @param model
      * @return String
      */
     @AuthMethod(role = "ROLE_PAYMENT")
     @GetMapping("index")
     public ModelAndView index(Model model, HttpSession session) {
-        ModelAndView view = new ModelAndView("payment/index");
-        return view;
+        return new ModelAndView("payment/index");
     }
 
     @AuthMethod(role = "ROLE_PAYMENT")
     @GetMapping("dialog")
     public ModelAndView dialog(String id, String pid, Model model) throws JsonProcessingException {
         PaymentMethod paymentMethod = new PaymentMethod();
-        boolean disabled = true;
+        boolean disabled;
         if (id != null && !id.isEmpty()) {
-            paymentMethod =paymentMethodService.queryPaymentMethod(id);
-            if("all".equals(pid)){
-                disabled=true;
-            }else {
-                disabled = pid != null && !pid.isEmpty() ? false : true;
+            paymentMethod = paymentMethodService.queryPaymentMethod(id);
+            if ("all".equals(pid)) {
+                disabled = true;
+            } else {
+                disabled = pid == null || pid.isEmpty();
             }
         } else {
             paymentMethod.setZtbz("T");
@@ -73,8 +77,7 @@ public class PaymentMethodController {
         model.addAttribute("disabled", disabled);
         model.addAttribute("paymentMethod", paymentMethod);
         model.addAttribute("pid", paymentMethod.getParent() != null ? paymentMethod.getParent().getId() : pid);
-        ModelAndView view = new ModelAndView("payment/dialog");
-        return view;
+        return new ModelAndView("payment/dialog");
     }
 
 
@@ -82,14 +85,14 @@ public class PaymentMethodController {
     @PostMapping("save")
     public Message save(@Validated PaymentMethodDto paymentMethodDto, BindingResult br, String pid, HttpSession session) {
         if (br.hasErrors()) {
-            return new Message(0, br.getFieldError().getDefaultMessage());
+            return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }
         try {
             PaymentMethod paymentMethod = new PaymentMethodDto().getPaymentMethod(paymentMethodDto);
             String id = paymentMethod.getId();
             if (id == null || id.isEmpty()) {
                 //添加
-                return paymentMethodService.addPaymentMethod(paymentMethod,pid);
+                return paymentMethodService.addPaymentMethod(paymentMethod, pid);
             } else {
                 //更新
                 PaymentMethod mast = paymentMethodService.queryPaymentMethod(id);
@@ -97,7 +100,7 @@ public class PaymentMethodController {
                 mast.setPaymentName(paymentMethod.getPaymentName());
                 mast.setPaymentBh(paymentMethod.getPaymentBh());
                 mast.setZtbz(paymentMethod.getZtbz());
-                return paymentMethodService.updatePaymentMethod(mast,pid);
+                return paymentMethodService.updatePaymentMethod(mast, pid);
             }
         } catch (Exception e) {
             return new Message(0, e.getMessage());
@@ -128,6 +131,7 @@ public class PaymentMethodController {
 
     /**
      * 目录树
+     *
      * @return
      */
     @AuthMethod(role = "ROLE_PAYMENT")
@@ -138,6 +142,7 @@ public class PaymentMethodController {
 
     /**
      * 删除
+     *
      * @param id
      * @return
      */

@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 开票确认视图接口层
@@ -44,27 +45,51 @@ import java.util.List;
 @AuthClass("login")
 public class BillConfirmInfoController {
 
-    @Autowired
+
     private ITableHeaderService tableHeaderService;
 
-    @Autowired
+
     private IBillApplyInfoService billApplyInfoService;
 
-    @Autowired
-    private ICustomService customService;
 
-    @Autowired
+
+
     private IDeptInfoService deptInfoService;
 
-    @Autowired
+
     private IBillCorpInfoService billCorpInfoService;
 
-    @Autowired
-    private IAccounCodeService accounCodeService;
 
-    @Autowired
+
     private IBillAccounInfoService billAccounInfoService;
 
+    @Autowired
+    public void setTableHeaderService(ITableHeaderService tableHeaderService) {
+        this.tableHeaderService = tableHeaderService;
+    }
+
+    @Autowired
+    public void setBillApplyInfoService(IBillApplyInfoService billApplyInfoService) {
+        this.billApplyInfoService = billApplyInfoService;
+    }
+
+
+
+    @Autowired
+    public void setDeptInfoService(IDeptInfoService deptInfoService) {
+        this.deptInfoService = deptInfoService;
+    }
+
+    @Autowired
+    public void setBillCorpInfoService(IBillCorpInfoService billCorpInfoService) {
+        this.billCorpInfoService = billCorpInfoService;
+    }
+
+
+    @Autowired
+    public void setBillAccounInfoService(IBillAccounInfoService billAccounInfoService) {
+        this.billAccounInfoService = billAccounInfoService;
+    }
 
     /**
      * 首页
@@ -85,8 +110,7 @@ public class BillConfirmInfoController {
         model.addAttribute("starDate", starDate);
         model.addAttribute("endDate", endDate);
         model.addAttribute("applyDept", deptInfoService.listUserByDeptIDS(user.getManageDept()));
-        ModelAndView view = new ModelAndView("confirm/index");
-        return view;
+        return new ModelAndView("confirm/index");
     }
 
     /**
@@ -112,7 +136,7 @@ public class BillConfirmInfoController {
         }
         if ("billMoney".equals(field)) {
             if (!CmsUtils.isNumeric(value))
-                return new Pager<BillConfirmInfoDto>();
+                return new Pager<>();
         }
         if (starDate != null && !starDate.isEmpty())
             starDate = starDate + " 00:00:00";
@@ -124,8 +148,7 @@ public class BillConfirmInfoController {
         SystemContext.setPageNumber(page);
         SystemContext.setOrder(order);
         SystemContext.setSort(sort);
-        Pager<BillConfirmInfoDto> mast = billApplyInfoService.listBillConfirmInfoDto(field, value, starDate, endDate, "T", bookSet, applyDeptBH, saleCorpID, buyerCorpID);
-        return mast;
+        return billApplyInfoService.listBillConfirmInfoDto(field, value, starDate, endDate, "T", bookSet, applyDeptBH, saleCorpID, buyerCorpID);
     }
 
 
@@ -142,8 +165,7 @@ public class BillConfirmInfoController {
     public ModelAndView getCorpInfo(String keyword, String corpType, Model model) {
         model.addAttribute("keyword", keyword);
         model.addAttribute("corpType", corpType);
-        ModelAndView view = new ModelAndView("confirm/getCorpInfo");
-        return view;
+        return new ModelAndView("confirm/getCorpInfo");
     }
 
     /**
@@ -164,8 +186,7 @@ public class BillConfirmInfoController {
         SystemContext.setPageNumber(page);
         SystemContext.setOrder(order);
         SystemContext.setSort(sort);
-        Pager<BillCorpInfo> mast = billCorpInfoService.listBillCorpInfo(corpType, keyword, "T");
-        return mast;
+        return billCorpInfoService.listBillCorpInfo(corpType, keyword, "T");
     }
 
 
@@ -194,8 +215,7 @@ public class BillConfirmInfoController {
         BillApplyInfo info = billApplyInfoService.queryBillApplyInfoById(id);
         BillConfirmInfoDto billApplyInfoDto = new BillConfirmInfoDto(info);
         model.addAttribute("billApplyInfoDto", billApplyInfoDto);
-        ModelAndView view = new ModelAndView("confirm/dialog");
-        return view;
+        return new ModelAndView("confirm/dialog");
     }
 
 
@@ -211,14 +231,14 @@ public class BillConfirmInfoController {
     @PostMapping("saveConfirmInfo")
     public Message saveConfirmInfo(@Validated BillConfirmInfoDto dto, BindingResult br, HttpSession session) {
         if (br.hasErrors()) {
-            return new Message(0, br.getFieldError().getDefaultMessage());
+            return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }
         try {
             User user = (User) session.getAttribute("user");
             String id = dto.getId();
             BillApplyInfo info = billApplyInfoService.queryBillApplyInfoById(id);
             if (info != null) {
-                String proccedID=info.getProceedId();
+                String proccedID = info.getProceedId();
                 info.setInvoiceDate(BeanUtil.strToTimestampTime(CmsUtils.getNowDate()));
                 info.setBillCode(dto.getBillCode());
                 info.setBillNumber(dto.getBillNumber());
@@ -228,7 +248,7 @@ public class BillConfirmInfoController {
                 info.setDrawerUser(user.getUserName());
                 info.setBalanceMoney(info.getBillMoney());
                 info.setZtbz("O");//更新状态标识
-                Message msg = billApplyInfoService.updateBillApplyInfo(info,proccedID);
+                Message msg = billApplyInfoService.updateBillApplyInfo(info, proccedID);
                 if (msg.getCode() == 1) {
                     BillAccounInfo billAccounInfo = new BillAccounInfo();
                     billAccounInfo.setBookSet(info.getBookSet());
@@ -245,16 +265,16 @@ public class BillConfirmInfoController {
                     billAccounInfo.setZtbz("F");//是否已做凭证处理
                     billAccounInfo.setBillType(info.getBillType());//发票类型
                     billAccounInfo.setrVTime(CmsUtils.getTimeMillis());
-                    BillAccounInfo temp=billAccounInfoService.queryMaxBillAccounInfo(info.getSaleCorp().getId(),info.getBuyerCorp().getId(),"F");
-                    if(temp!=null){
-                        billAccounInfo.setBalanceTaxMoney(CmsUtils.addDouble(temp.getBalanceTaxMoney(),info.getBillMoney()));//含税余额
-                        billAccounInfo.setBalanceMoney(CmsUtils.addDouble(temp.getBalanceMoney(),info.getAmountMoney()));//不含税余额
-                    }else{
+                    BillAccounInfo temp = billAccounInfoService.queryMaxBillAccounInfo(info.getSaleCorp().getId(), info.getBuyerCorp().getId(), "F");
+                    if (temp != null) {
+                        billAccounInfo.setBalanceTaxMoney(CmsUtils.addDouble(temp.getBalanceTaxMoney(), info.getBillMoney()));//含税余额
+                        billAccounInfo.setBalanceMoney(CmsUtils.addDouble(temp.getBalanceMoney(), info.getAmountMoney()));//不含税余额
+                    } else {
                         billAccounInfo.setBalanceTaxMoney(info.getBillMoney());
                         billAccounInfo.setBalanceMoney(info.getAmountMoney());
                     }
                     billAccounInfoService.addBillAccounInfo(billAccounInfo);
-                 }
+                }
                 return msg;
             } else {
                 return new Message(0, "该单据不存在或已被删除");
@@ -275,8 +295,7 @@ public class BillConfirmInfoController {
     @GetMapping("importUpload")
     @AuthMethod(role = "ROLE_CONFIRM")
     public ModelAndView importUpload(Model model) throws JsonProcessingException {
-        ModelAndView view = new ModelAndView("confirm/import");
-        return view;
+        return new ModelAndView("confirm/import");
     }
 
     /**
@@ -291,7 +310,7 @@ public class BillConfirmInfoController {
     public void downloadExcel(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
         //需要导出的数据列表。
         User user = (User) session.getAttribute("user");
-        List<BillConfirmInfoVo> list = new ArrayList<BillConfirmInfoVo>();
+        List<BillConfirmInfoVo> list = new ArrayList<>();
         BillConfirmInfoVo vo = new BillConfirmInfoVo();
         vo.setSaleCorpName("销方编号或名称（必填项）");
         vo.setBuyerCorpName("购方编号或名称（必填项）");
@@ -300,15 +319,16 @@ public class BillConfirmInfoController {
         vo.setTaxRate("默认为13");
         vo.setBillMoney("0.00");
         vo.setBillType("（必填项）");
-        vo.setInvoiceDate("时间格式如："+BeanUtil.formatDate(new Date(),"yyyy-MM-dd")+"，不填写默认当前时间");
-        vo.setApplyUserBH("申请用户编号如："+user.getAccount()+"，不填写默认为当前操作用户");
+        vo.setInvoiceDate("时间格式如：" + BeanUtil.formatDate(new Date(), "yyyy-MM-dd") + "，不填写默认当前时间");
+        vo.setApplyUserBH("申请用户编号如：" + user.getAccount() + "，不填写默认为当前操作用户");
         vo.setRemarks("此行为说明行，导入数据前请删除");
         list.add(vo);
-        ExcelUtils.exportExcel(list, null, "开票信息", BillConfirmInfoVo.class, "开票确认导入模板_"+BeanUtil.formatDate(new Date(),"yyyyMMdd"), response);
+        ExcelUtils.exportExcel(list, null, "开票信息", BillConfirmInfoVo.class, "开票确认导入模板_" + BeanUtil.formatDate(new Date(), "yyyyMMdd"), response);
     }
 
     /**
      * 导出开票信息
+     *
      * @param field
      * @param value
      * @param starDate
@@ -323,8 +343,8 @@ public class BillConfirmInfoController {
      */
     @AuthMethod(role = "ROLE_CONFIRM")
     @RequestMapping("exportDown")
-    public void exportDown(String field, String value, String starDate, String endDate, String applyDeptBH, String saleCorpID, String buyerCorpID,  HttpServletRequest request, HttpServletResponse response,String ztbz, HttpSession session) throws IOException {
-       if ("billMoney".equals(field)) {
+    public void exportDown(String field, String value, String starDate, String endDate, String applyDeptBH, String saleCorpID, String buyerCorpID, HttpServletRequest request, HttpServletResponse response, String ztbz, HttpSession session) throws IOException {
+        if ("billMoney".equals(field)) {
             if (!CmsUtils.isNumeric(value))
                 throw new JsonException(500, "开票金额格式不合法");
         }
@@ -335,7 +355,7 @@ public class BillConfirmInfoController {
         User user = (User) session.getAttribute("user");
         String bookSet = user.getBookSet();
         List<BillConfirmInfoVo> list = billApplyInfoService.listBillConfirmInfoVo(field, value, starDate, endDate, ztbz, bookSet, applyDeptBH, saleCorpID, buyerCorpID);
-        ExcelUtils.exportExcel(list, null, "开票信息", BillConfirmInfoVo.class, "客户开票信息_"+BeanUtil.formatDate(new Date(),"yyyyMMdd"), response);
+        ExcelUtils.exportExcel(list, null, "开票信息", BillConfirmInfoVo.class, "客户开票信息_" + BeanUtil.formatDate(new Date(), "yyyyMMdd"), response);
     }
 
 }

@@ -25,9 +25,11 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 科目信息管理视图层-View接口
+ *
  * @author 雷智荣
  */
 @RestController
@@ -36,27 +38,38 @@ import java.util.List;
 @AuthClass("login")
 public class CashBankController {
 
-    @Autowired
+
     private ICashBankService cashBankService;
 
-    @Autowired
+
     private ICustomService customService;
 
+    @Autowired
+    public void setCashBankService(ICashBankService cashBankService) {
+        this.cashBankService = cashBankService;
+    }
+
+    @Autowired
+    public void setCustomService(ICustomService customService) {
+        this.customService = customService;
+    }
+
     /**
-     *科目管理首页
+     * 科目管理首页
+     *
      * @param model
      * @return String
      * @throws JsonProcessingException
      */
     @AuthMethod(role = "ROLE_CASHBANK")
     @GetMapping("index")
-    public ModelAndView index(Model model,HttpSession session) throws JsonProcessingException {
-        ModelAndView view = new ModelAndView("cashbank/index");
-        return view;
+    public ModelAndView index(Model model, HttpSession session) throws JsonProcessingException {
+        return new ModelAndView("cashbank/index");
     }
 
     /**
      * 科目信息编辑页dialog
+     *
      * @param model
      * @return String
      */
@@ -64,13 +77,13 @@ public class CashBankController {
     @GetMapping("dialog")
     public ModelAndView dialog(String id, String pid, Model model) throws JsonProcessingException {
         CashBank cashBank = new CashBank();
-        boolean disabled = true;
+        boolean disabled;
         if (id != null && !id.isEmpty()) {
             cashBank = cashBankService.queryCashBank(id);
-            if("all".equals(pid)){
-                disabled=true;
-            }else {
-                disabled = pid != null && !pid.isEmpty() ? false : true;
+            if ("all".equals(pid)) {
+                disabled = true;
+            } else {
+                disabled = pid == null || pid.isEmpty();
             }
         } else {
             cashBank.setZtbz("T");
@@ -78,13 +91,12 @@ public class CashBankController {
             disabled = false;
         }
         List<SelectJson> balance = customService.listCustomParameByCode("BALANCE");
-        balance.add(0,new SelectJson("","无",null));
+        balance.add(0, new SelectJson("", "无", null));
         model.addAttribute("disabled", disabled);
         model.addAttribute("cashBank", cashBank);
         model.addAttribute("balance", balance);
         model.addAttribute("pid", cashBank.getParent() != null ? cashBank.getParent().getId() : pid);
-        ModelAndView view = new ModelAndView("cashbank/dialog");
-        return view;
+        return new ModelAndView("cashbank/dialog");
     }
 
     /**
@@ -92,7 +104,7 @@ public class CashBankController {
      *
      * @param cashBankDto
      * @param br
-     * @param pid 上级科目ID
+     * @param pid         上级科目ID
      * @param session
      * @return Message
      */
@@ -100,14 +112,14 @@ public class CashBankController {
     @PostMapping("save")
     public Message save(@Validated CashBankDto cashBankDto, BindingResult br, String pid, HttpSession session) {
         if (br.hasErrors()) {
-            return new Message(0, br.getFieldError().getDefaultMessage());
+            return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }
         try {
             CashBank cashBank = new CashBankDto().getCashBank(cashBankDto);
             String id = cashBank.getId();
             if (id == null || id.isEmpty()) {
                 //添加
-                return cashBankService.addCashBank(cashBank,pid);
+                return cashBankService.addCashBank(cashBank, pid);
             } else {
                 //更新
                 CashBank mast = cashBankService.queryCashBank(id);
@@ -119,7 +131,7 @@ public class CashBankController {
                 mast.setKmPYM(cashBank.getKmPYM());
                 mast.setRemarks(cashBank.getRemarks());
                 mast.setBalance(cashBank.getBalance());
-                return cashBankService.updateCashBank(mast,pid);
+                return cashBankService.updateCashBank(mast, pid);
             }
         } catch (Exception e) {
             return new Message(0, e.getMessage());
@@ -129,6 +141,7 @@ public class CashBankController {
 
     /**
      * 获取科目分页数据
+     *
      * @param order
      * @param sort
      * @param page
@@ -143,11 +156,12 @@ public class CashBankController {
         SystemContext.setPageNumber(page);
         SystemContext.setOrder(order);
         SystemContext.setSort(sort);
-       return cashBankService.findCashBankDto(pid, value);
+        return cashBankService.findCashBankDto(pid, value);
     }
 
     /**
      * 更新排序
+     *
      * @param ids
      * @return
      */
@@ -164,6 +178,7 @@ public class CashBankController {
 
     /**
      * 科目信息目录树
+     *
      * @return
      */
     @AuthMethod(role = "ROLE_CASHBANK")
@@ -174,6 +189,7 @@ public class CashBankController {
 
     /**
      * 删除部门信息
+     *
      * @param id
      * @return
      */

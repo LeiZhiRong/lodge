@@ -24,7 +24,6 @@ import java.util.List;
 @Service("customService")
 public class CustomService implements ICustomService {
 
-
     private ICustomParameDao customParameDao;
 
     private ICustomTypeDao customTypeDao;
@@ -117,7 +116,7 @@ public class CustomService implements ICustomService {
     @Transactional(value = "primaryTransactionManager")
     public Message savaCustomParame(CustomParame customParame) {
         Message msg = new Message(0, "保存失败");
-        Integer orders = customParameDao.getMaxOrderByParent(customParame.getTypeId());
+        int orders = customParameDao.getMaxOrderByParent(customParame.getTypeId());
         customParame.setOrders(orders + 1);
         if (customParameDao.add(customParame) != null) {
             msg.setMessage("保存成功");

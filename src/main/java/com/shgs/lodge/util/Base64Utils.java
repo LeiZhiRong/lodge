@@ -89,7 +89,7 @@ public class Base64Utils {
       FileInputStream in = new FileInputStream(file);
       ByteArrayOutputStream out = new ByteArrayOutputStream(2048);
       byte[] cache = new byte[CACHE_SIZE];
-      int nRead = 0;
+      int nRead;
       while ((nRead = in.read(cache)) != -1) {
         out.write(cache, 0, nRead);
         out.flush();
@@ -118,7 +118,7 @@ public class Base64Utils {
     destFile.createNewFile();
     OutputStream out = new FileOutputStream(destFile);
     byte[] cache = new byte[CACHE_SIZE];
-    int nRead = 0;
+    int nRead;
     while ((nRead = in.read(cache)) != -1) {
       out.write(cache, 0, nRead);
       out.flush();

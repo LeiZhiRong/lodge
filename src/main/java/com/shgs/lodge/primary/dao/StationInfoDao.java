@@ -40,9 +40,9 @@ public class StationInfoDao extends BaseDAO<StationInfo,String> implements IStat
 
     @Override
     public List<SelectJson> listStationInfoToSelectJson(String value,  String ztbz) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
-        List<SelectJson> selectJsonList = new ArrayList<SelectJson>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
+        List<SelectJson> selectJsonList = new ArrayList<>();
         jpql.append("from StationInfo s where 1=1 ");
         if (StringUtils.isNotBlank(value)) {
             jpql.append(" and s.stationName like:value ");
@@ -63,9 +63,9 @@ public class StationInfoDao extends BaseDAO<StationInfo,String> implements IStat
 
     @Override
     public Pager<StationInfo> findStationInfoDto(String value, String ztbz) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
-        List<SelectJson> selectJsonList = new ArrayList<SelectJson>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
+        List<SelectJson> selectJsonList = new ArrayList<>();
         jpql.append("from StationInfo s where 1=1 ");
          if (StringUtils.isNotBlank(value)) {
             jpql.append(" and s.stationName like:value ");
@@ -81,18 +81,14 @@ public class StationInfoDao extends BaseDAO<StationInfo,String> implements IStat
     @Override
     public boolean deleteStationInfo(String id) {
         Object o = super.executeByJpql("delete from StationInfo a where a.id =?0", id);
-        if (o != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return o != null;
     }
 
     @Override
     public List<SelectJson> listStationInfoBYIDS(String ids) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
-        List<SelectJson> selectJsonList = new ArrayList<SelectJson>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
+        List<SelectJson> selectJsonList = new ArrayList<>();
         jpql.append("from StationInfo s where s.ztbz =:ztbz  ");
         alias.put("ztbz","T");
         if(StringUtils.isNotEmpty(ids)) {
@@ -110,12 +106,10 @@ public class StationInfoDao extends BaseDAO<StationInfo,String> implements IStat
 
     @Override
     public List<TreeJson> listStationInfoByBookSet(String selectNames) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
-        List<TreeJson> cts = new ArrayList<TreeJson>();
-        jpql.append("from StationInfo s where  s.ztbz =:ztbz ");
+        Map<String, Object> alias = new HashMap<>();
+        List<TreeJson> cts = new ArrayList<>();
         alias.put("ztbz","T");
-        List<StationInfo> dts = super.listByAlias(jpql.toString(), alias);
+        List<StationInfo> dts = super.listByAlias("from StationInfo s where  s.ztbz =:ztbz ", alias);
         if (dts != null && dts.size() > 0) {
             List<String> list = CmsUtils.string2Array(selectNames, ",");
             for(StationInfo mast:dts){
@@ -133,9 +127,9 @@ public class StationInfoDao extends BaseDAO<StationInfo,String> implements IStat
 
     @Override
     public List<SelectJson> listNodeStationInfo(String station) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
-        List<SelectJson> cts = new ArrayList<SelectJson>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
+        List<SelectJson> cts = new ArrayList<>();
         jpql.append("from StationInfo s where s.ztbz =:ztbz ");
          alias.put("ztbz","T");
         if(StringUtils.isNotEmpty(station)){

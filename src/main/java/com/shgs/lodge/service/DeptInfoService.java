@@ -24,8 +24,12 @@ import java.util.Map;
 @Service("deptInfoService")
 public class DeptInfoService implements IDeptInfoService {
 
-    @Autowired
     private IDeptInfoDao deptInfoDao;
+
+    @Autowired
+    public void setDeptInfoDao(IDeptInfoDao deptInfoDao) {
+        this.deptInfoDao = deptInfoDao;
+    }
 
     @Override
     @Transactional(value = "primaryTransactionManager")
@@ -37,7 +41,7 @@ public class DeptInfoService implements IDeptInfoService {
             msg.setMessage("部门编号:【" + deptInfo.getDeptID() + "】已在使用中，请检测后重试！");
             return msg;
         }
-        Integer orders = deptInfoDao.getMaxOrderByParent(pid);
+        int orders = deptInfoDao.getMaxOrderByParent(pid);
         String ids = null;
         DeptInfo pc = null;
         if (pid != null && !pid.isEmpty()) {
@@ -99,11 +103,11 @@ public class DeptInfoService implements IDeptInfoService {
                 deptInfoDao.updateDeptInfo(parent);
             }
             if (pid != null && !pid.isEmpty()) {
-                if (oldparent != null && parent != null && oldparent.getId() != parent.getId()) {
+                if (oldparent != null && parent != null && !oldparent.getId().equals(parent.getId())) {
                     deptInfoDao.executeIds(deptInfo.getId(), oldparent.getIds(), parent.getIds());
                 }
             }
-            if (oldparent != null && oldparent.getId() != pid) {
+            if (oldparent != null && !oldparent.getId().equals(pid)) {
                 if (deptInfoDao.getCountDeptInfoByPid(oldparent.getId()) == 0) {
                     oldparent.setContents("F");
                     deptInfoDao.updateDeptInfo(oldparent);
@@ -147,22 +151,26 @@ public class DeptInfoService implements IDeptInfoService {
     }
 
     @Override
+    @Transactional(value = "primaryTransactionManager",readOnly = true)
     public DeptInfo queryDeptInfo(String id) {
         return deptInfoDao.queryDeptInfo(id);
     }
 
     @Override
+    @Transactional(value = "primaryTransactionManager",readOnly = true)
     public List<DeptInfo> listByParent(String pid) {
         return deptInfoDao.listByParent(pid);
     }
 
     @Override
+    @Transactional(value = "primaryTransactionManager",readOnly = true)
     public Pager<DeptInfo> findDeptInfo(String pid) {
         return deptInfoDao.findDeptInfo(pid);
     }
 
 
     @Override
+    @Transactional(value = "primaryTransactionManager",readOnly = true)
     public Pager<DeptInfoDto> findDeptInfoDto(String pid, String value) {
         return deptInfoDao.findDeptInfoDto(pid, value);
     }
@@ -180,6 +188,7 @@ public class DeptInfoService implements IDeptInfoService {
     }
 
     @Override
+    @Transactional(value = "primaryTransactionManager",readOnly = true)
     public List<DeptInfoDto> listDeptInfoDto(String pid, String value) {
         return deptInfoDao.listDeptInfoDto(pid, value);
     }
@@ -207,7 +216,7 @@ public class DeptInfoService implements IDeptInfoService {
     public String listNotInDeptName(String deptIDs) {
         List<Map> list = deptInfoDao.listNotInDeptName(deptIDs);
         if (list != null && list.size() > 0) {
-            List<String> strings = new ArrayList<String>();
+            List<String> strings = new ArrayList<>();
             for (Map map : list) {
                 strings.add((String) map.get("deptID"));
             }
@@ -218,11 +227,13 @@ public class DeptInfoService implements IDeptInfoService {
     }
 
     @Override
+    @Transactional(value = "primaryTransactionManager",readOnly = true)
     public List<SelectJson> listUserByDeptIDS(String deptIDS) {
         return deptInfoDao.listUserByDeptIDS(deptIDS);
     }
 
     @Override
+    @Transactional(value = "primaryTransactionManager",readOnly = true)
     public List<TreeJson> listUserSetllDept(String deptIDS) {
         return deptInfoDao.listUserSetllDept(deptIDS);
     }

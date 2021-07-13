@@ -23,7 +23,7 @@ public class AccounCodeDto {
 
     private String codeType;
 
-    @HeaderEnum(field = "codeTypeName", title = "编号类型", width = 100, sortable = false, hidden = false)
+    @HeaderEnum(field = "codeTypeName", title = "编号类型", sortable = false)
     private String codeTypeName;
     /**
      * 前缀一
@@ -31,12 +31,12 @@ public class AccounCodeDto {
 
     private String prefixOne;
 
-    @HeaderEnum(field = "preFixOneName", title = "前缘一", width = 100, sortable = false, hidden = false)
+    @HeaderEnum(field = "preFixOneName", title = "前缘一", sortable = false)
     private String preFixOneName;
     /**
      * 前缀一编码
      */
-    @HeaderEnum(field = "prefixOneCode", title = "前缀一编码", width = 100, sortable = false, hidden = false)
+    @HeaderEnum(field = "prefixOneCode", title = "前缀一编码", sortable = false)
     private String prefixOneCode;
 
     /**
@@ -45,12 +45,12 @@ public class AccounCodeDto {
 
     private String prefixTwo;
 
-    @HeaderEnum(field = "prefixTwoName", title = "前缀二", width = 100, sortable = false, hidden = false)
+    @HeaderEnum(field = "prefixTwoName", title = "前缀二", sortable = false)
     private String prefixTwoName;
     /**
      * 前缀二编码
      */
-    @HeaderEnum(field = "prefixTwoCode", title = "前缀二编码", width = 100, sortable = false, hidden = false)
+    @HeaderEnum(field = "prefixTwoCode", title = "前缀二编码", sortable = false)
     private String prefixTwoCode;
     /**
      * 前缀三
@@ -58,14 +58,14 @@ public class AccounCodeDto {
 
     private String prefixThree;
 
-    @HeaderEnum(field = "prefixThreeName", title = "前缀三", width = 100, sortable = false, hidden = false)
+    @HeaderEnum(field = "prefixThreeName", title = "前缀三", sortable = false)
     private String prefixThreeName;
 
 
     /**
      * 前缀三编码
      */
-    @HeaderEnum(field = "prefixThreeCode", title = "前缀三编码", width = 100, sortable = false, hidden = false)
+    @HeaderEnum(field = "prefixThreeCode", title = "前缀三编码", sortable = false)
     private String prefixThreeCode;
 
     private String prefixFour;
@@ -73,29 +73,29 @@ public class AccounCodeDto {
     /**
      * 前缀四
      */
-    @HeaderEnum(field = "prefixFourName", title = "前缀四", width = 100, sortable = false, hidden = false)
+    @HeaderEnum(field = "prefixFourName", title = "前缀四", sortable = false)
     private String prefixFourName;
 
     /**
      * 前缀四编码
      */
-    @HeaderEnum(field = "prefixFourCode", title = "前缀四编码", width = 100, sortable = false, hidden = false)
+    @HeaderEnum(field = "prefixFourCode", title = "前缀四编码", sortable = false)
     private String prefixFourCode;
 
     /**
      * 流水号
      */
-    @HeaderEnum(field = "jhSerialLength", title = "流水号", width = 80, sortable = false, hidden = false)
+    @HeaderEnum(field = "jhSerialLength", title = "流水号", width = 80, sortable = false)
     private Integer jhSerialLength = 4;
     /**
      * 分隔符
      */
     private String separator;
 
-    @HeaderEnum(field = "separatorName", title = "分隔符", width = 100, sortable = false, hidden = false)
+    @HeaderEnum(field = "separatorName", title = "分隔符", sortable = false)
     private String separatorName;
 
-    @HeaderEnum(field = "handle", title = "关联操作", width = 150, sortable = false, hidden = false)
+    @HeaderEnum(field = "handle", title = "关联操作", width = 150, sortable = false)
     private String handle;
 
     public String getPrefixFour() {
@@ -311,7 +311,7 @@ public class AccounCodeDto {
     }
 
     public List<AccounCodeDto> listAccounCodeDto(List<AccounCode> accounCodeList) {
-        List<AccounCodeDto> list = new ArrayList<AccounCodeDto>();
+        List<AccounCodeDto> list = new ArrayList<>();
         if (accounCodeList != null && accounCodeList.size() > 0) {
             for (AccounCode mast : accounCodeList) {
                 list.add(new AccounCodeDto(mast));

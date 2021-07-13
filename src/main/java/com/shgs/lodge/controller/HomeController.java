@@ -6,7 +6,6 @@ import com.shgs.lodge.auth.AuthMethod;
 import com.shgs.lodge.dto.RSAPublicDto;
 import com.shgs.lodge.dto.User;
 import com.shgs.lodge.primary.entity.UserInfo;
-import com.shgs.lodge.service.IMenuService;
 import com.shgs.lodge.service.IUserInfoService;
 import com.shgs.lodge.util.Message;
 import com.shgs.lodge.util.MyJasyptStringEncryptor;
@@ -33,21 +32,24 @@ import static java.net.URLDecoder.decode;
 @AuthClass("login")
 public class HomeController {
 
-    @Autowired
+
     private IUserInfoService userInfoService;
 
     @Autowired
-    private IMenuService menuService;
+    public void setUserInfoService(IUserInfoService userInfoService) {
+        this.userInfoService = userInfoService;
+    }
+
 
     @AuthMethod
     @GetMapping("index")
-    public ModelAndView index(@RequestHeader("token") String token,Model model, HttpSession session, HttpServletResponse response, HttpServletRequest request) throws JsonProcessingException {
-        ModelAndView view = new ModelAndView("home/index");
-        return view;
+    public ModelAndView index(@RequestHeader("token") String token, Model model, HttpSession session, HttpServletResponse response, HttpServletRequest request) throws JsonProcessingException {
+        return new ModelAndView("home/index");
     }
 
     /**
      * 密码修改
+     *
      * @param model
      * @param session
      * @return
@@ -55,15 +57,15 @@ public class HomeController {
     @AuthMethod
     @GetMapping("password")
     public ModelAndView password(Model model, HttpSession session) {
-        User user= (User) session.getAttribute("user");
-        String userId=user.getId();
-        model.addAttribute("userId",userId);
-        ModelAndView view = new ModelAndView("home/password");
-        return view;
+        User user = (User) session.getAttribute("user");
+        String userId = user.getId();
+        model.addAttribute("userId", userId);
+        return new ModelAndView("home/password");
     }
 
     /**
      * 用户信息
+     *
      * @param model
      * @param session
      * @return
@@ -71,8 +73,7 @@ public class HomeController {
     @AuthMethod
     @GetMapping("getUserInfo")
     public ModelAndView getUserInfo(Model model, HttpSession session) {
-         ModelAndView view = new ModelAndView("home/userInfo");
-        return view;
+        return new ModelAndView("home/userInfo");
     }
 
     /**
@@ -86,7 +87,7 @@ public class HomeController {
     @ResponseBody
     public RSAPublicDto getKey(HttpServletRequest request, HttpSession session) {
         RSAPublicDto client = new RSAPublicDto();
-        HashMap<String, Object> keys = null;
+        HashMap<String, Object> keys;
         try {
             keys = RSAUtils.getKeys();
         } catch (NoSuchAlgorithmException e) {
@@ -113,11 +114,10 @@ public class HomeController {
      * @param newPwd
      * @param session
      * @return
-     * @throws Exception
      */
     @AuthMethod
     @PostMapping(value = "saveUserPwd")
-    public Message saveUserPwd(String id, String password, String confirmPwd, String newPwd, HttpSession session) throws Exception {
+    public Message saveUserPwd(String id, String password, String confirmPwd, String newPwd, HttpSession session) {
         try {
             RSAPrivateKey privateKey = (RSAPrivateKey) session.getAttribute("loginKey");
             if (password == null || password.isEmpty())
@@ -140,8 +140,8 @@ public class HomeController {
                 if (_pwd.equals(decrypt)) {
                     userInfo.setLoginPassword(new MyJasyptStringEncryptor().encrypt(_newPwd));
                     return userInfoService.updateUserinfo(userInfo);
-                }else{
-                    return new Message(0,"原始密码不正确");
+                } else {
+                    return new Message(0, "原始密码不正确");
                 }
             } else {
                 return new Message(0, "用户信息获取错误，请联系管理员");
@@ -153,7 +153,6 @@ public class HomeController {
             session.removeAttribute("loginKey");
         }
     }
-
 
 
 }

@@ -6,7 +6,7 @@ import com.shgs.lodge.primary.entity.ProceedType;
 
 import java.util.List;
 
-public interface IProceedTypeDao extends IBaseDAO<ProceedType,String> {
+public interface IProceedTypeDao extends IBaseDAO<ProceedType> {
 
     boolean deleteProceedTypeById(String id);
 

@@ -5,6 +5,7 @@ import com.shgs.lodge.primary.entity.UserInfo;
 import com.shgs.lodge.util.CmsUtils;
 import com.shgs.lodge.util.Pager;
 import com.shgs.lodge.util.SelectJson;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -18,16 +19,12 @@ import java.util.Map;
  * @author 雷智荣
  */
 @Repository("userInfoDao")
-public class UserInfoDao extends BaseDAO<UserInfo,String> implements IUserInfoDao {
+public class UserInfoDao extends BaseDAO<UserInfo, String> implements IUserInfoDao {
 
     @Override
     public boolean deleteUserInfo(String id) {
         Object o = super.executeByJpql("delete from UserInfo u where u.id =?0", id);
-        if (o != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return o != null;
     }
 
     @Override
@@ -37,10 +34,10 @@ public class UserInfoDao extends BaseDAO<UserInfo,String> implements IUserInfoDa
 
     @Override
     public Pager<UserInfo> listUserInfo(String keyword, boolean isAdmin) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append(" from UserInfo u where 1=1 ");
-        if (keyword != null && !keyword.isEmpty()) {
+        if (StringUtils.isNotEmpty(keyword)) {
             jpql.append(" and ( u.userName like:keyword or u.loginAccount like:keyword ) ");
             alias.put("keyword", "%" + keyword + "%");
         }
@@ -51,15 +48,10 @@ public class UserInfoDao extends BaseDAO<UserInfo,String> implements IUserInfoDa
     }
 
     @Override
-    public UserInfo queryUserInfo(String loginAccount, String LoginPassword) {
-        return (UserInfo) super.queryObject("from UserInfo u where u.loginAccount =?0 and u.LoginPassword =?1", new Object[]{loginAccount, LoginPassword});
-    }
-
-    @Override
     public int batchDeleteUser(String ids) {
         if (ids != null && !ids.isEmpty()) {
             List<String> _ids = CmsUtils.string2Array(ids, ",");
-            Map<String, Object> alias = new HashMap<String, Object>();
+            Map<String, Object> alias = new HashMap<>();
             alias.put("ids", _ids);
             Object o = super.executeByAliasJpql("delete from UserInfo t where t.id in( :ids) ", alias);
             if (o != null)
@@ -80,8 +72,8 @@ public class UserInfoDao extends BaseDAO<UserInfo,String> implements IUserInfoDa
 
     @Override
     public List<UserInfo> lisetUserInfo(List<String> userIDS) {
-        Map<String, Object> alias = new HashMap<String, Object>();
-        StringBuffer jpql = new StringBuffer();
+        Map<String, Object> alias = new HashMap<>();
+        StringBuilder jpql = new StringBuilder();
         jpql.append("from UserInfo u where 1=1 ");
         if (userIDS != null && userIDS.size() > 0) {
             jpql.append(" and u.id in:(ids) ");
@@ -92,9 +84,9 @@ public class UserInfoDao extends BaseDAO<UserInfo,String> implements IUserInfoDa
 
     @Override
     public List<SelectJson> listToSelectJson(String keyword) {
-        List<SelectJson> selectJsonList = new ArrayList<SelectJson>();
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        List<SelectJson> selectJsonList = new ArrayList<>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append(" from UserInfo u where 1=1 ");
         if (keyword != null && !keyword.isEmpty()) {
             jpql.append(" and ( u.userName like:keyword or u.loginAccount like:keyword ) ");

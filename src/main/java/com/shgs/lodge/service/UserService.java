@@ -22,24 +22,49 @@ import java.util.Map;
 @Service("userService")
 public class UserService implements IUserService {
 
-    @Autowired
+
     private IUserInfoService userInfoService;
 
-    @Autowired
+
     private IAccounInfoService accounInfoService;
 
-    @Autowired
+
     private IUserRoleService userRoleService;
 
-    @Autowired
+
     private IPermInfoService permInfoService;
 
-    @Autowired
+
     private IMenuService menuService;
 
+    @Autowired
+    public void setUserInfoService(IUserInfoService userInfoService) {
+        this.userInfoService = userInfoService;
+    }
+
+    @Autowired
+    public void setAccounInfoService(IAccounInfoService accounInfoService) {
+        this.accounInfoService = accounInfoService;
+    }
+
+    @Autowired
+    public void setUserRoleService(IUserRoleService userRoleService) {
+        this.userRoleService = userRoleService;
+    }
+
+    @Autowired
+    public void setPermInfoService(IPermInfoService permInfoService) {
+        this.permInfoService = permInfoService;
+    }
+
+    @Autowired
+    public void setMenuService(IMenuService menuService) {
+        this.menuService = menuService;
+    }
+
     @Override
-     public Message loginUser(String userName, String password, String bookSet, HttpServletRequest request, HttpServletResponse response) throws Exception {
-         HttpSession session = request.getSession();
+    public Message loginUser(String userName, String password, String bookSet, HttpServletRequest request, HttpServletResponse response) throws Exception {
+        HttpSession session = request.getSession();
         if (StringUtils.isEmpty(userName)) {
             return new Message(0, "登录账号不能为空");
         }
@@ -51,7 +76,7 @@ public class UserService implements IUserService {
         User dto = new User(password, session);
         ObjectMapper mapper = new ObjectMapper();
         mapper.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
-        boolean isAdmin = false;
+        boolean isAdmin;
         Message msg = userInfoService.loginUser(userName, dto.getPassword());
         if (msg.getCode() == 1) {
             UserInfo userInfo = (UserInfo) msg.getData();
@@ -84,9 +109,9 @@ public class UserService implements IUserService {
                 msg.setCode(0);
                 return msg;
             }
-            List<String> menuIds = new ArrayList<String>();
-            List<Role> roleList = new ArrayList<Role>();
-            List<Permissions> _permissionsList = new ArrayList<Permissions>();
+            List<String> menuIds = new ArrayList<>();
+            List<Role> roleList = new ArrayList<>();
+            List<Permissions> _permissionsList = new ArrayList<>();
             for (Role role : roles) {
                 List<Permissions> permissionsList = permInfoService.listRoleType(role.getId());
                 if (permissionsList != null && permissionsList.size() > 0) {
@@ -102,7 +127,7 @@ public class UserService implements IUserService {
                 role.setPermissions(permissionsList);
                 roleList.add(role);
             }
-            if (menuIds == null || menuIds.size() == 0) {
+            if (menuIds.size() == 0) {
                 msg.setMessage("获取系统操作权限失败，请联系管理员授权后重新登录");
                 msg.setCode(0);
                 return msg;
@@ -135,22 +160,23 @@ public class UserService implements IUserService {
     }
 
 
+    @SuppressWarnings("unchecked")
     private List<String> getAllActions(List<Permissions> permissions, HttpSession session) {
-        List<String> roletype = new ArrayList<String>();
-        List<String> actions = new ArrayList<String>();
+        List<String> roletype = new ArrayList<>();
+        List<String> actions = new ArrayList<>();
         Map<String, List<String>> allAuths = (Map<String, List<String>>) session.getServletContext().getAttribute("allAuths");
         for (Permissions mast : permissions) {
             roletype.add(mast.getRoleType());
         }
         try {
             actions.addAll(allAuths.get("base"));
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
         for (String str : roletype) {
             try {
                 actions.addAll(allAuths.get(str));
-            } catch (Exception e) {
+            } catch (Exception ignored) {
 
             }
         }

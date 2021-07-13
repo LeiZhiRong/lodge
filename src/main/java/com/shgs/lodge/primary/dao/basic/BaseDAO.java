@@ -29,11 +29,12 @@ import java.util.*;
  * @param <T>
  * @author 雷智荣
  */
-public class BaseDAO<T,ID> implements IBaseDAO<T,ID> {
+@SuppressWarnings({"unused", "ConstantConditions", "EqualsBetweenInconvertibleTypes", "unchecked", "RedundantCast", "rawtypes", "UnusedReturnValue", "DuplicatedCode"})
+public class BaseDAO<T,ID> implements IBaseDAO<T> {
 
     private static final int BATCH_SIZE = 500;
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private Class<T> entityClass = null;
 
@@ -41,9 +42,7 @@ public class BaseDAO<T,ID> implements IBaseDAO<T,ID> {
 
     @PersistenceContext(unitName = "primaryEntityManagerFactory")
     private EntityManager entityManager;
-
     {
-
         Type type = getClass().getGenericSuperclass();
         while (!(type instanceof ParameterizedType)) {
             type = ((Class<?>) type).getGenericSuperclass();
@@ -95,14 +94,12 @@ public class BaseDAO<T,ID> implements IBaseDAO<T,ID> {
      */
     @Override
     public boolean update(T entity) {
-        boolean flag = false;
         try {
             entityManager.merge(entity);
-            flag = true;
+            return true;
         } catch (Exception e) {
             return false;
         }
-        return flag;
     }
 
     /**
@@ -113,28 +110,24 @@ public class BaseDAO<T,ID> implements IBaseDAO<T,ID> {
      */
     @Override
     public boolean delete(T entity) {
-        boolean flag = false;
         try {
             entityManager.remove(entityManager.merge(entity));
-            flag = true;
+            return true;
         } catch (Exception e) {
             return false;
         }
-        return flag;
     }
 
     @Override
     public boolean delete(Serializable id) {
-        boolean flag = false;
         try {
             Query query = entityManager.createQuery("delete from " + entityClass.getName() + " b where b."+getIdField() +" =:id ");
             query.setParameter("id", id);
             query.executeUpdate();
-            flag = true;
+            return true;
         } catch (Exception e) {
             return false;
         }
-        return flag;
     }
 
 
@@ -345,7 +338,7 @@ public class BaseDAO<T,ID> implements IBaseDAO<T,ID> {
      */
     @Override
     public boolean batchSave(List<T> t) {
-        Iterator iterator = t.listIterator();
+        Iterator<T> iterator = t.listIterator();
         int index = 0;
         while (iterator.hasNext()) {
             entityManager.persist(iterator.next());
@@ -370,7 +363,7 @@ public class BaseDAO<T,ID> implements IBaseDAO<T,ID> {
      */
     @Override
     public boolean batchUpdate(List<T> t) {
-        Iterator iterator = t.listIterator();
+        Iterator<T> iterator = t.listIterator();
         int index = 0;
         while (iterator.hasNext()) {
             entityManager.merge(iterator.next());
@@ -522,7 +515,7 @@ public class BaseDAO<T,ID> implements IBaseDAO<T,ID> {
             // 设置参数
             setParameter(query, args);
             setParameter(cquery, args);
-            Pager<T> pages = new Pager<T>();
+            Pager<T> pages = new Pager<>();
             setPagers(query, pages);
             List<T> datas = query.getResultList();
             pages.setRows(datas);
@@ -544,10 +537,11 @@ public class BaseDAO<T,ID> implements IBaseDAO<T,ID> {
         return c;
     }
 
+    @SuppressWarnings("rawtypes")
     private void setPagers(Query query, Pager pages) {
         Integer pageSize = SystemContext.getPageSize();
         Integer pageNumber = SystemContext.getPageNumber();
-        Integer pageOffset = 0;
+        int pageOffset;
         if (pageNumber == null || pageNumber < 0) {
             pageNumber = 1;
         }
@@ -604,7 +598,7 @@ public class BaseDAO<T,ID> implements IBaseDAO<T,ID> {
         return true;
     }
 
-    private <N extends Object> List<N> listToBeanBySql(String sql, Object[] args, Map<String, Object> alias, Class<?> clz, boolean hasEntity) {
+    private <N> List<N> listToBeanBySql(String sql, Object[] args, Map<String, Object> alias, Class<?> clz, boolean hasEntity) {
         try {
             NativeQueryImpl query = entityManager.createNativeQuery(sql).unwrap(NativeQueryImpl.class);
             setAliasParameter(query, alias);
@@ -623,7 +617,7 @@ public class BaseDAO<T,ID> implements IBaseDAO<T,ID> {
         }
     }
 
-    private <N extends Object> Pager<N> findToBeanBySql(String sql, Object[] args, Map<String, Object> alias, Class<?> clz, boolean hasEntity) {
+    private <N> Pager<N> findToBeanBySql(String sql, Object[] args, Map<String, Object> alias, Class<?> clz, boolean hasEntity) {
         try {
             String sql1 = initSort(sql);
             String cq = getCountJpql(sql, false);
@@ -633,7 +627,7 @@ public class BaseDAO<T,ID> implements IBaseDAO<T,ID> {
             setAliasParameter(cquery, alias);
             setParameter(sq, args);
             setParameter(cquery, args);
-            Pager<N> pages = new Pager<N>();
+            Pager<N> pages = new Pager<>();
             setPagers(sq, pages);
             if (hasEntity) {
                 sq.addEntity(clz);
@@ -981,7 +975,7 @@ public class BaseDAO<T,ID> implements IBaseDAO<T,ID> {
             setAliasParameter(cquery, alias);
             setParameter(sq, args);
             setParameter(cquery, args);
-            Pager<Map> pages = new Pager<Map>();
+            Pager<Map> pages = new Pager<>();
             setPagers(sq, pages);
             sq.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
             List<Map> datas = (List<Map>) sq.getResultList();
@@ -998,8 +992,7 @@ public class BaseDAO<T,ID> implements IBaseDAO<T,ID> {
     }
 
     private String getIdField(){
-        String idField = entityManager.getMetamodel().entity(entityClass).getId(idClass).getName();
-        return idField;
+        return entityManager.getMetamodel().entity(entityClass).getId(idClass).getName();
     }
 
 }

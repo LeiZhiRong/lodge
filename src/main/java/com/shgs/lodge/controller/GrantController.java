@@ -30,14 +30,30 @@ import java.util.List;
 @AuthClass("login")
 public class GrantController {
 
-    @Autowired
+
     private IUserRoleService userRoleService;
 
-    @Autowired
+
     private IUserInfoService userInfoService;
 
-    @Autowired
+
     private IRoleInfoService roleInfoService;
+
+    @Autowired
+    public void setUserRoleService(IUserRoleService userRoleService) {
+        this.userRoleService = userRoleService;
+    }
+
+    @Autowired
+    public void setUserInfoService(IUserInfoService userInfoService) {
+        this.userInfoService = userInfoService;
+    }
+
+    @Autowired
+    public void setRoleInfoService(IRoleInfoService roleInfoService) {
+        this.roleInfoService = roleInfoService;
+    }
+
 
     /**
      * 授权管理首页
@@ -49,8 +65,7 @@ public class GrantController {
     @AuthMethod(role = "ROLE_GRANT")
     @GetMapping("index")
     public ModelAndView index(Model model, HttpSession session) throws JsonProcessingException {
-        ModelAndView view = new ModelAndView("grant/index");
-        return view;
+        return new ModelAndView("grant/index");
     }
 
     /**
@@ -61,29 +76,25 @@ public class GrantController {
      */
     @AuthMethod(role = "ROLE_GRANT")
     @RequestMapping("list")
-    public List<SelectJson> list(String keyword, HttpSession session) {
-        User user= (User) session.getAttribute("user");
-        if(user.isAdmin()) {
-            return userInfoService.listToSelectJson(keyword);
-        }else {
-            return userInfoService.listToSelectJson(keyword);
-        }
+    public List<SelectJson> list(String keyword) {
+         return userInfoService.listToSelectJson(keyword);
     }
 
     /**
      * 按用户和关键字获取未授权角色列表
+     *
      * @param keyword 关键字
      * @return arrayJson
      */
     @AuthMethod(role = "ROLE_GRANT")
     @RequestMapping("getRoleInfo")
-    public List<SelectJson> getRoleInfo(String user_id,String keyword, HttpSession session) {
+    public List<SelectJson> getRoleInfo(String user_id, String keyword, HttpSession session) {
         User user = (User) session.getAttribute("user");
         String bookSet = user.isAdmin() ? null : user.getBookSet();
         //获取已授权角色IDS
-        List<String> role_ids=userRoleService.getUserRoleID(user_id,bookSet);
+        List<String> role_ids = userRoleService.getUserRoleID(user_id, bookSet);
         //获取未授权角色列表
-        return roleInfoService.listRoleInfo(role_ids,bookSet,keyword);
+        return roleInfoService.listRoleInfo(role_ids, bookSet, keyword);
     }
 
     /**
@@ -98,13 +109,14 @@ public class GrantController {
     public List<SelectJson> getUserGrant(String user_id, String keyword, HttpSession session) {
         User user = (User) session.getAttribute("user");
         String bookSet = user.isAdmin() ? null : user.getBookSet();
-        return userRoleService.listRoleInfo(user_id,bookSet,keyword);
+        return userRoleService.listRoleInfo(user_id, bookSet, keyword);
     }
 
     /**
      * 保存用户角色
+     *
      * @param role_ids 角色ID，多个ID以","隔开
-     * @param user_id 用户ID
+     * @param user_id  用户ID
      * @return
      */
     @AuthMethod(role = "ROLE_GRANT")
@@ -115,14 +127,15 @@ public class GrantController {
 
     /**
      * 移除用户角色
+     *
      * @param role_ids 角色ID，多个ID以","隔开
-     * @param user_id 用户ID
+     * @param user_id  用户ID
      * @return
      */
     @AuthMethod(role = "ROLE_GRANT")
     @PostMapping("delUserGrant")
-    public Message delUserGrant(String role_ids,String user_id) {
-        return userRoleService.batchDeleteUserRole( role_ids,user_id);
+    public Message delUserGrant(String role_ids, String user_id) {
+        return userRoleService.batchDeleteUserRole(role_ids, user_id);
     }
 
 }

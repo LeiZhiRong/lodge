@@ -31,18 +31,37 @@ import java.util.List;
 @Service("billApplyInfoService")
 public class BillApplyInfoService implements IBillApplyInfoService {
 
-    @Autowired
+
     private IBillApplyInfoDao billApplyInfoDao;
 
-    @Autowired
+
     private IAccounCodeDao accounCodeDao;
 
-    @Autowired
+
     private IReveExpeItemDao reveExpeItemDao;
 
-    @Autowired
+
     private IVoucherInfoDao voucherInfoDao;
 
+    @Autowired
+    public void setBillApplyInfoDao(IBillApplyInfoDao billApplyInfoDao) {
+        this.billApplyInfoDao = billApplyInfoDao;
+    }
+
+    @Autowired
+    public void setAccounCodeDao(IAccounCodeDao accounCodeDao) {
+        this.accounCodeDao = accounCodeDao;
+    }
+
+    @Autowired
+    public void setReveExpeItemDao(IReveExpeItemDao reveExpeItemDao) {
+        this.reveExpeItemDao = reveExpeItemDao;
+    }
+
+    @Autowired
+    public void setVoucherInfoDao(IVoucherInfoDao voucherInfoDao) {
+        this.voucherInfoDao = voucherInfoDao;
+    }
 
     @Override
     @Transactional(value = "primaryTransactionManager")
@@ -109,11 +128,11 @@ public class BillApplyInfoService implements IBillApplyInfoService {
 
     @Override
     public Pager<BillApplyInfoDto> listBillApplyInfoDto(String field, String value, String ztbz, String bookSet, String userBh) {
-        List<String> _ztbz = new ArrayList<String>();
+        List<String> _ztbz = new ArrayList<>();
         if (ztbz != null && !ztbz.isEmpty()) {
             _ztbz = CmsUtils.string2Array(ztbz, ",");
         }
-        Pager<BillApplyInfoDto> dto = new Pager<BillApplyInfoDto>();
+        Pager<BillApplyInfoDto> dto = new Pager<>();
         Pager<BillApplyInfo> list = billApplyInfoDao.listBillApplyInfo(field, value, null, null, _ztbz, bookSet, userBh);
         if (list != null) {
             dto.setRows(new BillApplyInfoDto().listBillApplyInfoDto(list.getRows()));
@@ -127,7 +146,7 @@ public class BillApplyInfoService implements IBillApplyInfoService {
 
     @Override
     public Pager<BillApplyHistoryInfoDto> listHistoryInfoDto(String field, String value, String starDate, String endDate, List<String> ztbz, String bookSet, String userBh) {
-        Pager<BillApplyHistoryInfoDto> dto = new Pager<BillApplyHistoryInfoDto>();
+        Pager<BillApplyHistoryInfoDto> dto = new Pager<>();
         Pager<BillApplyInfo> list = billApplyInfoDao.listBillApplyInfo(field, value, starDate, endDate, ztbz, bookSet, userBh);
         if (list != null) {
             dto.setRows(new BillApplyHistoryInfoDto().listHistoryInfoDto(list.getRows()));
@@ -141,7 +160,7 @@ public class BillApplyInfoService implements IBillApplyInfoService {
 
     @Override
     public Pager<BillConfirmInfoDto> listBillConfirmInfoDto(String field, String value, String starDate, String endDate, String ztbz, String bookSet, String applyDeptBH, String saleCorpID, String buyerCorpID) {
-        Pager<BillConfirmInfoDto> dto = new Pager<BillConfirmInfoDto>();
+        Pager<BillConfirmInfoDto> dto = new Pager<>();
         Pager<BillApplyInfo> list = billApplyInfoDao.listBillApplyInfo(field, value, starDate, endDate, ztbz, bookSet, applyDeptBH, saleCorpID, buyerCorpID);
         if (list != null) {
             dto.setRows(new BillConfirmInfoDto().listBillConfirmInfoDto(list.getRows()));
@@ -155,7 +174,7 @@ public class BillApplyInfoService implements IBillApplyInfoService {
 
     @Override
     public List<BillConfirmInfoVo> listBillConfirmInfoVo(String field, String value, String starDate, String endDate, String ztbz, String bookSet, String applyDeptBH, String saleCorpID, String buyerCorpID) {
-        List<BillConfirmInfoVo> dto = new ArrayList<BillConfirmInfoVo>();
+        List<BillConfirmInfoVo> dto = new ArrayList<>();
         List<BillApplyInfo> list = billApplyInfoDao.listToBillApplyInfo(field, value, starDate, endDate, ztbz, bookSet, applyDeptBH, saleCorpID, buyerCorpID);
         if (list != null && list.size() > 0) {
             dto = new BillConfirmInfoVo().listBillConfirmInfoVo(list);

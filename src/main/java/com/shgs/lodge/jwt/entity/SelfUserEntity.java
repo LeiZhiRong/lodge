@@ -232,7 +232,7 @@ public class SelfUserEntity implements Serializable {
 		this.setManageDept(userInfo.getDeptID());
 		this.setBalanceDept(userInfo.getSettID());
 		this.setStatus(userInfo.getStatus()==1?"T":"F");
-		this.setAdmin("T".equals(userInfo.getManager())?true:false);
+		this.setAdmin("T".equals(userInfo.getManager()));
 	}
 
 

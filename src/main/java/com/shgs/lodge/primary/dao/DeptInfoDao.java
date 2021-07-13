@@ -21,7 +21,7 @@ public class DeptInfoDao extends BaseDAO<DeptInfo,String> implements IDeptInfoDa
 
     @Override
     public int getMaxOrderByParent(String pid) {
-        Object obj = null;
+        Object obj;
         if (pid != null && !pid.isEmpty()) {
             obj = super.queryObject("select max(m.orders) from DeptInfo m where m.parent.id=?0", pid);
         } else {
@@ -45,11 +45,7 @@ public class DeptInfoDao extends BaseDAO<DeptInfo,String> implements IDeptInfoDa
     @Override
     public boolean deleteDeptInfo(String id) {
         Object o = super.executeByJpql("delete from DeptInfo m where m.id =?0", id);
-        if (o != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return o != null;
     }
 
     @Override
@@ -73,8 +69,8 @@ public class DeptInfoDao extends BaseDAO<DeptInfo,String> implements IDeptInfoDa
 
     @Override
     public Pager<DeptInfo> findDeptInfo(String pid) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         if (pid != null && !pid.isEmpty()) {
             jpql.append("from DeptInfo m where m.parent.id =:pid ");
             alias.put("pid", pid);
@@ -97,9 +93,11 @@ public class DeptInfoDao extends BaseDAO<DeptInfo,String> implements IDeptInfoDa
     @Override
     public Pager<DeptInfoDto> findDeptInfoDto(String pid, String value) {
         pid = "all".equals(pid) ? null : pid;
-        Pager<DeptInfoDto> deptInfoPager = new Pager<DeptInfoDto>();
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        Pager<DeptInfoDto> deptInfoPager = new Pager<>();
+        StringBuilder jpql;
+        jpql = new StringBuilder();
+        Map<String, Object> alias;
+        alias = new HashMap<>();
         jpql.append("from DeptInfo m where 1=1 ");
         if (pid != null && !pid.isEmpty()) {
             jpql.append("and m.parent.id =:pid ");
@@ -133,30 +131,31 @@ public class DeptInfoDao extends BaseDAO<DeptInfo,String> implements IDeptInfoDa
 
     @Override
     public List<TreeJson> getMenuInfo2TreeJson(String keyword) {
-        List<TreeJson> cts = new ArrayList<TreeJson>();
+        List<TreeJson> cts = new ArrayList<>();
         List<Map> dts = super.listToMapBySql("select m.id as id,m.deptID as deptID,m.deptName as text,m.pid as pid,m.contents as contents from dept_info m  order by m.pid asc,m.orders asc");
         if (dts.size() > 0) {
             List<String> list = CmsUtils.string2Array(keyword, ";");
             for (Map map : dts) {
                 TreeJson temp = new TreeJson();
                 temp.setId((String) map.get("id"));
-                temp.setText((String) map.get("deptID") + " " + (String) map.get("text"));
+                temp.setText(map.get("deptID") + " " + map.get("text"));
                 temp.setPid((String) map.get("pid"));
                 temp.setArg(map.get("deptID"));
-                if (list.contains(map.get("deptID")))
+                if (list.contains(map.get("deptID"))) {
                     temp.setChecked(true);
+                }
                 temp.setArg1(map.get("contents"));
                 cts.add(temp);
             }
         }
-        return new TreeJson().getfatherNode(cts);
+        return TreeJson.getfatherNode(cts);
     }
 
     @Override
     public int batchDelete(String ids) {
         if (ids != null && !ids.isEmpty()) {
             List<String> list = CmsUtils.string2Array(ids, ",");
-            Map<String, Object> alias = new HashMap<String, Object>();
+            Map<String, Object> alias = new HashMap<>();
             alias.put("ids", list);
             return (int) super.executeByAliasJpql("delete from DeptInfo where id in(:ids)", alias);
         }
@@ -166,7 +165,7 @@ public class DeptInfoDao extends BaseDAO<DeptInfo,String> implements IDeptInfoDa
     @Override
     public void executeIds(String id, String oldIds, String newIds) {
         List<DeptInfo> list = super.list("from DeptInfo m  where m.ids like ?0", "%" + id + "%");
-        List<DeptInfo> mast = new ArrayList<DeptInfo>();
+        List<DeptInfo> mast = new ArrayList<>();
         if (list != null && list.size() > 0) {
             for (DeptInfo temp : list) {
                 temp.setIds(temp.getIds().replace(oldIds, newIds));
@@ -180,11 +179,11 @@ public class DeptInfoDao extends BaseDAO<DeptInfo,String> implements IDeptInfoDa
 
     @Override
     public Integer countDeptID(String id, String pid, String deptId) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append(" select count(d) from DeptInfo d where d.deptID =:deptID ");
         alias.put("deptID", deptId);
-        if (pid != null && !pid.isEmpty()) {
+        if (StringUtils.isNotEmpty(pid)) {
             jpql.append(" and d.parent.id =:pid ");
             alias.put("pid", pid);
         } else {
@@ -203,9 +202,9 @@ public class DeptInfoDao extends BaseDAO<DeptInfo,String> implements IDeptInfoDa
     @Override
     public List<DeptInfoDto> listDeptInfoDto(String pid, String value) {
         pid = "all".equals(pid) ? null : pid;
-        List<DeptInfoDto> deptInfoDtos = new ArrayList<DeptInfoDto>();
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        List<DeptInfoDto> deptInfoDtos = new ArrayList<>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append("from DeptInfo m where 1=1 ");
         if (pid != null && !pid.isEmpty()) {
             jpql.append("and m.parent.id =:pid ");
@@ -227,9 +226,9 @@ public class DeptInfoDao extends BaseDAO<DeptInfo,String> implements IDeptInfoDa
     @Override
     public List<DeptInfoListDto> listDeptInfoListDto(String pid, String value) {
         pid = "all".equals(pid) ? null : pid;
-        List<DeptInfoListDto> deptInfoDtos = new ArrayList<DeptInfoListDto>();
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        List<DeptInfoListDto> deptInfoDtos = new ArrayList<>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append("from DeptInfo m where m.status =1 ");
         if (pid != null && !pid.isEmpty()) {
             jpql.append("and m.parent.id =:pid ");
@@ -258,20 +257,19 @@ public class DeptInfoDao extends BaseDAO<DeptInfo,String> implements IDeptInfoDa
     public List<Map> listNotInDeptName(String deptIDs) {
         if (deptIDs == null || deptIDs.isEmpty())
             return null;
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         List<String> list = CmsUtils.string2Array(deptIDs, ";");
         jpql.append("SELECT deptID FROM ( ");
         int i = list.size() - 1;
         int h = 0;
         for (String str : list) {
             if (i == h) {
-                jpql.append(" select '" + list.get(h) + "' as deptID ");
-                h++;
+                jpql.append(" select '").append(list.get(h)).append("' as deptID ");
             } else {
-                jpql.append(" select '" + list.get(h) + "' as deptID UNION ");
-                h++;
+                jpql.append(" select '").append(list.get(h)).append("' as deptID UNION ");
             }
+            h++;
         }
         jpql.append(" ) a WHERE deptID NOT IN ( SELECT deptID from dept_info WHERE deptID IN (:ids) )");
         alias.put("ids", list);
@@ -280,10 +278,10 @@ public class DeptInfoDao extends BaseDAO<DeptInfo,String> implements IDeptInfoDa
 
     @Override
     public List<SelectJson> listUserByDeptIDS(String deptIDS) {
-        List<SelectJson> select = new ArrayList<SelectJson>();
+        List<SelectJson> select = new ArrayList<>();
         if (deptIDS != null && !deptIDS.isEmpty()) {
             List<String> array = CmsUtils.string2Array(deptIDS, ";");
-            Map<String, Object> alias = new HashMap<String, Object>();
+            Map<String, Object> alias = new HashMap<>();
             alias.put("contents", "F");
             alias.put("ids", array);
             List<DeptInfo> list = super.listByAlias("from DeptInfo d where d.status =1 and d.contents =:contents and  d.deptID in(:ids) order by d.orders asc ", alias);
@@ -298,11 +296,11 @@ public class DeptInfoDao extends BaseDAO<DeptInfo,String> implements IDeptInfoDa
 
     @Override
     public List<TreeJson> listUserSetllDept(String deptIDS) {
-        List<TreeJson> jsonList=new ArrayList<TreeJson>();
+        List<TreeJson> jsonList= new ArrayList<>();
         jsonList.add(new TreeJson("all","all 所有部门",null));
         if (deptIDS != null && !deptIDS.isEmpty()) {
             List<String> array = CmsUtils.string2Array(deptIDS, ";");
-            Map<String, Object> alias = new HashMap<String, Object>();
+            Map<String, Object> alias = new HashMap<>();
             alias.put("contents", "F");
             alias.put("ids", array);
             List<DeptInfo> list = super.listByAlias("from DeptInfo d where d.status =1 and d.contents =:contents and  d.deptID in(:ids) order by d.orders asc ", alias);
@@ -312,7 +310,7 @@ public class DeptInfoDao extends BaseDAO<DeptInfo,String> implements IDeptInfoDa
                 }
             }
         }
-        return new TreeJson().getfatherNode(jsonList);
+        return TreeJson.getfatherNode(jsonList);
     }
 
 }

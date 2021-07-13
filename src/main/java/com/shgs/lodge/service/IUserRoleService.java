@@ -63,6 +63,7 @@ public interface IUserRoleService {
      */
     Message batchSaveUserRole(String userIds,String roleIds);
 
+    @SuppressWarnings("UnusedReturnValue")
     int batchDeleteUserRole(String userIds);
 
     /**

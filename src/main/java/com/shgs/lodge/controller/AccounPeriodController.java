@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 会计期间view层
@@ -38,8 +39,13 @@ import java.util.List;
 @AuthClass("login")
 public class AccounPeriodController {
 
-    @Autowired
+
     private IAccounPeriodService accounPeriodService;
+
+    @Autowired
+    public void setAccounPeriodService(IAccounPeriodService accounPeriodService) {
+        this.accounPeriodService = accounPeriodService;
+    }
 
     /**
      * 首页
@@ -55,8 +61,7 @@ public class AccounPeriodController {
         User user = (User) session.getAttribute("user");
         List<HeaderColumns> columns = CmsUtils.getHeaderColumns("com.shgs.lodge.dto.AccounPeriodDto");
         model.addAttribute("columns", columns);
-        ModelAndView mv = new ModelAndView("period/index");
-        return mv;
+        return new ModelAndView("period/index");
     }
 
     /**
@@ -101,8 +106,7 @@ public class AccounPeriodController {
             dto.setZtbz("T");
         }
         model.addAttribute("accounPeriodDto", dto);
-        ModelAndView view = new ModelAndView("period/dialog");
-        return view;
+        return new ModelAndView("period/dialog");
     }
 
     /**
@@ -117,7 +121,7 @@ public class AccounPeriodController {
     @PostMapping("saveAccounPeriodDto")
     public Message saveAccounPeriodDto(@Validated AccounPeriodDto accounPeriodDto, BindingResult br, HttpSession session) {
         if (br.hasErrors()) {
-            return new Message(0, br.getFieldError().getDefaultMessage());
+            return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }
         AccounPeriod accounPeriod = new AccounPeriodDto().getAccounPeriod(accounPeriodDto);
         String id = accounPeriod.getId();

@@ -105,7 +105,7 @@ public class CorpInfoListDto {
     }
 
     public List<CorpInfoListDto> listCorpInfoListDto(List<BillCorpInfo> billCorpInfoList, String contents) {
-        List<CorpInfoListDto> list = new ArrayList<CorpInfoListDto>();
+        List<CorpInfoListDto> list = new ArrayList<>();
         if (billCorpInfoList.size() > 0) {
             for (BillCorpInfo mast : billCorpInfoList) {
                 CorpInfoListDto temp = new CorpInfoListDto(mast);

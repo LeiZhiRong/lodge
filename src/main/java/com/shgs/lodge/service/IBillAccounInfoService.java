@@ -14,6 +14,7 @@ public interface IBillAccounInfoService {
      * @param billAccounInfo
      * @return msg
      */
+    @SuppressWarnings("UnusedReturnValue")
     Message addBillAccounInfo(BillAccounInfo billAccounInfo);
 
     /**

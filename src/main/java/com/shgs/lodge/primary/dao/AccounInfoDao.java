@@ -27,8 +27,8 @@ public class AccounInfoDao extends BaseDAO<AccounInfo,String> implements IAccoun
 
     @Override
     public AccounInfo queryAccounInfoByIDAndBookSet(String id, String bookSet) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append("from AccounInfo a where a.bookSet =:bookSet ");
         alias.put("bookSet", bookSet);
         if (id != null && !id.isEmpty()) {
@@ -40,9 +40,9 @@ public class AccounInfoDao extends BaseDAO<AccounInfo,String> implements IAccoun
 
     @Override
     public List<SelectJson> listAccounInfoToSelectJson(String value, String ztbz) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
-        List<SelectJson> select=new ArrayList<SelectJson>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
+        List<SelectJson> select= new ArrayList<>();
         jpql.append("from AccounInfo a where 1=1 ");
         if (value != null && !value.isEmpty()) {
             jpql.append(" and ( a.bookSet like:value or a.accounName like:value or a.remarks like:value ) ");
@@ -63,9 +63,9 @@ public class AccounInfoDao extends BaseDAO<AccounInfo,String> implements IAccoun
 
     @Override
     public Pager<AccounInfoDto> findAccounInfoDto(String value, String ztbz) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
-        Pager<AccounInfoDto> pager=new Pager<AccounInfoDto>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
+        Pager<AccounInfoDto> pager= new Pager<>();
         jpql.append("from AccounInfo a where 1=1 ");
         if (value != null && !value.isEmpty()) {
             jpql.append(" and ( a.bookSet like:value or a.accounName like:value or a.remarks like:value or a.corpName like:value ) ");
@@ -89,10 +89,6 @@ public class AccounInfoDao extends BaseDAO<AccounInfo,String> implements IAccoun
     @Override
     public boolean deleteAccounInfo(String id) {
         Object o = super.executeByJpql("delete from AccounInfo a where a.id =?0", id);
-        if (o != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return o != null;
     }
 }

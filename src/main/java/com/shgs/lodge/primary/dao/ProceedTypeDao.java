@@ -16,16 +16,12 @@ public class ProceedTypeDao extends BaseDAO<ProceedType,String> implements IProc
     @Override
     public boolean deleteProceedTypeById(String id) {
         Object o = super.executeByJpql("delete from ProceedType m where m.id =?0", id);
-        if (o != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return o != null;
     }
 
     @Override
     public int getMaxOrderByParent(String pid) {
-        Object obj = null;
+        Object obj;
         if (pid != null && !pid.isEmpty()) {
             obj = super.queryObject("select max(m.orders) from ProceedType m where m.parent.id=?0", pid);
         } else {
@@ -39,7 +35,7 @@ public class ProceedTypeDao extends BaseDAO<ProceedType,String> implements IProc
     @Override
     public void executeIds(String id, String oldIds, String newIds) {
         List<ProceedType> list = super.list("from ProceedType m  where m.ids like ?0", "%" + id + "%");
-        List<ProceedType> mast = new ArrayList<ProceedType>();
+        List<ProceedType> mast = new ArrayList<>();
         if (list != null && list.size() > 0) {
             for (ProceedType temp : list) {
                 temp.setIds(temp.getIds().replace(oldIds, newIds));
@@ -62,8 +58,8 @@ public class ProceedTypeDao extends BaseDAO<ProceedType,String> implements IProc
     @Override
     public List<ProceedTypeListDto> listProceedTypeListDto(String pid, String value) {
         pid = "all".equals(pid) ? null : pid;
-        List<ProceedTypeListDto> list = new ArrayList<ProceedTypeListDto>();
-        StringBuffer jpql = new StringBuffer();
+        List<ProceedTypeListDto> list = new ArrayList<>();
+        StringBuilder jpql = new StringBuilder();
         Map<String, Object> alias = new HashMap<>();
         jpql.append("from ProceedType m where 1=1 ");
         if (pid != null && !pid.isEmpty()) {

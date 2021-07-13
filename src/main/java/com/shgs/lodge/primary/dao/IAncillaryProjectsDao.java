@@ -9,7 +9,7 @@ import com.shgs.lodge.util.Pager;
 
 import java.util.List;
 
-public interface IAncillaryProjectsDao extends IBaseDAO<AncillaryProjects,String> {
+public interface IAncillaryProjectsDao extends IBaseDAO<AncillaryProjects> {
 
     /**
      * 获取最大序号

@@ -12,7 +12,7 @@ import java.util.List;
  * 账套信息持久层接口
  * @author 雷智荣
  */
-public interface IAccounInfoDao extends IBaseDAO<AccounInfo,String> {
+public interface IAccounInfoDao extends IBaseDAO<AccounInfo> {
 
     /**
      * 按ID查询对象

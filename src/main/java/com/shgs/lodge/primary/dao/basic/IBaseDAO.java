@@ -11,7 +11,9 @@ import java.util.Map;
  *
  * @author 雷智荣
  */
-public interface IBaseDAO<T,ID> {
+@SuppressWarnings({"rawtypes", "unused"})
+public interface IBaseDAO<T> {
+
     T load(Class<?> clz, String id);
 
     T load(Serializable id);
@@ -44,8 +46,6 @@ public interface IBaseDAO<T,ID> {
 
     List<Map> listToMapByAliasSql(String sql, Map<String, Object> alias);
 
-
-
     Pager<T> find(String jpql);
 
     Pager<T> find(String jpql, Object arg);
@@ -53,8 +53,6 @@ public interface IBaseDAO<T,ID> {
     Pager<T> find(String jpql, Object[] args);
 
     Pager<T> find(String jpql, Map<String, Object> alias);
-
-
 
     Object queryObject(String jpql);
 

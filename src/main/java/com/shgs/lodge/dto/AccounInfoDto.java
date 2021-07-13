@@ -18,13 +18,13 @@ public class AccounInfoDto {
     /**
      * 账套编号(唯一)
      */
-    @HeaderEnum(field = "bookSet", title = "账套编号", width = 100, sortable = false, hidden = false)
+    @HeaderEnum(field = "bookSet", title = "账套编号", sortable = false)
     private String bookSet;
 
     /**
      * 账套名称
      */
-    @HeaderEnum(field = "accounName", title = "账套名称", width = 200, sortable = false, hidden = false)
+    @HeaderEnum(field = "accounName", title = "账套名称", width = 200, sortable = false)
     private String accounName;
 
     /**
@@ -35,31 +35,31 @@ public class AccounInfoDto {
     /**
      * 注册时间
      */
-    @HeaderEnum(field = "regTime", title = "注册时间", width = 120, sortable = false, hidden = false)
+    @HeaderEnum(field = "regTime", title = "注册时间", width = 120, sortable = false)
     private String regTime;
 
     /**
      * 客户名称
      */
-    @HeaderEnum(field = "corpName", title = "注册单位", width = 200, sortable = false, hidden = false)
+    @HeaderEnum(field = "corpName", title = "注册单位", width = 200, sortable = false)
     private String corpName;
 
     /**
      * 描述
      */
-    @HeaderEnum(field = "remarks", title = "描述", width = 200, sortable = false, hidden = false)
+    @HeaderEnum(field = "remarks", title = "描述", width = 200, sortable = false)
     private String remarks;
 
     /**
      * 状态标志
      */
-    @HeaderEnum(field = "ztbz", title = "单据状态", width = 80, sortable = true, hidden = true)
+    @HeaderEnum(field = "ztbz", title = "单据状态", width = 80, hidden = true)
     private String ztbz;
 
     /**
      * 关联操作
      */
-    @HeaderEnum(field = "handle", title = "关联操作", width = 150, sortable = false, hidden = false)
+    @HeaderEnum(field = "handle", title = "关联操作", width = 150, sortable = false)
     private String handle;
 
 
@@ -155,7 +155,7 @@ public class AccounInfoDto {
     }
 
     public List<AccounInfoDto> listAccounInfoDto(List<AccounInfo> accounInfoList) {
-        List<AccounInfoDto> list = new ArrayList<AccounInfoDto>();
+        List<AccounInfoDto> list = new ArrayList<>();
         if (accounInfoList.size() > 0) {
             for (AccounInfo mast : accounInfoList) {
                 list.add(new AccounInfoDto(mast));

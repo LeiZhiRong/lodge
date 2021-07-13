@@ -24,33 +24,25 @@ public class VoucherInfoDao extends BaseDAO<VoucherInfo,String> implements IVouc
     }
 
     @Override
-    public int deleteVoucherInfo(String applyId, String proceedId, String auditStatus, String onAccount, String paymentMethod) {
+    public void deleteVoucherInfo(String applyId, String proceedId, String auditStatus, String onAccount, String paymentMethod) {
         String jpql = "delete from VoucherInfo v where v.applyId =:applyId  and v.proceedId =:proceedId and v.auditStatus =:auditStatus and v.onAccount =:onAccount and v.paymentMethod =:paymentMethod ";
-        Map<String, Object> alias = new HashMap<String, Object>();
+        Map<String, Object> alias = new HashMap<>();
         alias.put("applyId",applyId);
         alias.put("proceedId",proceedId);
         alias.put("auditStatus",auditStatus);
         alias.put("onAccount",onAccount);
         alias.put("paymentMethod",paymentMethod);
         Object o = super.executeByAliasJpql(jpql, alias);
-        if (o == null)
-            return 0;
-        return (Integer) o;
     }
 
     @Override
-    public int batchDeleteVoucherInfo(String applyId) {
+    public void batchDeleteVoucherInfo(String applyId) {
         if (applyId != null && !applyId.isEmpty()) {
             List<String> _ids = CmsUtils.string2Array(applyId, ",");
             Map<String, Object> alias = new HashMap<>();
             alias.put("ids", _ids);
             Object o = super.executeByAliasJpql("delete from VoucherInfo b where b.applyId in( :ids) ", alias);
-            if (o != null)
-                return (int) o;
         }
-        return 0;
-
-
 
 
     }

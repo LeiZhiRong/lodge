@@ -15,7 +15,7 @@ import java.util.Map;
  * 部门信息管理持久层Dao接口类
  * @author 雷智荣
  */
-public interface IDeptInfoDao extends IBaseDAO<DeptInfo,String> {
+public interface IDeptInfoDao extends IBaseDAO<DeptInfo> {
 
     /**
      * 获取最大序号

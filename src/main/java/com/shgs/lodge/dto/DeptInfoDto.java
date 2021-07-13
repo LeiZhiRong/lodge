@@ -180,7 +180,7 @@ public class DeptInfoDto {
     }
 
     public List<DeptInfoDto> listDeptInfoDto(List<DeptInfo> deptInfoList) {
-        List<DeptInfoDto> list = new ArrayList<DeptInfoDto>();
+        List<DeptInfoDto> list = new ArrayList<>();
         if (deptInfoList.size() > 0) {
             for (DeptInfo mast : deptInfoList) {
                 list.add(new DeptInfoDto(mast));

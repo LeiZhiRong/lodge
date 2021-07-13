@@ -4,7 +4,7 @@ import com.shgs.lodge.primary.dao.basic.IBaseDAO;
 import com.shgs.lodge.primary.entity.VoucherInfo;
 import com.shgs.lodge.util.Message;
 
-public interface IVoucherInfoDao extends IBaseDAO<VoucherInfo,String> {
+public interface IVoucherInfoDao extends IBaseDAO<VoucherInfo> {
 
     /**
      * 添加凭证记录
@@ -20,16 +20,15 @@ public interface IVoucherInfoDao extends IBaseDAO<VoucherInfo,String> {
      * @param auditStatus 表单状态
      * @param onAccount 是否挂账
      * @param paymentMethod 结算方式
-     * @return
      */
-    int deleteVoucherInfo(String applyId,String proceedId,String auditStatus,String onAccount,String paymentMethod);
+     void deleteVoucherInfo(String applyId, String proceedId, String auditStatus, String onAccount, String paymentMethod);
 
     /**
      * 按订单号删除凭证记录
      * @param applyId
-     * @return
      */
-    int batchDeleteVoucherInfo(String applyId);
+
+    void batchDeleteVoucherInfo(String applyId);
 
 
 }

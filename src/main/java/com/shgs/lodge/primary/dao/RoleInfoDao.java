@@ -31,17 +31,13 @@ public class RoleInfoDao extends BaseDAO<RoleInfo,String> implements IRoleInfoDa
     @Override
     public boolean delRoleINfo(String id) {
         Object o = super.executeByJpql("delete from RoleInfo r where r.id =?0", id);
-        if (o != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return o != null;
     }
 
     @Override
     public List<RoleInfo> listRoleInfo(String keyword) {
-        Map<String, Object> alias = new HashMap<String, Object>();
-        StringBuffer jpql = new StringBuffer();
+        Map<String, Object> alias = new HashMap<>();
+        StringBuilder jpql = new StringBuilder();
         jpql.append("from RoleInfo r where 1=1 ");
         if (keyword != null && !keyword.isEmpty()) {
             jpql.append(" and r.roleName like:keyword ");
@@ -52,8 +48,8 @@ public class RoleInfoDao extends BaseDAO<RoleInfo,String> implements IRoleInfoDa
 
     @Override
     public List<RoleInfo> listRoleInfo(String keyword, String bookSet) {
-        Map<String, Object> alias = new HashMap<String, Object>();
-        StringBuffer jpql = new StringBuffer();
+        Map<String, Object> alias = new HashMap<>();
+        StringBuilder jpql = new StringBuilder();
         jpql.append("from RoleInfo r where r.bookSet =:bookSet ");
         alias.put("bookSet", bookSet);
         if (keyword != null && !keyword.isEmpty()) {
@@ -75,8 +71,8 @@ public class RoleInfoDao extends BaseDAO<RoleInfo,String> implements IRoleInfoDa
 
     @Override
     public List<RoleInfo> listRoleInfo(List<String> ids) {
-        Map<String, Object> alias = new HashMap<String, Object>();
-        StringBuffer jpql = new StringBuffer();
+        Map<String, Object> alias = new HashMap<>();
+        StringBuilder jpql = new StringBuilder();
         jpql.append("from RoleInfo r where 1=1 ");
         if (ids != null && ids.size() > 0) {
             jpql.append(" and r.id in(:ids) ");
@@ -87,9 +83,9 @@ public class RoleInfoDao extends BaseDAO<RoleInfo,String> implements IRoleInfoDa
 
     @Override
     public List<SelectJson> listRoleInfo(List<String> roleIds, String bookSet, String keyword) {
-        Map<String, Object> alias = new HashMap<String, Object>();
-        StringBuffer jpql = new StringBuffer();
-        List<SelectJson> selectJsonList = new ArrayList<SelectJson>();
+        Map<String, Object> alias = new HashMap<>();
+        StringBuilder jpql = new StringBuilder();
+        List<SelectJson> selectJsonList = new ArrayList<>();
         jpql.append("from RoleInfo r where 1=1 ");
         if (roleIds != null && roleIds.size() > 0) {
             jpql.append(" and r.id not in(:ids) ");

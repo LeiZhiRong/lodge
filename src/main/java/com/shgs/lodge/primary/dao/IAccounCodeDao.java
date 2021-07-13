@@ -5,7 +5,7 @@ import com.shgs.lodge.primary.entity.AccounCode;
 
 import java.util.List;
 
-public interface IAccounCodeDao extends IBaseDAO<AccounCode,String> {
+public interface IAccounCodeDao extends IBaseDAO<AccounCode> {
 
     /**
      * 按ID查询

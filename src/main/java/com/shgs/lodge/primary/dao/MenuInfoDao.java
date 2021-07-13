@@ -17,7 +17,7 @@ public class MenuInfoDao extends BaseDAO<MenuInfo,String> implements IMenuInfoDa
 
     @Override
     public int getMaxOrderByParent(String pid) {
-        Object obj = null;
+        Object obj;
         if (pid != null && !pid.isEmpty()) {
             obj = super.queryObject("select max(m.orders) from MenuInfo m where m.parent.id=?0", pid);
         } else {
@@ -41,11 +41,7 @@ public class MenuInfoDao extends BaseDAO<MenuInfo,String> implements IMenuInfoDa
     @Override
     public boolean deleteMenuInfo(String id) {
         Object o = super.executeByJpql("delete from MenuInfo m where m.id =?0", id);
-        if (o != null) {
-            return true;
-        } else {
-            return false;
-        }
+        return o != null;
     }
 
     @Override
@@ -60,8 +56,8 @@ public class MenuInfoDao extends BaseDAO<MenuInfo,String> implements IMenuInfoDa
 
     @Override
     public List<MenuInfo> listMenuInfoByIds(String ids) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append("from MenuInfo m where 1=1");
         if (ids != null && !ids.isEmpty()) {
             List<String> array = CmsUtils.string2Array(ids, ",");
@@ -73,8 +69,8 @@ public class MenuInfoDao extends BaseDAO<MenuInfo,String> implements IMenuInfoDa
 
     @Override
     public Pager<MenuInfo> findMenuInfo(String pid) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         if (pid != null && !pid.isEmpty()) {
             jpql.append("from MenuInfo m where m.parent.id =:pid ");
             alias.put("pid", pid);
@@ -90,16 +86,13 @@ public class MenuInfoDao extends BaseDAO<MenuInfo,String> implements IMenuInfoDa
         if (ids == null || ids.isEmpty()) {
             return null;
         }
-        List<TreeJson> treeJsonList = new ArrayList<TreeJson>();
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        List<TreeJson> treeJsonList = new ArrayList<>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append("select id as id, name as text,icons as iconCls,pid as pid,pathUrl as arg from menu_info  where 1=1 ");
         if (!isAdmin) {
-            jpql.append(" and status =1 ");
-            if (ids != null && ids.size() > 0) {
-                jpql.append(" and id in(:ids) ");
-                alias.put("ids", ids);
-            }
+            jpql.append(" and status =1  and id in(:ids) ");
+            alias.put("ids", ids);
         }
         jpql.append(" order by pid asc,orders asc ");
         List<Map> menuInfos = super.listToMapByAliasSql(jpql.toString(), alias);
@@ -116,7 +109,7 @@ public class MenuInfoDao extends BaseDAO<MenuInfo,String> implements IMenuInfoDa
                 treeJsonList.add(treeJson);
             }
         }
-        return new TreeJson().getfatherNode(treeJsonList);
+        return TreeJson.getfatherNode(treeJsonList);
     }
 
     @Override
@@ -124,20 +117,18 @@ public class MenuInfoDao extends BaseDAO<MenuInfo,String> implements IMenuInfoDa
         if (ids == null || ids.isEmpty()) {
             return null;
         }
-        List<MenuShortcut> list = new ArrayList<MenuShortcut>();
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        List<MenuShortcut> list = new ArrayList<>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append("select id as id, name as text,icons as iconCls,pid as pid,pathUrl as url from menu_info  where  hompPage='T' and status =1 ");
         if (!isAdmin) {
             jpql.append(" and modelGrant ='T' ");
-            if (ids != null && ids.size() > 0) {
-                jpql.append(" and id in(:ids) ");
-                alias.put("ids", ids);
-            }
+            jpql.append(" and id in(:ids) ");
+            alias.put("ids", ids);
         }
         jpql.append(" order by pid asc,orders asc ");
         List<Map> menuInfos = super.listToMapByAliasSql(jpql.toString(), alias);
-        List<String> _ids = new ArrayList<String>();
+        List<String> _ids = new ArrayList<>();
         if (menuInfos != null && menuInfos.size() > 0) {
             for (Map menuInfo : menuInfos) {
                 MenuShortcut temp = new MenuShortcut();
@@ -171,7 +162,7 @@ public class MenuInfoDao extends BaseDAO<MenuInfo,String> implements IMenuInfoDa
 
             }
         }
-        List<MenuShortcut> menuShortcutList = new ArrayList<MenuShortcut>();
+        List<MenuShortcut> menuShortcutList = new ArrayList<>();
         for (MenuShortcut m : list) {
             if (m.getList() != null && m.getList().size() > 0)
                 menuShortcutList.add(m);
@@ -190,9 +181,9 @@ public class MenuInfoDao extends BaseDAO<MenuInfo,String> implements IMenuInfoDa
     @Override
     public Pager<MenuInfoDto> findMenuInfoDto(String pid, String value) {
         pid = "all".equals(pid) ? null : pid;
-        Pager<MenuInfoDto> menuInfoDtoPager = new Pager<MenuInfoDto>();
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        Pager<MenuInfoDto> menuInfoDtoPager = new Pager<>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append("from MenuInfo m where 1=1 ");
         if (pid != null && !pid.isEmpty()) {
             jpql.append("and  m.parent.id =:pid ");
@@ -226,21 +217,21 @@ public class MenuInfoDao extends BaseDAO<MenuInfo,String> implements IMenuInfoDa
 
     @Override
     public List<TreeJson> getMenuInfo2TreeJson() {
-        List<TreeJson> cts = new ArrayList<TreeJson>();
+        List<TreeJson> cts = new ArrayList<>();
         List<Map> dts = super.listToMapBySql("select m.id as id,m.name as text,m.pid as pid from menu_info m ");
         if (dts != null && dts.size() > 0) {
             for (Map map : dts) {
                 cts.add(new TreeJson((String) map.get("id"), (String) map.get("text"), (String) map.get("pid")));
             }
         }
-        return new TreeJson().getfatherNode(cts);
+        return TreeJson.getfatherNode(cts);
     }
 
     @Override
     public int batchDelete(String ids) {
         if (ids != null && !ids.isEmpty()) {
             List<String> list = CmsUtils.string2Array(ids, ",");
-            Map<String, Object> alias = new HashMap<String, Object>();
+            Map<String, Object> alias = new HashMap<>();
             alias.put("ids", list);
             return (int) super.executeByAliasJpql("delete from MenuInfo where id in(:ids)", alias);
         }
@@ -250,7 +241,7 @@ public class MenuInfoDao extends BaseDAO<MenuInfo,String> implements IMenuInfoDa
     @Override
     public void executeIds(String id, String oldIds, String newIds) {
         List<MenuInfo> list = super.list("from MenuInfo m  where m.ids like ?0", "%" + id + "%");
-        List<MenuInfo> mast = new ArrayList<MenuInfo>();
+        List<MenuInfo> mast = new ArrayList<>();
         if (list != null && list.size() > 0) {
             for (MenuInfo temp : list) {
                 temp.setIds(temp.getIds().replace(oldIds, newIds));
@@ -263,8 +254,8 @@ public class MenuInfoDao extends BaseDAO<MenuInfo,String> implements IMenuInfoDa
 
     @Override
     public List<ListGroup> getMenuInfo2ListGroup(List<String> menuIds, String keyword, List<String> ids, boolean isNot, boolean isAdmin) {
-        StringBuffer jpql = new StringBuffer();
-        Map<String, Object> alias = new HashMap<String, Object>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append("from MenuInfo m where 1=1 ");
         if (keyword != null && !keyword.isEmpty()) {
             jpql.append(" and ( m.name like:keyword or m.parent.name like:keyword )");
@@ -283,7 +274,7 @@ public class MenuInfoDao extends BaseDAO<MenuInfo,String> implements IMenuInfoDa
         }
         jpql.append(" order by m.parent.orders asc,m.orders asc ");
         List<MenuInfo> list = super.listByAlias(jpql.toString(), alias);
-        List<ListGroup> groups = new ArrayList<ListGroup>();
+        List<ListGroup> groups = new ArrayList<>();
         if (list.size() > 0) {
             for (MenuInfo menuInfo : list) {
                 if (menuInfo.getParent() != null)

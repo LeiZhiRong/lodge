@@ -13,7 +13,7 @@ import java.util.List;
  * 科目管理持久接口类
  * @author 雷智荣
  */
-public interface ICashBankDao extends IBaseDAO<CashBank,String> {
+public interface ICashBankDao extends IBaseDAO<CashBank> {
 
     /**
      * 获取最大序号
