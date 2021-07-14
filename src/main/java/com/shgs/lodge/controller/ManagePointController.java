@@ -7,12 +7,13 @@ import com.shgs.lodge.dto.ManagePointDto;
 import com.shgs.lodge.dto.User;
 import com.shgs.lodge.primary.entity.ManagePoint;
 import com.shgs.lodge.service.IManagePointService;
-import com.shgs.lodge.util.CmsUtils;
-import com.shgs.lodge.util.Message;
-import com.shgs.lodge.util.Pager;
-import com.shgs.lodge.util.SystemContext;
+import com.shgs.lodge.util.*;
 import org.apache.commons.lang3.StringUtils;
+import org.jasypt.encryption.StringEncryptor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Scope;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -38,6 +39,8 @@ import java.util.Objects;
 @Scope("prototype")
 @AuthClass("login")
 public class ManagePointController {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private IManagePointService managePointService;
 
@@ -146,6 +149,15 @@ public class ManagePointController {
         } else {
             return new Message(0, "id参数不能为空");
         }
+
+    }
+
+    @AuthMethod(role = "ROLE_MANAGEPOINT")
+    @GetMapping(value = "test")
+    public void test() {
+        String name=new MyJasyptStringEncryptor().encrypt("sa");
+        System.out.println("加密结果：" + name);
+        System.out.println(new MyJasyptStringEncryptor().decrypt(name));
 
     }
 

@@ -108,7 +108,7 @@ public class LoginController {
      */
     @PostMapping(value = "getKey")
     @ResponseBody
-    public RSAPublicDto getKey(HttpServletRequest request, HttpSession session) {
+    public RSAPublicDto getKey(HttpSession session) {
         RSAPublicDto client = new RSAPublicDto();
         HashMap<String, Object> keys;
         try {
@@ -133,7 +133,6 @@ public class LoginController {
      * @param userName
      * @param password
      * @param bookSet
-     * @param model
      * @param session
      * @param request
      * @param response
@@ -142,7 +141,7 @@ public class LoginController {
      */
     @ResponseBody
     @PostMapping(value = "login")
-    public Message login(String userName, String password, String bookSet, String check, Model model, HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception {
+    public Message login(String userName, String password, String bookSet, String check, HttpSession session, HttpServletRequest request, HttpServletResponse response) throws Exception {
         Message msg = userService.loginUser(userName, password, bookSet, request, response);
         if (msg.getCode() == 1) {
             if ("T".equals(check)) {

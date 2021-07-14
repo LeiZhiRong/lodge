@@ -121,12 +121,11 @@ public class AccounInfoController {
      *
      * @param dto
      * @param br
-     * @param session
      * @return
      */
     @AuthMethod(role = "ROLE_BOOKSET")
     @PostMapping("save")
-    public Message save(@Validated AccounInfoDto dto, BindingResult br, HttpSession session) {
+    public Message save(@Validated AccounInfoDto dto, BindingResult br) {
         if (br.hasErrors()) {
             return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }

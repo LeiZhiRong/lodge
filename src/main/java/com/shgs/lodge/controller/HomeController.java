@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPrivateKey;
@@ -43,7 +42,7 @@ public class HomeController {
 
     @AuthMethod
     @GetMapping("index")
-    public ModelAndView index(@RequestHeader("token") String token, Model model, HttpSession session, HttpServletResponse response, HttpServletRequest request) throws JsonProcessingException {
+    public ModelAndView index() throws JsonProcessingException {
         return new ModelAndView("home/index");
     }
 
@@ -66,13 +65,11 @@ public class HomeController {
     /**
      * 用户信息
      *
-     * @param model
-     * @param session
      * @return
      */
     @AuthMethod
     @GetMapping("getUserInfo")
-    public ModelAndView getUserInfo(Model model, HttpSession session) {
+    public ModelAndView getUserInfo() {
         return new ModelAndView("home/userInfo");
     }
 
@@ -85,7 +82,7 @@ public class HomeController {
     @AuthMethod
     @PostMapping(value = "getKey")
     @ResponseBody
-    public RSAPublicDto getKey(HttpServletRequest request, HttpSession session) {
+    public RSAPublicDto getKey(HttpSession session) {
         RSAPublicDto client = new RSAPublicDto();
         HashMap<String, Object> keys;
         try {

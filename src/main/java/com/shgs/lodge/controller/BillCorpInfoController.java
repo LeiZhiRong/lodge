@@ -30,7 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -204,7 +203,7 @@ public class BillCorpInfoController {
 
     @GetMapping("importUpload")
     @AuthMethod(role = "ROLE_USER")
-    public ModelAndView importUpload(Model model) throws JsonProcessingException {
+    public ModelAndView importUpload() throws JsonProcessingException {
         return new ModelAndView("corp/import");
     }
 
@@ -238,12 +237,11 @@ public class BillCorpInfoController {
     /**
      * 下载模板
      *
-     * @param request
      * @param response
      */
     @AuthMethod(role = "ROLE_CORP")
     @RequestMapping("downloadExcel")
-    public void downloadExcel(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void downloadExcel(HttpServletResponse response) throws IOException {
         //需要导出的数据列表。
         List<BillCorpInfoVo> list = new ArrayList<>();
         BillCorpInfoVo vo = new BillCorpInfoVo();
@@ -388,7 +386,7 @@ public class BillCorpInfoController {
 
     @AuthMethod(role = "ROLE_CORP")
     @RequestMapping("exportDown")
-    public void exportDown(String keyword, String corpType, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void exportDown(String keyword, String corpType, HttpServletResponse response) throws IOException {
         //需要导出的数据列表。
         try {
             List<BillCorpInfo> mast = billCorpInfoService.listBillCorpInfoByKeyWord(corpType, keyword);
@@ -429,12 +427,11 @@ public class BillCorpInfoController {
      *
      * @param bankAccount
      * @param br
-     * @param session
      * @return
      */
     @AuthMethod(role = "ROLE_CORP")
     @PostMapping("saveCorpBank")
-    public Message saveCorpBank(@Validated BankAccount bankAccount, BindingResult br, HttpSession session) {
+    public Message saveCorpBank(@Validated BankAccount bankAccount, BindingResult br) {
         if (br.hasErrors()) {
             return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }

@@ -11,7 +11,6 @@ import com.shgs.lodge.util.Message;
 import com.shgs.lodge.util.SelectJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -58,13 +57,12 @@ public class GrantController {
     /**
      * 授权管理首页
      *
-     * @param model
      * @return
      * @throws JsonProcessingException
      */
     @AuthMethod(role = "ROLE_GRANT")
     @GetMapping("index")
-    public ModelAndView index(Model model, HttpSession session) throws JsonProcessingException {
+    public ModelAndView index() throws JsonProcessingException {
         return new ModelAndView("grant/index");
     }
 

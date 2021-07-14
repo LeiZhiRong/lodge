@@ -58,12 +58,11 @@ public class AncillaryProjectsController {
     /**
      * 首页
      *
-     * @param model
      * @return String
      */
     @AuthMethod(role = "ROLE_PROJECTS")
     @GetMapping("index")
-    public ModelAndView index(Model model, HttpSession session) {
+    public ModelAndView index() {
         return new ModelAndView("projects/index");
     }
 
@@ -96,7 +95,7 @@ public class AncillaryProjectsController {
 
     @AuthMethod(role = "ROLE_PROJECTS")
     @PostMapping("save")
-    public Message save(@Validated AncillaryProjectsForm ancillaryProjectsDto, BindingResult br, String pid, String t_id, HttpSession session) {
+    public Message save(@Validated AncillaryProjectsForm ancillaryProjectsDto, BindingResult br, String pid, String t_id) {
         if (br.hasErrors()) {
             return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }

@@ -93,12 +93,11 @@ public class TableInfoController {
      * 更新列排序
      *
      * @param rows
-     * @param session
      * @return
      */
     @AuthMethod
     @PostMapping(value = "saveTableHeader")
-    public Message saveTableHeader(String rows, HttpSession session) {
+    public Message saveTableHeader(String rows) {
         if (rows != null && !rows.isEmpty()) {
             rows = CmsUtils.decryptBASE64(rows);
             JSONArray jsonArray = JSONObject.parseArray(rows);

@@ -5,7 +5,6 @@ import com.shgs.lodge.auth.AuthClass;
 import com.shgs.lodge.auth.AuthMethod;
 import com.shgs.lodge.dto.DeptInfoDto;
 import com.shgs.lodge.dto.TreeJson;
-import com.shgs.lodge.dto.User;
 import com.shgs.lodge.primary.entity.DeptInfo;
 import com.shgs.lodge.service.IDeptInfoService;
 import com.shgs.lodge.util.CmsUtils;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Objects;
 
@@ -49,13 +47,12 @@ public class DeptController {
     /**
      * 部门管理首页
      *
-     * @param model
      * @return String
      * @throws JsonProcessingException
      */
     @AuthMethod(role = "ROLE_DEPT")
     @GetMapping("index")
-    public ModelAndView index(Model model, HttpSession session) throws JsonProcessingException {
+    public ModelAndView index() throws JsonProcessingException {
         return new ModelAndView("dept/index");
     }
 
@@ -95,17 +92,15 @@ public class DeptController {
      * @param deptInfoDto
      * @param br
      * @param pid         上级目录ID
-     * @param session
      * @return Message
      */
     @AuthMethod(role = "ROLE_DEPT")
     @PostMapping("save")
-    public Message save(@Validated DeptInfoDto deptInfoDto, BindingResult br, String pid, HttpSession session) {
+    public Message save(@Validated DeptInfoDto deptInfoDto, BindingResult br, String pid) {
         if (br.hasErrors()) {
             return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }
         try {
-            User user = (User) session.getAttribute("user");
             DeptInfo deptInfo = new DeptInfoDto().getDeptInfo(deptInfoDto);
             String id = deptInfo.getId();
             if (id == null || deptInfo.getId().isEmpty()) {
@@ -138,12 +133,11 @@ public class DeptController {
      */
     @AuthMethod(role = "ROLE_DEPT")
     @RequestMapping("list")
-    public Pager<DeptInfoDto> findMenuInfoDto(String order, String sort, int page, int rows, String pid, String value, HttpSession session) {
+    public Pager<DeptInfoDto> findMenuInfoDto(String order, String sort, int page, int rows, String pid, String value) {
         SystemContext.setPageSize(rows);
         SystemContext.setPageNumber(page);
         SystemContext.setOrder(order);
         SystemContext.setSort(sort);
-        User user = (User) session.getAttribute("user");
         return deptInfoService.findDeptInfoDto(pid, value);
     }
 
@@ -151,12 +145,11 @@ public class DeptController {
      * 更新排序
      *
      * @param ids
-     * @param type
      * @return
      */
     @AuthMethod(role = "ROLE_DEPT")
     @RequestMapping("uporders")
-    public Message uporders(String[] ids, String type) {
+    public Message uporders(String[] ids) {
         try {
             deptInfoService.updateSort(ids);
             return new Message(1, "success");

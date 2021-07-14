@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Objects;
 
@@ -57,13 +56,12 @@ public class CashBankController {
     /**
      * 科目管理首页
      *
-     * @param model
      * @return String
      * @throws JsonProcessingException
      */
     @AuthMethod(role = "ROLE_CASHBANK")
     @GetMapping("index")
-    public ModelAndView index(Model model, HttpSession session) throws JsonProcessingException {
+    public ModelAndView index() throws JsonProcessingException {
         return new ModelAndView("cashbank/index");
     }
 
@@ -105,12 +103,11 @@ public class CashBankController {
      * @param cashBankDto
      * @param br
      * @param pid         上级科目ID
-     * @param session
      * @return Message
      */
     @AuthMethod(role = "ROLE_CASHBANK")
     @PostMapping("save")
-    public Message save(@Validated CashBankDto cashBankDto, BindingResult br, String pid, HttpSession session) {
+    public Message save(@Validated CashBankDto cashBankDto, BindingResult br, String pid) {
         if (br.hasErrors()) {
             return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }

@@ -185,12 +185,11 @@ public class ReveExpeItemController {
      *
      * @param proceedType
      * @param br
-     * @param session
      * @return
      */
     @AuthMethod(role = "ROLE_REVE_EXPE_ITEM")
     @PostMapping("saveProceedType")
-    public Message saveProceedType(@Validated ProceedType proceedType, BindingResult br, String pid, HttpSession session) {
+    public Message saveProceedType(@Validated ProceedType proceedType, BindingResult br, String pid) {
         if (br.hasErrors()) {
             return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }
@@ -302,12 +301,11 @@ public class ReveExpeItemController {
      * 删除收支项目
      *
      * @param id      收支项目ID
-     * @param session
      * @return
      */
     @AuthMethod(role = "ROLE_REVE_EXPE_ITEM")
     @PostMapping("deleteReveExpeItem")
-    public Message deleteReveExpeItem(String id, HttpSession session) {
+    public Message deleteReveExpeItem(String id) {
         return reveExpeItemService.deleteReveExpeItem(id);
     }
 
@@ -341,12 +339,11 @@ public class ReveExpeItemController {
     /**
      * 客商选择器
      *
-     * @param model
      * @return
      */
     @AuthMethod(role = "ROLE_REVE_EXPE_ITEM")
     @GetMapping("getCorpInfo")
-    public ModelAndView getCorpInfo(Model model) {
+    public ModelAndView getCorpInfo() {
         return new ModelAndView("reve/getCorpInfo");
     }
 
@@ -386,12 +383,11 @@ public class ReveExpeItemController {
     /**
      * 部门选择器
      *
-     * @param model
      * @return
      */
     @AuthMethod(role = "ROLE_REVE_EXPE_ITEM")
     @GetMapping("getDeptInfo")
-    public ModelAndView getDeptInfo(Model model) {
+    public ModelAndView getDeptInfo() {
         return new ModelAndView("reve/getDeptInfo");
     }
 

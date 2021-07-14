@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,13 +44,12 @@ public class MenuController {
     /**
      * 模块管理首页跳转
      *
-     * @param model
      * @return
      * @throws JsonProcessingException
      */
     @GetMapping("index")
     @AuthMethod(role = "ROLE_MENU")
-    public ModelAndView list(Model model, HttpSession session) throws JsonProcessingException {
+    public ModelAndView list() throws JsonProcessingException {
         return new ModelAndView("menu/index");
     }
 
@@ -92,12 +90,11 @@ public class MenuController {
      * @param menuInfoDto
      * @param br
      * @param pid
-     * @param session
      * @return Message
      */
     @PostMapping("save")
     @AuthMethod(role = "ROLE_MENU")
-    public Message save(@Validated MenuInfoDto menuInfoDto, BindingResult br, String pid, HttpSession session) {
+    public Message save(@Validated MenuInfoDto menuInfoDto, BindingResult br, String pid) {
         if (br.hasErrors()) {
             return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }
@@ -151,12 +148,11 @@ public class MenuController {
      * 更新拖动排序
      *
      * @param ids
-     * @param type
      * @return
      */
     @RequestMapping("uporders")
     @AuthMethod(role = "ROLE_MENU")
-    public Message uporders(String[] ids, String type) {
+    public Message uporders(String[] ids) {
         try {
             menuService.updateSort(ids);
             return new Message(1, "success");

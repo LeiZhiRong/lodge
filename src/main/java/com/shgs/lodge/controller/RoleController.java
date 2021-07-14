@@ -59,13 +59,12 @@ public class RoleController {
     /**
      * 角色管理首页
      *
-     * @param model
      * @return
      * @throws JsonProcessingException
      */
     @AuthMethod(role = "ROLE_ROLE")
     @GetMapping("index")
-    public ModelAndView index(Model model, HttpSession session) throws JsonProcessingException {
+    public ModelAndView index() throws JsonProcessingException {
         return new ModelAndView("role/index");
     }
 
@@ -221,13 +220,13 @@ public class RoleController {
      */
     @AuthMethod(role = "ROLE_ROLE")
     @RequestMapping("getPermInfo")
-    public List<ListGroup> getPermInfo(String role_id, String keyword, HttpSession session) {
+    public List<ListGroup> getPermInfo(String role_id, String keyword) {
         return permInfoService.listPermInfo2ListGroup(role_id, keyword);
     }
 
     @AuthMethod(role = "ROLE_ROLE")
     @PostMapping("savaPermInfo")
-    public Message savaPermInfo(String menu_ids, String role_id, HttpSession session) {
+    public Message savaPermInfo(String menu_ids, String role_id) {
         return permInfoService.batchSavePermInfo(role_id, menu_ids);
     }
 

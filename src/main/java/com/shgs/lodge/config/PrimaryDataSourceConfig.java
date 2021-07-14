@@ -47,6 +47,7 @@ public class PrimaryDataSourceConfig {
     @Primary
     @Bean(name = "primaryEntityManagerFactory")
     public LocalContainerEntityManagerFactoryBean primaryEntityManagerFactory(EntityManagerFactoryBuilder builder) {
+        DataSourceConfig.logDS(primaryDataSource);
         return builder.dataSource(primaryDataSource)
                 .properties(properties.determineHibernateProperties(jpaProperties.getProperties(), new
                         HibernateSettings()))

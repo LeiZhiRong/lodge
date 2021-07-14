@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.shgs.lodge.auth.AuthClass;
 import com.shgs.lodge.auth.AuthMethod;
 import com.shgs.lodge.dto.HeaderColumns;
-import com.shgs.lodge.dto.User;
 import com.shgs.lodge.primary.entity.StationInfo;
 import com.shgs.lodge.service.IStationInfoService;
 import com.shgs.lodge.service.IUserInfoService;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Objects;
 
@@ -57,8 +55,7 @@ public class StationInfoController {
 
     @AuthMethod(role = "ROLE_STATION")
     @RequestMapping("index")
-    public ModelAndView index(Model model, HttpSession session) throws JsonProcessingException {
-        User user = (User) session.getAttribute("user");
+    public ModelAndView index(Model model) throws JsonProcessingException {
         List<HeaderColumns> columns = CmsUtils.getHeaderColumns("com.shgs.lodge.primary.entity.StationInfo");
         model.addAttribute("columns", columns);
         return new ModelAndView("station/index");
@@ -77,7 +74,7 @@ public class StationInfoController {
      */
     @AuthMethod(role = "ROLE_STATION")
     @RequestMapping("list")
-    public Pager<StationInfo> listStationInfo(String order, String sort, int page, int rows, String value, HttpSession session) {
+    public Pager<StationInfo> listStationInfo(String order, String sort, int page, int rows, String value) {
         SystemContext.setPageSize(rows);
         SystemContext.setPageNumber(page);
         SystemContext.setOrder(order);
@@ -114,12 +111,11 @@ public class StationInfoController {
      *
      * @param info
      * @param br
-     * @param session
      * @return
      */
     @AuthMethod(role = "ROLE_STATION")
     @PostMapping("save")
-    public Message save(@Validated StationInfo info, BindingResult br, HttpSession session) {
+    public Message save(@Validated StationInfo info, BindingResult br) {
         if (br.hasErrors()) {
             return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }

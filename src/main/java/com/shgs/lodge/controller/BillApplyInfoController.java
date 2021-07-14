@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -261,7 +260,6 @@ public class BillApplyInfoController {
     @GetMapping("dialog")
     public ModelAndView dialog(String id, String cation, Model model, HttpSession session) throws JsonProcessingException {
         User user = (User) session.getAttribute("user");
-        String orderNum = billApplyInfoService.getOrderCode(user.getBookSet(), "TG", "DEPTBH", "CORPBH");
         BillApplyInfoDto billApplyInfoDto = new BillApplyInfoDto();
         List<SelectJson> billType = customService.listCustomParame("FPTYPE", null, true);
         if (id != null && !id.isEmpty()) {
@@ -472,26 +470,24 @@ public class BillApplyInfoController {
     /**
      * 模板导入页
      *
-     * @param model
      * @return
      * @throws JsonProcessingException
      */
     @GetMapping("importUpload")
     @AuthMethod(role = "ROLE_APPLY")
-    public ModelAndView importUpload(Model model) throws JsonProcessingException {
+    public ModelAndView importUpload() throws JsonProcessingException {
         return new ModelAndView("apply/import");
     }
 
     /**
      * 模板下载
      *
-     * @param request
      * @param response
      * @throws IOException
      */
     @AuthMethod(role = "ROLE_APPLY")
     @RequestMapping("downloadExcel")
-    public void downloadExcel(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+    public void downloadExcel(HttpServletResponse response) throws IOException {
         //需要导出的数据列表。
         List<BillApplyInfoImportVo> list = new ArrayList<>();
         BillApplyInfoImportVo vo = new BillApplyInfoImportVo();
@@ -537,13 +533,12 @@ public class BillApplyInfoController {
      * @param starDate
      * @param endDate
      * @param ztbz
-     * @param request
      * @param response
      * @throws IOException
      */
     @AuthMethod(role = "ROLE_APPLY")
     @RequestMapping("exportDown")
-    public void exportDown(String field, String value, String starDate, String endDate, String ztbz, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+    public void exportDown(String field, String value, String starDate, String endDate, String ztbz, HttpServletResponse response, HttpSession session) throws IOException {
         //需要导出的数据列表。
         if (starDate != null && !starDate.isEmpty())
             starDate = starDate + " 00:00:00";
@@ -575,8 +570,7 @@ public class BillApplyInfoController {
         //管理部门
         List<String> manageDept = CmsUtils.string2Array(user.getManageDept(), ";");
         //结算部门
-        List<String> balanceDept = CmsUtils.string2Array(user.getBalanceDept(), ";");
-        if (rows != null && !rows.isEmpty()) {
+        if (StringUtils.isNotEmpty(rows)) {
             rows = CmsUtils.decryptBASE64(rows);
             JSONArray jsonArray = JSONObject.parseArray(rows);
             List<BillApplyInfoImportVo> dtos = JSONArray.parseArray(jsonArray.toString(), BillApplyInfoImportVo.class);

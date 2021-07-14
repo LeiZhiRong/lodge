@@ -48,12 +48,11 @@ public class PaymentMethodController {
     /**
      * 首页
      *
-     * @param model
      * @return String
      */
     @AuthMethod(role = "ROLE_PAYMENT")
     @GetMapping("index")
-    public ModelAndView index(Model model, HttpSession session) {
+    public ModelAndView index() {
         return new ModelAndView("payment/index");
     }
 
@@ -83,7 +82,7 @@ public class PaymentMethodController {
 
     @AuthMethod(role = "ROLE_PAYMENT")
     @PostMapping("save")
-    public Message save(@Validated PaymentMethodDto paymentMethodDto, BindingResult br, String pid, HttpSession session) {
+    public Message save(@Validated PaymentMethodDto paymentMethodDto, BindingResult br, String pid) {
         if (br.hasErrors()) {
             return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }

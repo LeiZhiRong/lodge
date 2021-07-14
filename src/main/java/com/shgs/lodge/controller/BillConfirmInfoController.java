@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -288,26 +287,24 @@ public class BillConfirmInfoController {
     /**
      * 模板导入页
      *
-     * @param model
      * @return
      * @throws JsonProcessingException
      */
     @GetMapping("importUpload")
     @AuthMethod(role = "ROLE_CONFIRM")
-    public ModelAndView importUpload(Model model) throws JsonProcessingException {
+    public ModelAndView importUpload() throws JsonProcessingException {
         return new ModelAndView("confirm/import");
     }
 
     /**
      * 模板下载
      *
-     * @param request
      * @param response
      * @throws IOException
      */
     @AuthMethod(role = "ROLE_CONFIRM")
     @RequestMapping("downloadExcel")
-    public void downloadExcel(HttpServletRequest request, HttpServletResponse response, HttpSession session) throws IOException {
+    public void downloadExcel(HttpServletResponse response, HttpSession session) throws IOException {
         //需要导出的数据列表。
         User user = (User) session.getAttribute("user");
         List<BillConfirmInfoVo> list = new ArrayList<>();
@@ -336,14 +333,13 @@ public class BillConfirmInfoController {
      * @param applyDeptBH
      * @param saleCorpID
      * @param buyerCorpID
-     * @param request
      * @param response
      * @param session
      * @throws IOException
      */
     @AuthMethod(role = "ROLE_CONFIRM")
     @RequestMapping("exportDown")
-    public void exportDown(String field, String value, String starDate, String endDate, String applyDeptBH, String saleCorpID, String buyerCorpID, HttpServletRequest request, HttpServletResponse response, String ztbz, HttpSession session) throws IOException {
+    public void exportDown(String field, String value, String starDate, String endDate, String applyDeptBH, String saleCorpID, String buyerCorpID, HttpServletResponse response, String ztbz, HttpSession session) throws IOException {
         if ("billMoney".equals(field)) {
             if (!CmsUtils.isNumeric(value))
                 throw new JsonException(500, "开票金额格式不合法");

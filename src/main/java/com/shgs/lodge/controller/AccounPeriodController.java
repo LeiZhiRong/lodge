@@ -5,7 +5,6 @@ import com.shgs.lodge.auth.AuthClass;
 import com.shgs.lodge.auth.AuthMethod;
 import com.shgs.lodge.dto.AccounPeriodDto;
 import com.shgs.lodge.dto.HeaderColumns;
-import com.shgs.lodge.dto.User;
 import com.shgs.lodge.primary.entity.AccounPeriod;
 import com.shgs.lodge.service.IAccounPeriodService;
 import com.shgs.lodge.util.CmsUtils;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Objects;
 
@@ -51,14 +49,12 @@ public class AccounPeriodController {
      * 首页
      *
      * @param model
-     * @param session
      * @return
      * @throws JsonProcessingException
      */
     @AuthMethod(role = "ROLE_ACCOUN_PERIOD")
     @RequestMapping("index")
-    public ModelAndView index(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("user");
+    public ModelAndView index(Model model) {
         List<HeaderColumns> columns = CmsUtils.getHeaderColumns("com.shgs.lodge.dto.AccounPeriodDto");
         model.addAttribute("columns", columns);
         return new ModelAndView("period/index");
@@ -71,12 +67,11 @@ public class AccounPeriodController {
      * @param sort
      * @param page
      * @param rows
-     * @param session
      * @return
      */
     @AuthMethod(role = "ROLE_ACCOUN_PERIOD")
     @RequestMapping("list")
-    public Pager<AccounPeriodDto> list(String order, String sort, int page, int rows, HttpSession session) {
+    public Pager<AccounPeriodDto> list(String order, String sort, int page, int rows) {
         SystemContext.setPageSize(rows);
         SystemContext.setPageNumber(page);
         SystemContext.setOrder(order);
@@ -90,13 +85,12 @@ public class AccounPeriodController {
      *
      * @param id
      * @param model
-     * @param session
      * @return
      * @throws JsonProcessingException
      */
     @AuthMethod(role = "ROLE_ACCOUN_PERIOD")
     @GetMapping("dialog")
-    public ModelAndView dialog(String id, Model model, HttpSession session) throws JsonProcessingException {
+    public ModelAndView dialog(String id, Model model) throws JsonProcessingException {
         AccounPeriodDto dto = new AccounPeriodDto();
         if (id != null && !id.isEmpty()) {
             AccounPeriod accounPeriod = accounPeriodService.load(id);
@@ -114,12 +108,11 @@ public class AccounPeriodController {
      *
      * @param accounPeriodDto
      * @param br
-     * @param session
      * @return
      */
     @AuthMethod(role = "ROLE_ACCOUN_PERIOD")
     @PostMapping("saveAccounPeriodDto")
-    public Message saveAccounPeriodDto(@Validated AccounPeriodDto accounPeriodDto, BindingResult br, HttpSession session) {
+    public Message saveAccounPeriodDto(@Validated AccounPeriodDto accounPeriodDto, BindingResult br) {
         if (br.hasErrors()) {
             return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
         }
