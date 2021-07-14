@@ -281,6 +281,7 @@ public class BillApplyInfoController {
             billApplyInfoDto.setJxsdaName(null);
         }
         model.addAttribute("billApplyInfoDto", billApplyInfoDto);
+
         model.addAttribute("billType", billType);
         model.addAttribute("applyDept", deptInfoService.listUserByDeptIDS(user.getManageDept()));
         model.addAttribute("setllDept", deptInfoService.listUserByDeptIDS(user.getBalanceDept()));
