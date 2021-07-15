@@ -51,5 +51,4 @@ public class DataSourceConfig {
                 + "ms\n\t连接最长生命周期：" + hds.getMaxLifetime() + "ms\n";
         logger.info(info);
     }
-
 }

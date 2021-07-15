@@ -11,7 +11,7 @@ public class UserInfoVo {
     /**
      * 编号
      */
-    @Excel(name = "用户编号",orderNum = "0",width = 15)
+    @Excel(name = "用户编号", width = 15)
     private String bh;
 
     /**
