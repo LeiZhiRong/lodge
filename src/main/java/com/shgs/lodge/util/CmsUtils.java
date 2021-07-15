@@ -11,14 +11,12 @@ import javax.servlet.http.HttpSession;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.charset.StandardCharsets;
 import java.security.interfaces.RSAPrivateKey;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,13 +36,13 @@ public class CmsUtils {
      * @return
      */
     public static List<HeaderColumns> getHeaderColumns(String clas) {
-        List<HeaderColumns> list = new ArrayList<HeaderColumns>();
+        List<HeaderColumns> list = new ArrayList<>();
         try {
             Class<?> cls = Class.forName(clas);
             Field[] fields = cls.getDeclaredFields();
             for (Field field : fields) {
                 if (field.isAnnotationPresent(HeaderEnum.class)) {
-                    HeaderEnum file = (HeaderEnum) field.getAnnotation(HeaderEnum.class);
+                    HeaderEnum file = field.getAnnotation(HeaderEnum.class);
                     list.add(new HeaderColumns(file.field(), file.title(), file.width(), file.sortable(), file.hidden(), file.status()));
                 }
             }
@@ -61,9 +59,9 @@ public class CmsUtils {
      */
     public static List<SelectJson> getRoleType() {
         Map<String, String> type = EnumUtils.enumProp2NameMap(RoleType.class, "name");
-        List<SelectJson> select = new ArrayList<SelectJson>();
+        List<SelectJson> select = new ArrayList<>();
         select.add(new SelectJson(null, "请选择..."));
-        for (Map.Entry<String, String> entry : type.entrySet()) {
+        for (Map.Entry<String, String> entry : Objects.requireNonNull(type).entrySet()) {
             select.add(new SelectJson(entry.getKey(), entry.getValue()));
         }
         return select;
@@ -91,7 +89,7 @@ public class CmsUtils {
      * @return
      */
     public static String[] list2String(List<String> list) {
-        return list.toArray(new String[list.size()]);
+        return list.toArray(new String[0]);
     }
 
     /**
@@ -104,12 +102,10 @@ public class CmsUtils {
     public static List<String> string2Array(String s, String regex) {
         if (regex == null || regex.isEmpty())
             regex = ",";
-        List<String> array = new ArrayList<String>();
+        List<String> array = new ArrayList<>();
         if (s != null && !s.isEmpty()) {
             String[] str = s.split(regex);
-            for (int i = 0; i < str.length; i++) {
-                array.add(str[i]);
-            }
+            Collections.addAll(array, str);
         }
         return array;
     }
@@ -141,8 +137,6 @@ public class CmsUtils {
             return true;
         if (str1 == null || str2 == null)
             return false;
-        if (str1 == null)
-            str1 = "";
         return str1.equals(str2);
     }
 
@@ -151,9 +145,8 @@ public class CmsUtils {
      *
      * @param request
      * @return
-     * @throws Exception
      */
-    public static String getIpAddr(HttpServletRequest request) throws Exception {
+    public static String getIpAddr(HttpServletRequest request) {
         String ip = request.getHeader("X-Real-IP");
         if (!StringUtils.isBlank(ip) && !"unknown".equalsIgnoreCase(ip)) {
             return ip;
@@ -182,8 +175,7 @@ public class CmsUtils {
         NumberFormat formatter = NumberFormat.getNumberInstance();
         formatter.setMinimumIntegerDigits(digit);
         formatter.setGroupingUsed(false);
-        String s = formatter.format(number);
-        return s;
+        return formatter.format(number);
 
     }
 
@@ -278,8 +270,7 @@ public class CmsUtils {
     public static String getNowDate() {
         Date date = new Date();
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String time = format.format(date);
-        return time;
+        return format.format(date);
     }
 
     /**
@@ -289,8 +280,7 @@ public class CmsUtils {
      */
     public static String getTimeMillis() {
         Date d = new Date();
-        String s = String.valueOf(d.getTime());
-        return s;
+        return String.valueOf(d.getTime());
     }
 
 
@@ -309,7 +299,7 @@ public class CmsUtils {
             format = "yyyy-MM-dd HH:mm:ss";
         }
         SimpleDateFormat sdf = new SimpleDateFormat(format);
-        return sdf.format(new Date(Long.valueOf(seconds + "000")));
+        return sdf.format(new Date(Long.parseLong(seconds + "000")));
     }
 
     /**
@@ -346,8 +336,8 @@ public class CmsUtils {
         String value = "";
         try {
             byte[] key = decoder.decodeBuffer(outputStr);
-            value = new String(key, "UTF-8");
-        } catch (Exception e) {
+            value = new String(key, StandardCharsets.UTF_8);
+        } catch (Exception ignored) {
         }
         return value;
     }
@@ -374,7 +364,7 @@ public class CmsUtils {
      * @return
      */
     public static String getAccounCode(AccounCode accounCode, String deptBh, String corpBh, Integer orderNum) {
-        List<String> str = new ArrayList<String>();
+        List<String> str = new ArrayList<>();
         if (accounCode != null) {
             if (accounCode.getPrefixOne() != null) {
                 CustomParame parame = accounCode.getPrefixOne();
@@ -447,15 +437,12 @@ public class CmsUtils {
      * @return
      */
     public static boolean isNumeric(String str) {
-        Pattern pattern = Pattern.compile("[0-9]+[.]{0,1}[0-9]*[dD]{0,1}");
+        Pattern pattern = Pattern.compile("[0-9]+[.]?[0-9]*[dD]?");
         Matcher isNum = pattern.matcher(str);
-        if (!isNum.matches()) {
-            return false;
-        }
-        return true;
+        return isNum.matches();
     }
 
-    public static String decryptPassword(String pwd, HttpSession session) throws Exception {
+    public static String decryptPassword(String pwd, HttpSession session) {
         try {
             RSAPrivateKey privateKey = (RSAPrivateKey) session.getAttribute("loginKey");
             if (pwd != null && !pwd.isEmpty()) {

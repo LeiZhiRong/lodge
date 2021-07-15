@@ -74,6 +74,15 @@ public interface IManagePointService {
     ManagePoint queryManagePoint(String bookSet,String keyword);
 
 
+    /**
+     * 检测管理处是否存在
+     * @param bookSet 账套
+     * @param name 管理处名称
+     * @return
+     */
+    String listNotInManagePoint(String bookSet,String name);
+
+
 
 
 }

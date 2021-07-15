@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class Pager<T> {
 
-  private List<T> footer = new ArrayList<T>();
+  private List<T> footer = new ArrayList<>();
   /**
    * 分页的起始页
    */
@@ -27,7 +27,7 @@ public class Pager<T> {
   /**
    * 分页的数据
    */
-  private List<T> rows = new ArrayList<T>();
+  private List<T> rows = new ArrayList<>();
   /**
    * 总记录数
    */

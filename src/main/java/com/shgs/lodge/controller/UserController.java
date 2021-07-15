@@ -368,12 +368,12 @@ public class UserController {
         //需要导出的数据列表。
         List<UserInfoVo> list = new ArrayList<>();
         UserInfoVo vo = new UserInfoVo();
-        vo.setBh("职工工号或手机号码（必填项）");
-        vo.setName("用户名（必填项）");
-        vo.setPassword("不填默认为123456");
+        vo.setBh("（必填项）");
+        vo.setName("（必填项）");
+        vo.setPassword("默认为123456");
         vo.setGlBh("部门编号,多个部门编号以分号相隔（必填项）");
-        vo.setJsBh("不填默认为管理部门");
-        vo.setStatus("T或F（T=正常,F=禁用,注意是大写），默认为F");
+        vo.setJsBh("");
+        vo.setStatus("T或F（T=正常,F=禁用）");
         list.add(vo);
         ExcelUtils.exportExcel(list, null, "用户基本信息", UserInfoVo.class, "用户基本信息导入模板", response);
     }
@@ -386,8 +386,9 @@ public class UserController {
      */
     @AuthMethod(role = "ROLE_USER")
     @PostMapping(value = "batchsaveExcel")
-    public Message batchsaveExcel(String rows) {
+    public Message batchsaveExcel(String rows,HttpSession session) {
         if (rows != null && !rows.isEmpty()) {
+            User user = (User) session.getAttribute("user");
             rows = CmsUtils.decryptBASE64(rows);
             JSONArray jsonArray = JSONObject.parseArray(rows);
             List<UserInfoVo> dtos = JSONArray.parseArray(jsonArray.toString(), UserInfoVo.class);
@@ -421,14 +422,12 @@ public class UserController {
                             err.add("岗位【" + mast.getStation() + "】不存在");
                         }
                     }
-                    //检测结算部门
+                    //检测管理处
                     if (StringUtils.isNotEmpty(mast.getJsBh())) {
-                        String str = deptInfoService.listNotInDeptName(mast.getJsBh());
+                        String str = managePointService.listNotInManagePoint(user.getBookSet(),mast.getJsBh());
                         if (str != null && !str.isEmpty()) {
-                            err.add("结算部门【" + str + "】不存在");
+                            err.add("管理处【" + str + "】不存在");
                         }
-                    } else {
-                        mast.setJsBh(mast.getGlBh());
                     }
                     if (err.size() > 0) {
                         mast.setRemarks(String.join("；", err));

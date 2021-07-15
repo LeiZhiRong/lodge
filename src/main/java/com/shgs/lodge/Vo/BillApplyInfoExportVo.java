@@ -12,7 +12,7 @@ public class BillApplyInfoExportVo {
     /**
      * 申请单编号
      */
-    @Excel(name = "单据编号", orderNum = "0", width = 20)
+    @Excel(name = "单据编号", width = 20)
     private String applyBH;
 
     /**

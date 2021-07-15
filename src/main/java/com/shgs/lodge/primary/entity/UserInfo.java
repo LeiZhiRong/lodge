@@ -23,14 +23,14 @@ public class UserInfo {
     /**
      * 用户姓名
      */
-    @HeaderEnum(field = "userName", title = "用户名称", width = 150, sortable = true, hidden = false)
+    @HeaderEnum(field = "userName", title = "用户名称")
     @NotEmpty(message = "用户名称不能为空")
     private String userName;
 
     /**
      * 登录编号
      */
-    @HeaderEnum(field = "loginAccount", title = "用户编号", width = 150, sortable = true, hidden = false)
+    @HeaderEnum(field = "loginAccount", title = "用户编号")
     @NotEmpty(message = "用户编号不能为空")
     private String loginAccount;
 
@@ -41,29 +41,27 @@ public class UserInfo {
     private String loginPassword;
 
     /**
+     * 岗位
+     */
+    @HeaderEnum(field = "station", title = "岗位", width = 120,  hidden = true)
+    private String station;
+
+    /**
      * 管理部门
      */
-    @HeaderEnum(field = "deptID", title = "管理部门", width = 200, sortable = true, hidden = true)
+    @HeaderEnum(field = "deptID", title = "管理部门", width = 200,  hidden = true)
     @NotEmpty(message = "请选择管理部门")
     private String deptID;
 
     /**
      * 结算部门
      */
-    @HeaderEnum(field = "settID", title = "结算部门", width = 200, sortable = true, hidden = true)
-    @NotEmpty(message = "请选择结算部门")
     private String settID;
-
-    /**
-     * 职务
-     */
-    @HeaderEnum(field = "station", title = "岗位", width = 120, sortable = true, hidden = false)
-    private String station;
 
     /**
      * 注册时间
      */
-    @HeaderEnum(field = "registTime", title = "注册时间", width = 150, sortable = true, hidden = false)
+    @HeaderEnum(field = "registTime", title = "注册时间", width = 120)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private Timestamp registTime;
 
@@ -82,22 +80,22 @@ public class UserInfo {
     /**
      * 最后登录时间
      */
-    @HeaderEnum(field = "loginTime", title = "最后登录时间", width = 150, sortable = true, hidden = false)
+    @HeaderEnum(field = "loginTime", title = "最后登录时间", width = 120)
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm")
     private Timestamp loginTime;
 
     /**
      * 登录IP地址
      */
-    @HeaderEnum(field = "loginIP", title = "最后登录IP", width = 150, sortable = true, hidden = false)
+    @HeaderEnum(field = "loginIP", title = "最后登录IP", width = 150)
     private String loginIP;
 
 
     @JsonProperty("status")
-    @HeaderEnum(field = "status", title = "状态", width = 80, sortable = true, hidden = false)
+    @HeaderEnum(field = "status", title = "状态", width = 60)
     private String formatter;
 
-    @HeaderEnum(field = "handle", title = "关联操作", width = 150, sortable = false, hidden = false)
+    @HeaderEnum(field = "handle", title = "关联操作", width = 150, sortable = false)
     private String handle;
 
 

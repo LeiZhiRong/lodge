@@ -13,7 +13,7 @@ public class BillConfirmInfoVo {
     /**
      * 申请部门
      */
-    @Excel(name = "申请部门", orderNum = "0", width = 10)
+    @Excel(name = "申请部门", width = 10)
     private String applyDeptBH = "";
 
     /**
@@ -278,7 +278,7 @@ public class BillConfirmInfoVo {
 
 
     public List<BillConfirmInfoVo> listBillConfirmInfoVo(List<BillApplyInfo> info) {
-        List<BillConfirmInfoVo> dto = new ArrayList<BillConfirmInfoVo>();
+        List<BillConfirmInfoVo> dto = new ArrayList<>();
         if (info.size() > 0) {
             for (BillApplyInfo mast : info) {
                 dto.add(new BillConfirmInfoVo(mast));

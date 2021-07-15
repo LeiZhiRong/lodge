@@ -36,6 +36,11 @@ public class ManagePointService implements IManagePointService {
     @Transactional(value = "primaryTransactionManager")
     public Message addManagePoint(ManagePoint managePoint) {
         Message msg = new Message(0, "新增失败");
+        ManagePoint m= (ManagePoint) managePointDao.queryObject("from ManagePoint m where ( m.bh =?0 or m.name =?1 ) and  m.bookSet =?2 ",new Object[]{managePoint.getBh(),managePoint.getName(),managePoint.getBookSet()});
+        if (m != null) {
+            msg.setMessage("编号或名称已经存在，请修改后重试！");
+            return msg;
+        }
         if (managePointDao.add(managePoint) != null) {
             msg.setCode(1);
             msg.setMessage("新增成功");
@@ -47,6 +52,11 @@ public class ManagePointService implements IManagePointService {
     @Transactional(value = "primaryTransactionManager")
     public Message updateManagePoint(ManagePoint managePoint) {
         Message msg = new Message(0, "修改失败");
+        ManagePoint m= (ManagePoint) managePointDao.queryObject("from ManagePoint m where ( m.bh =?0 or m.name =?1 ) and  m.bookSet =?2 and m.id !=?3 ",new Object[]{managePoint.getBh(),managePoint.getName(),managePoint.getBookSet(),managePoint.getId()});
+        if (m != null) {
+            msg.setMessage("编号或名称已经存在，请修改后重试！");
+            return msg;
+        }
         if (managePointDao.update(managePoint)) {
             msg.setCode(1);
             msg.setMessage("修改成功");
@@ -121,5 +131,20 @@ public class ManagePointService implements IManagePointService {
         }
         jpql.append(" order by m.rVTime asc ");
         return (ManagePoint) managePointDao.queryObjectByAlias(jpql.toString(), alias);
+    }
+
+    @Override
+    @Transactional(value = "primaryTransactionManager", readOnly = true)
+    public String listNotInManagePoint(String bookSet, String name) {
+        List<Map> list = managePointDao.listNotInManagePoint(bookSet,name);
+        if (list != null && list.size() > 0) {
+            List<String> strings = new ArrayList<>();
+            for (Map map : list) {
+                strings.add((String) map.get("name"));
+            }
+            return String.join(",", strings);
+        } else {
+            return null;
+        }
     }
 }

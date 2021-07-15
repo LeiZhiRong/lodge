@@ -1,5 +1,6 @@
 package com.shgs.lodge.config;
 
+import com.shgs.lodge.exception.exception.SqlException;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateProperties;
 import org.springframework.boot.autoconfigure.orm.jpa.HibernateSettings;
 import org.springframework.boot.autoconfigure.orm.jpa.JpaProperties;
@@ -46,7 +47,7 @@ public class PrimaryDataSourceConfig {
 
     @Primary
     @Bean(name = "primaryEntityManagerFactory")
-    public LocalContainerEntityManagerFactoryBean primaryEntityManagerFactory(EntityManagerFactoryBuilder builder) {
+    public LocalContainerEntityManagerFactoryBean primaryEntityManagerFactory(EntityManagerFactoryBuilder builder) throws SqlException {
         DataSourceConfig.logDS(primaryDataSource);
         return builder.dataSource(primaryDataSource)
                 .properties(properties.determineHibernateProperties(jpaProperties.getProperties(), new

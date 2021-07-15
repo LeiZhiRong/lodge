@@ -46,7 +46,7 @@ function altDialog(id) {
         height: 240,
         width: 400,
         top:'10%',
-        left:'30%',
+        left:'35%',
         inline:true,
         border:'thin',
         cls:'c6',

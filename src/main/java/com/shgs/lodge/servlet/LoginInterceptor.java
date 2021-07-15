@@ -5,7 +5,6 @@ import com.shgs.lodge.exception.exception.JsonException;
 import com.shgs.lodge.exception.exception.PageException;
 import com.shgs.lodge.service.IUserInfoService;
 import groovy.util.logging.Slf4j;
-import org.apache.tomcat.util.http.MimeHeaders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * mvc拦截器
@@ -35,9 +31,12 @@ public class LoginInterceptor implements HandlerInterceptor {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginInterceptor.class);
 
-    @Autowired
-    private IUserInfoService userInfoService;
 
+    @Autowired
+    public void setUserInfoService(IUserInfoService userInfoService) {
+    }
+
+    @SuppressWarnings("unchecked")
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
@@ -54,13 +53,7 @@ public class LoginInterceptor implements HandlerInterceptor {
             return true;
         }
         // 如果不是映射到方法直接通过
-        if (!(handler instanceof HandlerMethod)) {
-            return true;
-        }
-        boolean ajax = false;
-        if (request.getHeader("x-requested-with") != null && request.getHeader("x-requested-with").equalsIgnoreCase("XMLHttpRequest")) {
-            ajax = true;
-        }
+        boolean ajax = request.getHeader("x-requested-with") != null && request.getHeader("x-requested-with").equalsIgnoreCase("XMLHttpRequest");
         User user = (User) session.getAttribute("user");
         if (user == null) {
             if (ajax) {
@@ -82,63 +75,22 @@ public class LoginInterceptor implements HandlerInterceptor {
             }
         }
 
-        Map<String, String> map = new HashMap<>();
-        map.put("token", "1111111");
-        addHeader(request, map);
         return HandlerInterceptor.super.preHandle(request, response, handler);
 
     }
 
     // 在目标方法执行后执行，但在请求返回前，我们仍然可以对 ModelAndView进行修改
     @Override
-    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView)
-            throws Exception {
+    public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) {
     }
 
     // 在请求已经返回之后执行
     @Override
     public void afterCompletion(
-            HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-            throws Exception {
+            HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
 
 
     }
-
-    /**
-     * 添加Header
-     *
-     * @param request
-     * @param headerMap
-     */
-    private void addHeader(HttpServletRequest request, Map<String, String> headerMap) {
-        if (headerMap == null || headerMap.isEmpty()) {
-            return;
-        }
-        Class<? extends HttpServletRequest> c = request.getClass();
-        try {
-            Field requestField = c.getDeclaredField("request");
-            requestField.setAccessible(true);
-
-            Object o = requestField.get(request);
-            Field coyoteRequest = o.getClass().getDeclaredField("coyoteRequest");
-            coyoteRequest.setAccessible(true);
-
-            Object o2 = coyoteRequest.get(o);
-            Field headers = o2.getClass().getDeclaredField("headers");
-            headers.setAccessible(true);
-
-            MimeHeaders mimeHeaders = (MimeHeaders) headers.get(o2);
-            for (Map.Entry<String, String> entry : headerMap.entrySet()) {
-                mimeHeaders.removeHeader(entry.getKey());
-                mimeHeaders.addValue(entry.getKey()).setString(entry.getValue());
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
-
 
 }
 

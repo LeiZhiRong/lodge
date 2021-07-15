@@ -12,7 +12,7 @@ public class BillCorpInfoVo {
     /**
      * 客商类型
      */
-    @Excel(name = "客商类型", orderNum = "0", width = 10)
+    @Excel(name = "客商类型", width = 10)
     private String corpType;
 
 
@@ -208,7 +208,7 @@ public class BillCorpInfoVo {
     }
 
     public List<BillCorpInfoVo> listBillCorpInfoVo(List<BillCorpInfo> info) {
-        List<BillCorpInfoVo> dto = new ArrayList<BillCorpInfoVo>();
+        List<BillCorpInfoVo> dto = new ArrayList<>();
         if (info.size() > 0) {
             for (BillCorpInfo mast : info) {
                 dto.add(new BillCorpInfoVo(mast));

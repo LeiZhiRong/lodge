@@ -41,7 +41,7 @@ public class UserInfoVo {
     /**
      * 结算部门
      */
-    @Excel(name = "结算部门",orderNum = "5",width = 30)
+    @Excel(name = "管理处",orderNum = "5",width = 30)
     private String jsBh;
 
     /**

@@ -19,7 +19,7 @@ public class EnumUtils {
   public static List<Integer> enum2Ordinal(Class<? extends Enum> clz) {
     if (!clz.isEnum()) return null;
     Enum[] enums = clz.getEnumConstants();
-    List<Integer> rels = new ArrayList<Integer>();
+    List<Integer> rels = new ArrayList<>();
     for (Enum en : enums) {
       rels.add(en.ordinal());
     }
@@ -35,7 +35,7 @@ public class EnumUtils {
   public static List<String> enum2Name(Class<? extends Enum> clz) {
     if (!clz.isEnum()) return null;
     Enum[] enums = clz.getEnumConstants();
-    List<String> rels = new ArrayList<String>();
+    List<String> rels = new ArrayList<>();
     for (Enum en : enums) {
       rels.add(en.name());
     }
@@ -51,7 +51,7 @@ public class EnumUtils {
   public static Map<Integer, String> enum2BasicMap(Class<? extends Enum> clz) {
     if (!clz.isEnum()) return null;
     Enum[] enums = clz.getEnumConstants();
-    Map<Integer, String> rels = new HashMap<Integer, String>();
+    Map<Integer, String> rels = new HashMap<>();
     for (Enum en : enums) {
       rels.put(en.ordinal(), en.name());
     }
@@ -65,20 +65,16 @@ public class EnumUtils {
    * @param propName 某个属性值
    * @return
    */
-  public static List<String> enumProp2List(Class<? extends Enum> clz, String propName) {
+  public static List<String> enumProp2List(Class<? extends Enum> clz, String propName) throws NoSuchMethodException {
     if (!clz.isEnum()) return null;
     try {
       Enum[] enums = clz.getEnumConstants();
-      List<String> rels = new ArrayList<String>();
+      List<String> rels = new ArrayList<>();
       for (Enum en : enums) {
         rels.add((String) PropertyUtils.getProperty(en, propName));
       }
       return rels;
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      e.printStackTrace();
-    } catch (NoSuchMethodException e) {
+    } catch (IllegalAccessException | InvocationTargetException e) {
       e.printStackTrace();
     }
     return null;
@@ -95,16 +91,12 @@ public class EnumUtils {
     if (!clz.isEnum()) return null;
     try {
       Enum[] enums = clz.getEnumConstants();
-      Map<Integer, String> rels = new HashMap<Integer, String>();
+      Map<Integer, String> rels = new HashMap<>();
       for (Enum en : enums) {
         rels.put(en.ordinal(), (String) PropertyUtils.getProperty(en, propName));
       }
       return rels;
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      e.printStackTrace();
-    } catch (NoSuchMethodException e) {
+    } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
       e.printStackTrace();
     }
     return null;
@@ -121,16 +113,12 @@ public class EnumUtils {
     if (!clz.isEnum()) return null;
     try {
       Enum[] enums = clz.getEnumConstants();
-      Map<String, String> rels = new HashMap<String, String>();
+      Map<String, String> rels = new HashMap<>();
       for (Enum en : enums) {
         rels.put(en.name(), (String) PropertyUtils.getProperty(en, propName));
       }
       return rels;
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      e.printStackTrace();
-    } catch (NoSuchMethodException e) {
+    } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
       e.printStackTrace();
     }
     return null;
@@ -148,16 +136,12 @@ public class EnumUtils {
     if (!clz.isEnum()) return null;
     try {
       Enum[] enums = clz.getEnumConstants();
-      Map<String, String> rels = new HashMap<String, String>();
+      Map<String, String> rels = new HashMap<>();
       for (Enum en : enums) {
         rels.put((String) PropertyUtils.getProperty(en, keyProp), (String) PropertyUtils.getProperty(en, valueProp));
       }
       return rels;
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      e.printStackTrace();
-    } catch (NoSuchMethodException e) {
+    } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
       e.printStackTrace();
     }
     return null;
@@ -168,16 +152,12 @@ public class EnumUtils {
     try {
       Enum[] enums = clz.getEnumConstants();
       for (Enum en : enums) {
-        if ((String) PropertyUtils.getProperty(en, "name") == name) {
+        if (PropertyUtils.getProperty(en, "name").equals(name)) {
           return en.name();
         }
 
       }
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (InvocationTargetException e) {
-      e.printStackTrace();
-    } catch (NoSuchMethodException e) {
+    } catch (IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
       e.printStackTrace();
     }
     return null;

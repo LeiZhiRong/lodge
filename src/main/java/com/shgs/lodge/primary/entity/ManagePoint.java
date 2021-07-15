@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "manage_point")
@@ -20,11 +21,13 @@ public class ManagePoint {
     /**
      * 编号
      */
+    @NotEmpty(message = "编号不能为空")
     private String bh;
 
     /**
      * 名称
      */
+    @NotEmpty(message = "名称不能为空")
     private String name;
 
     /**

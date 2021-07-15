@@ -49,7 +49,7 @@ public class RSAUtils {
    * @throws NoSuchAlgorithmException
    */
   public static HashMap<String, Object> getKeys() throws NoSuchAlgorithmException {
-    HashMap<String, Object> map = new HashMap<String, Object>();
+    HashMap<String, Object> map = new HashMap<>();
     KeyPairGenerator keyPairGen = KeyPairGenerator.getInstance("RSA",
         new org.bouncycastle.jce.provider.BouncyCastleProvider());
     keyPairGen.initialize(1024);
@@ -120,12 +120,12 @@ public class RSAUtils {
     int key_len = publicKey.getModulus().bitLength() / 8;
     // 加密数据长度 <= 模长-11
     String[] datas = splitString(data, key_len - 11);
-    String mi = "";
+    StringBuilder mi = new StringBuilder();
     // 如果明文长度大于模长-11则要分组加密
     for (String s : datas) {
-      mi += bcd2Str(cipher.doFinal(s.getBytes()));
+      mi.append(bcd2Str(cipher.doFinal(s.getBytes())));
     }
-    return mi;
+    return mi.toString();
   }
 
   /**
@@ -145,12 +145,12 @@ public class RSAUtils {
     byte[] bcd = ASCII_To_BCD(bytes, bytes.length);
     // System.err.println(bcd.length);
     // 如果密文长度大于模长则要分组解密
-    String ming = "";
+    StringBuilder ming = new StringBuilder();
     byte[][] arrays = splitArray(bcd, key_len);
     for (byte[] arr : arrays) {
-      ming += new String(cipher.doFinal(arr));
+      ming.append(new String(cipher.doFinal(arr)));
     }
-    return ming;
+    return ming.toString();
   }
 
   /**
@@ -164,7 +164,7 @@ public class RSAUtils {
       z = 1;
     }
     String[] strings = new String[x + z];
-    String str = "";
+    String str;
     for (int i = 0; i < x + z; i++) {
       if (i == x + z - 1 && y != 0) {
         str = string.substring(i * len, i * len + y);
@@ -180,7 +180,8 @@ public class RSAUtils {
    * BCD转字符串
    */
   public static String bcd2Str(byte[] bytes) {
-    char temp[] = new char[bytes.length * 2], val;
+    char[] temp = new char[bytes.length * 2];
+    char val;
 
     for (int i = 0; i < bytes.length; i++) {
       val = (char) (((bytes[i] & 0xf0) >> 4) & 0x0f);

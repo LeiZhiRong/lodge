@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -52,6 +53,7 @@ public class ExcelUtils {
      * @param request      HttpServletRequest
      * @param response     HttpServletResponse
      */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static void exportWord(String templatePath, String temDir, String fileName,
                                   Map<String, Object> params, HttpServletRequest request, HttpServletResponse response) {
         Assert.notNull(templatePath, "模板路径不能为空");
@@ -62,15 +64,13 @@ public class ExcelUtils {
             temDir = temDir + File.separator;
         }
         File dir = new File(temDir);
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
+        if (!dir.exists()) dir.mkdirs();
         try {
             String userAgent = request.getHeader("user-agent").toLowerCase();
             if (userAgent.contains("msie") || userAgent.contains("like gecko")) {
                 fileName = URLEncoder.encode(fileName, "UTF-8");
             } else {
-                fileName = new String(fileName.getBytes("utf-8"), "ISO-8859-1");
+                fileName = new String(fileName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
             }
             XWPFDocument doc = WordExportUtil.exportWord07(templatePath, params);
             String tmpPath = temDir + fileName;
@@ -85,8 +85,6 @@ public class ExcelUtils {
             out.close();
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            //delFileWord(temDir,fileName);//这一步看具体需求，要不要删
         }
     }
 
@@ -99,14 +97,13 @@ public class ExcelUtils {
      * @return workBook对象
      * @throws Exception 异常抛出
      */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     public static Workbook getWorkbook(TemplateExportParams params, Map<String, Object> data, String templateName) throws Exception {
         String templatePath = TEMPLATE_PATH + templateName;
         File file = getTemplateFile(templatePath);
         params.setTemplateUrl(file.getAbsolutePath());
         Workbook book = ExcelExportUtil.exportExcel(params, data);
-        if (file.exists()) {
-            file.delete();
-        }
+        if (file.exists()) file.delete();
         return book;
     }
 
@@ -121,14 +118,10 @@ public class ExcelUtils {
     public static void export(HttpServletResponse response, Workbook workbook, String fileName) throws Exception {
         response.setContentType("application/x-msdownload");
         fileName = fileName + new SimpleDateFormat("yyyyMMddHHmmss").format(new Date());
-        response.setHeader("Content-disposition", "attachment; filename=" + new String(fileName.getBytes("gb2312"), "ISO-8859-1") + ".xls");
-        ServletOutputStream outStream = null;
+        response.setHeader("Content-disposition", "attachment; filename=" + new String(fileName.getBytes("gb2312"), StandardCharsets.ISO_8859_1) + ".xls");
         //OutputStream outStream = null;
-        try {
-            outStream = response.getOutputStream();
+        try (ServletOutputStream outStream = response.getOutputStream()) {
             workbook.write(outStream);
-        } finally {
-            outStream.close();
         }
     }
 
@@ -162,7 +155,7 @@ public class ExcelUtils {
     public static void inputStreamToFile(InputStream ins, File file) {
         try {
             OutputStream os = new FileOutputStream(file);
-            int bytesRead = 0;
+            int bytesRead;
             byte[] buffer = new byte[8192];
             while ((bytesRead = ins.read(buffer, 0, 8192)) != -1) {
                 os.write(buffer, 0, bytesRead);

@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class CmsSessionContext {
 
-  private static final Map<String, HttpSession> ctx = new HashMap<String, HttpSession>();
+  private static final Map<String, HttpSession> ctx = new HashMap<>();
 
   private CmsSessionContext() {
   }

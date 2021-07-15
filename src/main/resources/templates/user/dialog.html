@@ -5,8 +5,6 @@
 </head>
 <body>
 <form id="userForm" th:action="@{saveUserInfo}" th:object="${userInfo}" method="post">
-    <fieldset class=" x-fieldset ">
-        <legend class="x-fieldset-header" style="user-select: none;">基本信息</legend>
         <table cellspacing="0" cellPadding="0" class="addTable">
             <tr>
                 <td class="rightTd" style="width:100px;">用户状态：</td>
@@ -33,7 +31,7 @@
                 <td class="rightTd" width="120px">工作岗位：</td>
                 <td class="leftTd">
                     <select name="station" class="easyui-combobox"
-                            data-options="panelMaxHeight:200,editable:false"
+                            data-options="panelMaxHeight:200,editable:false,panelHeight:'auto'"
                             style="width:150px;height:28px;">
                         <option th:each="item:${stations}"
                                 th:value="${item.values}"
@@ -55,38 +53,103 @@
                            th:value="*{loginPassword}"/>
                 </td>
             </tr>
-        </table>
-    </fieldset>
-    <fieldset class=" x-fieldset ">
-        <legend class="x-fieldset-header" style="user-select: none;">权限范围</legend>
-        <table cellspacing="0" cellPadding="0" class="addTable">
-            <tr>
-                <td class="rightTd" style="width:100px;">管理处：</td>
-                <td class="leftTd" colspan="3">
-                    <input id="settID" name="settID" th:value="*{settID}" class="easyui-combobox"
-                           data-options="prompt:'请选择...',editable:false,height:28,width:420">
-                </td>
-            </tr>
             <tr>
                 <td class="rightTd" style="width:100px;">管理部门：</td>
-                <td class="leftTd" colspan="3">
+                <td class="leftTd">
                     <input id="deptID" name="deptID" th:value="*{deptID}" class="easyui-searchbox"
-                           data-options="prompt:'请选择...',editable:false,searcher:_searchDeptID,height:28,width:420">
+                           data-options="prompt:'请选择...',editable:false,searcher:_searchDeptID,height:28,width:150">
+                </td>
+                <td class="rightTd" style="width:100px;">管理处：</td>
+                <td class="leftTd">
+                    <select id="settID" name="settID" data-options="panelMaxHeight:200,editable:false,panelHeight:'auto'"
+                            style="width:150px;height:28px;">
+                        <option th:each="item:${managePointList}"
+                                th:value="${item.name}"
+                                th:selected="${userInfo.settID eq item.name}"
+                                th:text="${item.name}"></option>
+                    </select>
                 </td>
             </tr>
-
         </table>
-    </fieldset>
     <input hidden="true" name="id" id="id" th:value="*{id}"/>
     <input hidden="true" name="status" id="status" th:value="*{status}"/>
 </form>
 <div id="deptContent" Style="display: none;"></div>
 
-<script type="text/javascript" th:inline="none">
+<script th:inline="javascript">
+
+    $(function () {
+
+        //管理处复选框事件
+        $("#settID").combobox({
+            multiple: true,
+            prompt: '请选择...',
+            formatter: function (row) {
+                let opts = $(this).combobox('options');
+                return '<input type="checkbox" class="combobox-checkbox">&nbsp;' + row[opts.textField];
+            },
+            onLoadSuccess: function () {
+                let settID = [[${userInfo.settID}]];
+                if (!empty(settID)) {
+                    $(this).combobox('setValues', settID);
+                } else {
+                    $(this).combobox('setValues', "");
+                }
+                let opts = $(this).combobox('options');
+                let target = this;
+                let values = $(target).combobox('getValues');
+                $.map(values, function (value) {
+                    let el = opts.finder.getEl(target, value);
+                    el.find('input.combobox-checkbox')._propAttr('checked', true);
+                })
+                $(this).combobox("panel").parent("div").append("<div style='border-width: 1px; border-style: solid; border-top: transparent;border-left-color:#d4d4d4;border-right-color:#d4d4d4;border-bottom-color:#d4d4d4;background: #F5F5F5;height: 35px;padding: 5px;text-align: center'><button class='c8' style='border: 0;width: 60px;height: 25px;margin-right: 3px;' id='combox_select'>正选</button><button  class='c8' style='border: 0;width: 60px;height: 25px' id='combox_close'>确定</button></div>");
+            },
+            onSelect: function (row) {
+                let opts = $(this).combobox('options');
+                let el = opts.finder.getEl(this, row[opts.valueField]);
+                el.find('input.combobox-checkbox')._propAttr('checked', true);
+            },
+            onUnselect: function (row) {
+                let opts = $(this).combobox('options');
+                let el = opts.finder.getEl(this, row[opts.valueField]);
+                el.find('input.combobox-checkbox')._propAttr('checked', false);
+            }
+        })
+        //全选（反选）
+        $("#combox_select").linkbutton({
+            onClick: function () {
+                let str = $("#combox_select").linkbutton("options").text;
+                let valueField = $("#settID").combobox("options").valueField;
+                let data = $("#settID").combobox("getData");
+                let selectVaues = [];
+                if (is_eq("正选", str)) {
+                    $('#combox_select').linkbutton({text: '反选'});
+                    data.reduce(function (prev, current, index, array) {
+                        selectVaues.push(current[valueField]);
+                    }, selectVaues);
+
+                } else {
+                    selectVaues.push(null);
+                    $('#combox_select').linkbutton({text: '正选'});
+                }
+                $("#settID").combobox('setValues', selectVaues);
+
+            }
+        })
+        // 关闭下拉框
+        $("#combox_close").linkbutton({
+            onClick: function () {
+                $('#settID').combobox('hidePanel');
+
+            }
+        })
+
+    })
+
     //管理部门列表
     function _searchDeptID(value) {
-        var deptParent = $('#deptContent').parent();
-        var deptOwn = $('#deptContent').clone();
+        let deptParent = $('#deptContent').parent();
+        let deptOwn = $('#deptContent').clone();
         deptOwn.hide();
         $('#deptContent').dialog({
             title: "【部门】选择器...",
@@ -110,8 +173,8 @@
                 iconCls: 'e-icon2 fa fa-check red',
                 text: '选择',
                 handler: function () {
-                    var rows = $('#deptTree').tree('getChecked', ['checked', 'indeterminate']);
-                    var ids = $(rows).map(function () {
+                    let rows = $('#deptTree').tree('getChecked', ['checked', 'indeterminate']);
+                    let ids = $(rows).map(function () {
                         if (is_eq("F", this.arg1))
                             return this.arg;
                     }).get().join(";");

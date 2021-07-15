@@ -119,7 +119,7 @@ public final class BeanUtil {
   }
 
   public static List<String> getAllDates(String start, String end) {
-    List<String> result = new ArrayList<String>();
+    List<String> result = new ArrayList<>();
     Calendar tempStart = Calendar.getInstance();
     tempStart.setTime(formatDate(start));
     int day = tempStart.get(Calendar.DATE);
@@ -145,7 +145,7 @@ public final class BeanUtil {
    * @return
    */
   public static List<String> getBetweenDates(Date start, Date end) {
-    List<String> result = new ArrayList<String>();
+    List<String> result = new ArrayList<>();
     Calendar tempStart = Calendar.getInstance();
     tempStart.setTime(start);
     tempStart.add(Calendar.DAY_OF_YEAR, 1);
@@ -166,7 +166,7 @@ public final class BeanUtil {
    * @return
    */
   public static List<String> getBetweenDates(String start, String end) {
-    List<String> result = new ArrayList<String>();
+    List<String> result = new ArrayList<>();
     Calendar tempStart = Calendar.getInstance();
     tempStart.setTime(formatDate(start));
     tempStart.add(Calendar.DAY_OF_YEAR, 1);
@@ -180,7 +180,7 @@ public final class BeanUtil {
   }
 
   public static int getCountMonthBetween(String minDate, String maxDate) throws ParseException {
-    ArrayList<String> result = new ArrayList<String>();
+    ArrayList<String> result = new ArrayList<>();
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");// 格式化为年月
     Calendar min = Calendar.getInstance();
     Calendar max = Calendar.getInstance();
@@ -188,10 +188,9 @@ public final class BeanUtil {
     min.set(min.get(Calendar.YEAR), min.get(Calendar.MONTH), 1);
     max.setTime(sdf.parse(maxDate));
     max.set(max.get(Calendar.YEAR), max.get(Calendar.MONTH), 2);
-    Calendar curr = min;
-    while (curr.before(max)) {
-      result.add(sdf.format(curr.getTime()));
-      curr.add(Calendar.MONTH, 1);
+    while (min.before(max)) {
+      result.add(sdf.format(min.getTime()));
+      min.add(Calendar.MONTH, 1);
     }
     return result.size();
   }
@@ -413,10 +412,9 @@ public final class BeanUtil {
     min.set(min.get(Calendar.YEAR), min.get(Calendar.MONTH), 1);
     max.setTime(maxDate);
     max.set(max.get(Calendar.YEAR), max.get(Calendar.MONTH), 2);
-    Calendar curr = min;
-    while (curr.before(max)) {
-      result.add(sdf.format(curr.getTime()));
-      curr.add(Calendar.MONTH, 1);
+    while (min.before(max)) {
+      result.add(sdf.format(min.getTime()));
+      min.add(Calendar.MONTH, 1);
     }
     String[] array = result.toArray(new String[result.size()]);
     return array;
@@ -431,7 +429,7 @@ public final class BeanUtil {
    * @throws ParseException
    */
   public static List<String> getMonthBetween(String minDate, String maxDate) throws ParseException {
-    ArrayList<String> result = new ArrayList<String>();
+    ArrayList<String> result = new ArrayList<>();
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");// 格式化为年月
     Calendar min = Calendar.getInstance();
     Calendar max = Calendar.getInstance();
@@ -439,10 +437,9 @@ public final class BeanUtil {
     min.set(min.get(Calendar.YEAR), min.get(Calendar.MONTH), 1);
     max.setTime(sdf.parse(maxDate));
     max.set(max.get(Calendar.YEAR), max.get(Calendar.MONTH), 2);
-    Calendar curr = min;
-    while (curr.before(max)) {
-      result.add(sdf.format(curr.getTime()));
-      curr.add(Calendar.MONTH, 1);
+    while (min.before(max)) {
+      result.add(sdf.format(min.getTime()));
+      min.add(Calendar.MONTH, 1);
     }
     return result;
   }
@@ -473,8 +470,7 @@ public final class BeanUtil {
     int dw = cal.get(Calendar.DAY_OF_WEEK);
     cal.setTimeInMillis(cal.getTimeInMillis() + (9 - dw) * 24 * 60 * 60 * 1000);
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-    String showTime = formatter.format(cal.getTime());
-    return showTime.toString();
+    return formatter.format(cal.getTime());
   }
 
   /**
@@ -490,8 +486,7 @@ public final class BeanUtil {
     cal.add(Calendar.DAY_OF_MONTH, -1);
     cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
     SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-    String showTime = formatter.format(cal.getTime());
-    return showTime.toString();
+    return formatter.format(cal.getTime());
   }
 
   public static int getNowYear() {
@@ -596,8 +591,7 @@ public final class BeanUtil {
   public static int getWeekDay(String date) {
     Calendar c = Calendar.getInstance();
     c.setTime(formatDate(date));
-    int number = c.get(Calendar.DAY_OF_WEEK) - 1;// 星期天=0，星期六=6
-    return number;
+    return c.get(Calendar.DAY_OF_WEEK) - 1;
   }
 
   public static int getYearIndex(Date date) {
@@ -643,12 +637,9 @@ public final class BeanUtil {
     return obj == null ? "" : obj.toString();
   }
 
-  public static Date parseDate(String dateStr, String pattern) {
-    Date date = null;
-    try {
-      date = new SimpleDateFormat(pattern).parse(dateStr);
-    } catch (ParseException localParseException) {
-    }
+  public static Date parseDate(String dateStr, String pattern) throws ParseException {
+    Date date;
+    date = new SimpleDateFormat(pattern).parse(dateStr);
     return date;
   }
 

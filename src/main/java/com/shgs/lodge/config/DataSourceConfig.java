@@ -24,7 +24,7 @@ public class DataSourceConfig {
     @Bean(name = "primaryDataSource")
     @Qualifier("primaryDataSource")
     @Primary
-    @ConfigurationProperties(prefix = "spring.datasource.hikari")
+    @ConfigurationProperties(prefix = "spring.datasource.primary")
     public DataSource primaryDataSource() {
         return DataSourceBuilder.create().build();
     }
@@ -35,7 +35,7 @@ public class DataSourceConfig {
      */
     @Bean(name = "businessDataSource")
     @Qualifier("businessDataSource")
-    @ConfigurationProperties(prefix = "spring.business.datasource")
+    @ConfigurationProperties(prefix = "spring.datasource.business")
     public DataSource BusinessDataSource() {
         return DataSourceBuilder.create().build();
     }

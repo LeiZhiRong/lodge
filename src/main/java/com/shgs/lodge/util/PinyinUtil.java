@@ -19,7 +19,7 @@ public class PinyinUtil {
 
   public static String str2Pinyin(String str, String fill) {
     try {
-      StringBuffer sb = new StringBuffer();
+      StringBuilder sb = new StringBuilder();
       if (fill == null) fill = "";
       boolean isCn = true;
       for (int i = 0; i < str.length(); i++) {
@@ -51,13 +51,12 @@ public class PinyinUtil {
 
   public static String strFirst2Pinyin(String str) {
     try {
-      StringBuffer sb = new StringBuffer();
+      StringBuilder sb = new StringBuilder();
       for (int i = 0; i < str.length(); i++) {
         char c = str.charAt(i);
         //1、判断c是不是中文
         if (c >= '\u4e00' && c <= '\u9fa5') {
           sb.append(PinyinHelper.toHanyuPinyinStringArray(c, format)[0].charAt(0));
-        } else {
         }
       }
       return sb.toString().toLowerCase();

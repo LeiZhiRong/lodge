@@ -17,6 +17,6 @@ public @interface AuthClass {
    *
    * @return
    */
-  public String value() default "admin";
+  String value() default "admin";
 }
 

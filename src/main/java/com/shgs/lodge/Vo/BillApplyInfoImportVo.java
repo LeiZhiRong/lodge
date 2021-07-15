@@ -8,7 +8,7 @@ public class BillApplyInfoImportVo {
     /**
      * 申请部门编号
      */
-    @Excel(name = "申请部门*", orderNum = "0", width = 15)
+    @Excel(name = "申请部门*", width = 15)
     private String applyDept="";
 
     /**
