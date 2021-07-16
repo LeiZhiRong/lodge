@@ -28,7 +28,7 @@
         <appender-ref ref="console"/>
         <appender-ref ref="file"/>
     </root>
-    <logger name="com.shgs.lodge.service" level="trace"/>
+    <logger name="com.shags.lodge.service" level="trace"/>
 <!--    <logger name="com.zaxxer.hikari.HikariConfig" level="DEBUG"/>-->
 <!--    <logger name="com.zaxxer.hikari" level="trace"/>-->
 </configuration>
