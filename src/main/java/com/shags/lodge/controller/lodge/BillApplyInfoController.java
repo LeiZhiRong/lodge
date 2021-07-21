@@ -10,7 +10,7 @@ import com.shags.lodge.auth.AuthMethod;
 import com.shags.lodge.dto.*;
 import com.shags.lodge.excel.ExcelUtils;
 import com.shags.lodge.primary.entity.*;
-import com.shags.lodge.service.*;
+import com.shags.lodge.service.primary.*;
 import com.shags.lodge.util.*;
 import com.shags.lodge.exception.exception.PageException;
 import org.apache.commons.lang3.StringUtils;
@@ -134,14 +134,7 @@ public class BillApplyInfoController {
         this.ancillaryProjectsService = ancillaryProjectsService;
     }
 
-    /**
-     * 首页
-     *
-     * @param model
-     * @param session
-     * @return
-     * @throws JsonProcessingException
-     */
+
     @AuthMethod(role = "ROLE_APPLY")
     @GetMapping("index")
     public ModelAndView index(Model model, HttpSession session) throws JsonProcessingException {
@@ -167,17 +160,7 @@ public class BillApplyInfoController {
         return new ModelAndView("apply/index");
     }
 
-    /**
-     * 获取开票申请单分页数据
-     *
-     * @param order
-     * @param sort
-     * @param page
-     * @param rows
-     * @param field
-     * @param value
-     * @return
-     */
+
     @AuthMethod(role = "ROLE_APPLY")
     @RequestMapping("list")
     public Pager<BillApplyInfoDto> list(String order, String sort, int page, int rows, String field, String value, HttpSession session) {
@@ -202,21 +185,7 @@ public class BillApplyInfoController {
         return billApplyInfoService.listBillApplyInfoDto(field, value, "DF", bookSet, userBh);
     }
 
-    /**
-     * 获取历史数据
-     *
-     * @param order
-     * @param sort
-     * @param page
-     * @param rows
-     * @param field
-     * @param value
-     * @param starDate
-     * @param endDate
-     * @param ztbz
-     * @param session
-     * @return
-     */
+
     @AuthMethod(role = "ROLE_APPLY")
     @RequestMapping("listHistoryInfo")
     public Pager<BillApplyHistoryInfoDto> listHistoryInfo(String order, String sort, int page, int rows, String field, String value, String starDate, String endDate, String ztbz, HttpSession session) {
@@ -248,14 +217,7 @@ public class BillApplyInfoController {
         return billApplyInfoService.listHistoryInfoDto(field, value, starDate, endDate, _ztbz, bookSet, userBh);
     }
 
-    /**
-     * 添加开票申请单
-     *
-     * @param id
-     * @param model
-     * @return
-     * @throws JsonProcessingException
-     */
+
     @AuthMethod(role = "ROLE_APPLY")
     @GetMapping("dialog")
     public ModelAndView dialog(String id, String cation, Model model, HttpSession session) throws JsonProcessingException {
@@ -288,14 +250,7 @@ public class BillApplyInfoController {
         return new ModelAndView("apply/dialog");
     }
 
-    /**
-     * 获取往来客户跳转页
-     *
-     * @param keyword
-     * @param corpType
-     * @param model
-     * @return
-     */
+
     @AuthMethod(role = "ROLE_APPLY")
     @GetMapping("getCorpInfo")
     public ModelAndView getCorpInfo(String keyword, String corpType, Model model) {
@@ -304,17 +259,7 @@ public class BillApplyInfoController {
         return new ModelAndView("apply/getCorpInfo");
     }
 
-    /**
-     * 获取往来客户信息
-     *
-     * @param order
-     * @param sort
-     * @param page
-     * @param rows
-     * @param keyword
-     * @param corpType
-     * @return
-     */
+
     @AuthMethod(role = "ROLE_APPLY")
     @RequestMapping("getCorpList")
     public Pager<BillCorpInfo> getCorpList(String order, String sort, int page, int rows, String keyword, String corpType) {
@@ -444,48 +389,27 @@ public class BillApplyInfoController {
         }
     }
 
-    /**
-     * 批量删除
-     *
-     * @param ids
-     * @return
-     */
+
     @AuthMethod(role = "ROLE_APPLY")
     @PostMapping("batchDeleteApply")
     public Message batchDeleteApply(String ids) {
         return billApplyInfoService.batchDeleteApply(ids);
     }
 
-    /**
-     * 删除
-     *
-     * @param id
-     * @return
-     */
+
     @AuthMethod(role = "ROLE_APPLY")
     @PostMapping("deleteApplyInfo")
     public Message deleteApplyInfo(String id) {
         return billApplyInfoService.deleteBillApplyInfo(id);
     }
 
-    /**
-     * 模板导入页
-     *
-     * @return
-     * @throws JsonProcessingException
-     */
+
     @GetMapping("importUpload")
     @AuthMethod(role = "ROLE_APPLY")
     public ModelAndView importUpload() throws JsonProcessingException {
         return new ModelAndView("apply/import");
     }
 
-    /**
-     * 模板下载
-     *
-     * @param response
-     * @throws IOException
-     */
     @AuthMethod(role = "ROLE_APPLY")
     @RequestMapping("downloadExcel")
     public void downloadExcel(HttpServletResponse response) throws IOException {
@@ -499,14 +423,6 @@ public class BillApplyInfoController {
         ExcelUtils.exportExcel(list, null, "开票信息", BillApplyInfoImportVo.class, "开票信息导入模板_" + BeanUtil.formatDate(new Date(), "yyyyMMdd"), response);
     }
 
-    /**
-     * 模板上传处理
-     *
-     * @param file
-     * @param headerRows
-     * @return
-     * @throws Exception
-     */
     @PostMapping(value = "importUpload", produces = "text/html;charset=utf-8")
     @AuthMethod(role = "ROLE_APPLY")
     public String importUpload(MultipartFile file, Integer headerRows) throws Exception {
@@ -526,17 +442,6 @@ public class BillApplyInfoController {
         return JsonUtil.objectToString(msg);
     }
 
-    /**
-     * 导出数据
-     *
-     * @param field
-     * @param value
-     * @param starDate
-     * @param endDate
-     * @param ztbz
-     * @param response
-     * @throws IOException
-     */
     @AuthMethod(role = "ROLE_APPLY")
     @RequestMapping("exportDown")
     public void exportDown(String field, String value, String starDate, String endDate, String ztbz, HttpServletResponse response, HttpSession session) throws IOException {
@@ -558,12 +463,7 @@ public class BillApplyInfoController {
 
     }
 
-    /**
-     * 检测并保存模板数据，返回错误数据
-     *
-     * @param rows
-     * @return
-     */
+
     @AuthMethod(role = "ROLE_APPLY")
     @PostMapping(value = "batchsaveExcel")
     public Message batchsaveExcel(String rows, HttpSession session) {
@@ -753,12 +653,6 @@ public class BillApplyInfoController {
     }
 
 
-    /**
-     * 审核提交
-     *
-     * @param ids
-     * @return
-     */
     @AuthMethod(role = "ROLE_APPLY")
     @PostMapping("batchExamine")
     public Message batchExamine(String ids) {
@@ -766,12 +660,6 @@ public class BillApplyInfoController {
     }
 
 
-    /**
-     * 按客商编号获取银行列表
-     *
-     * @param corpId
-     * @return
-     */
     @AuthMethod(role = "ROLE_APPLY")
     @PostMapping("listBankAccount")
     public List<BankAccount> listBankAccount(String corpId) {
@@ -779,13 +667,6 @@ public class BillApplyInfoController {
         return bankAccountService.listBankAccount(corpId, "T");
     }
 
-    /**
-     * 获取收支费项
-     *
-     * @param value
-     * @param model
-     * @return
-     */
     @AuthMethod(role = "ROLE_APPLY")
     @GetMapping("getProceed")
     public ModelAndView getProceed(String value, Model model) {
@@ -793,26 +674,13 @@ public class BillApplyInfoController {
         return new ModelAndView("apply/getProceed");
     }
 
-    /**
-     * 查询收支费项信息
-     *
-     * @param pid
-     * @param keyword 过滤关键字
-     * @return
-     */
+
     @AuthMethod(role = "ROLE_APPLY")
     @RequestMapping("findProceed")
     public List<ProceedTypeListDto> findProceed(String pid, String keyword) {
         return reveExpeItemService.listProceedTypeListDto(pid, keyword);
     }
 
-    /**
-     * 获取结算方式
-     *
-     * @param value
-     * @param model
-     * @return
-     */
     @AuthMethod(role = "ROLE_APPLY")
     @GetMapping("getPayment")
     public ModelAndView getPayment(String value, Model model) {
@@ -820,13 +688,7 @@ public class BillApplyInfoController {
         return new ModelAndView("apply/getPayment");
     }
 
-    /**
-     * 查询结算方式
-     *
-     * @param pid
-     * @param keyword 过滤关键字
-     * @return
-     */
+
     @AuthMethod(role = "ROLE_APPLY")
     @RequestMapping("findPayment")
     public List<PaymentMethodListDto> findPayment(String pid, String keyword) {
@@ -839,12 +701,7 @@ public class BillApplyInfoController {
         return ancillaryProjectsService.listAncillaryProjectsDto(pid, keyword, t_id);
     }
 
-    /**
-     * 辅助项目选择器
-     *
-     * @param model
-     * @return
-     */
+
     @AuthMethod(role = "ROLE_APPLY")
     @GetMapping("getProjects")
     public ModelAndView getProjects(String value, Model model) {
@@ -852,14 +709,6 @@ public class BillApplyInfoController {
         return new ModelAndView("reve/getProjects");
     }
 
-    /**
-     * 获取商家银行账号
-     *
-     * @param action
-     * @param model
-     * @param corpId
-     * @return
-     */
     @AuthMethod(role = "ROLE_APPLY")
     @GetMapping("getBankAccount")
     public ModelAndView getBankAccount(String action, String corpId, Model model) {

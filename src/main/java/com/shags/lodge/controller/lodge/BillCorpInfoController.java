@@ -13,10 +13,10 @@ import com.shags.lodge.util.*;
 import com.shags.lodge.exception.exception.PageException;
 import com.shags.lodge.primary.entity.BankAccount;
 import com.shags.lodge.primary.entity.BillCorpInfo;
-import com.shags.lodge.service.IBankAccountService;
-import com.shags.lodge.service.IBillCorpInfoService;
-import com.shags.lodge.service.ICustomService;
-import com.shags.lodge.service.ITableHeaderService;
+import com.shags.lodge.service.primary.IBankAccountService;
+import com.shags.lodge.service.primary.IBillCorpInfoService;
+import com.shags.lodge.service.primary.ICustomService;
+import com.shags.lodge.service.primary.ITableHeaderService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -80,7 +80,7 @@ public class BillCorpInfoController {
     public ModelAndView index(Model model, HttpSession session) throws JsonProcessingException {
         User user = (User) session.getAttribute("user");
         List<HeaderColumns> columns = tableHeaderService.listHeaderColumns(user.getId(), "corpGrid", "com.shags.lodge.primary.entity.BillCorpInfo");
-        List<SelectJson> corpType = customService.listCustomParame("CORPTYPE", null, true);
+        List<SelectJson> corpType = customService.listCustomParameByCode("CORPTYPE");
         corpType.add(0, new SelectJson("", "-【全部】", "all"));
         model.addAttribute("columns", columns);
         model.addAttribute("corpType", corpType);
@@ -103,7 +103,7 @@ public class BillCorpInfoController {
     @GetMapping("dialog")
     public ModelAndView dialog(String id, Model model) throws JsonProcessingException {
         BillCorpInfo billCorpInfo = new BillCorpInfo();
-        List<SelectJson> coryType = customService.listCustomParame("CORPTYPE", null, true);
+        List<SelectJson> coryType = customService.listCustomParameByCode("CORPTYPE");
         if (id != null && !id.isEmpty()) {
             billCorpInfo = billCorpInfoService.queryBillCorpInfoById(id);
         } else {

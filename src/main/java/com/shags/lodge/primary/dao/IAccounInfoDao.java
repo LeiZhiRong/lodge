@@ -17,14 +17,14 @@ public interface IAccounInfoDao extends IBaseDAO<AccounInfo> {
     /**
      * 按ID查询对象
      * @param id 关键字id
-     * @return
+     * @return object
      */
     AccounInfo queryAccounInfoByID(String id);
 
     /**
      * 按账套编号查询对象
      * @param bookSet 账套编号
-     * @return
+     * @return object
      */
     AccounInfo queryAccounInfoByBookSet(String bookSet);
 
@@ -32,7 +32,7 @@ public interface IAccounInfoDao extends IBaseDAO<AccounInfo> {
      * 检测账套编号是否重名
      * @param id 排除的id
      * @param bookSet 账套编号
-     * @return
+     * @return object
      */
     AccounInfo queryAccounInfoByIDAndBookSet(String id,String bookSet);
 
@@ -40,7 +40,7 @@ public interface IAccounInfoDao extends IBaseDAO<AccounInfo> {
      * 按关键字和状态标识查询列表
      * @param value 关键字
      * @param ztbz 状态标识
-     * @return
+     * @return list
      */
     List<SelectJson> listAccounInfoToSelectJson(String value, String ztbz);
 
@@ -48,13 +48,13 @@ public interface IAccounInfoDao extends IBaseDAO<AccounInfo> {
      * 获取分页数据
      * @param value 关键字
      * @param ztbz 状态标识
-     * @return
+     * @return pager
      */
     Pager<AccounInfoDto> findAccounInfoDto(String value, String ztbz);
 
     /**
      * 按ID删除对象
-     * @param id
+     * @param id 关键字
      * @return boolean
      */
     boolean deleteAccounInfo(String id);

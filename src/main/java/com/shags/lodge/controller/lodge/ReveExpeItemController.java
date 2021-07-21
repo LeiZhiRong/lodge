@@ -3,7 +3,7 @@ package com.shags.lodge.controller.lodge;
 import com.shags.lodge.auth.AuthClass;
 import com.shags.lodge.auth.AuthMethod;
 import com.shags.lodge.dto.*;
-import com.shags.lodge.service.*;
+import com.shags.lodge.service.primary.*;
 import com.shags.lodge.util.Message;
 import com.shags.lodge.util.SelectJson;
 import com.shags.lodge.primary.entity.ProceedType;

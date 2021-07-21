@@ -7,7 +7,7 @@ import com.shags.lodge.dto.MenuInfoDto;
 import com.shags.lodge.dto.TreeJson;
 import com.shags.lodge.util.*;
 import com.shags.lodge.primary.entity.MenuInfo;
-import com.shags.lodge.service.IMenuService;
+import com.shags.lodge.service.primary.IMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.ui.Model;

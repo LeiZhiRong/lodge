@@ -1,7 +1,6 @@
 package com.shags.lodge.business.dao.basic;
 
 
-import com.shags.lodge.primary.dao.basic.IBaseDAO;
 import com.shags.lodge.util.Pager;
 import com.shags.lodge.util.SystemContext;
 import org.hibernate.query.internal.NativeQueryImpl;
@@ -30,7 +29,7 @@ import java.util.*;
  * @param <ID> ID类型
  */
 @SuppressWarnings({"unused", "ConstantConditions", "EqualsBetweenInconvertibleTypes", "unchecked", "RedundantCast", "rawtypes", "UnusedReturnValue", "DuplicatedCode"})
-public class BusinessBaseDAO<T, ID> implements IBaseDAO<T> {
+public class BusinessBaseDAO<T, ID> implements IBusinessBaseDAO<T> {
 
     private static final int BATCH_SIZE = 500;
 

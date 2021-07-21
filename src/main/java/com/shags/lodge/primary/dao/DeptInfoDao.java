@@ -96,8 +96,7 @@ public class DeptInfoDao extends LodgeBaseDAO<DeptInfo,String> implements IDeptI
         Pager<DeptInfoDto> deptInfoPager = new Pager<>();
         StringBuilder jpql;
         jpql = new StringBuilder();
-        Map<String, Object> alias;
-        alias = new HashMap<>();
+        Map<String, Object> alias  = new HashMap<>();
         jpql.append("from DeptInfo m where 1=1 ");
         if (pid != null && !pid.isEmpty()) {
             jpql.append("and m.parent.id =:pid ");

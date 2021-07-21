@@ -10,7 +10,7 @@ import com.shags.lodge.util.Message;
 import com.shags.lodge.util.Pager;
 import com.shags.lodge.util.SystemContext;
 import com.shags.lodge.primary.entity.AccounPeriod;
-import com.shags.lodge.service.IAccounPeriodService;
+import com.shags.lodge.service.primary.IAccounPeriodService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -31,8 +31,9 @@ import java.util.Objects;
  *
  * @author 雷智荣
  */
+@SuppressWarnings("SpellCheckingInspection")
 @RestController
-@RequestMapping("/period/")
+@RequestMapping(value = "/period/")
 @Scope("prototype")
 @AuthClass("login")
 public class AccounPeriodController {
@@ -45,32 +46,17 @@ public class AccounPeriodController {
         this.accounPeriodService = accounPeriodService;
     }
 
-    /**
-     * 首页
-     *
-     * @param model
-     * @return
-     * @throws JsonProcessingException
-     */
     @AuthMethod(role = "ROLE_ACCOUN_PERIOD")
-    @RequestMapping("index")
+    @RequestMapping(value = "index")
     public ModelAndView index(Model model) {
         List<HeaderColumns> columns = CmsUtils.getHeaderColumns("com.shags.lodge.dto.AccounPeriodDto");
         model.addAttribute("columns", columns);
         return new ModelAndView("period/index");
     }
 
-    /**
-     * 获取分页数据
-     *
-     * @param order
-     * @param sort
-     * @param page
-     * @param rows
-     * @return
-     */
+
     @AuthMethod(role = "ROLE_ACCOUN_PERIOD")
-    @RequestMapping("list")
+    @RequestMapping(value = "list")
     public Pager<AccounPeriodDto> list(String order, String sort, int page, int rows) {
         SystemContext.setPageSize(rows);
         SystemContext.setPageNumber(page);
@@ -80,16 +66,8 @@ public class AccounPeriodController {
     }
 
 
-    /**
-     * 添加（编辑）页面跳转
-     *
-     * @param id
-     * @param model
-     * @return
-     * @throws JsonProcessingException
-     */
     @AuthMethod(role = "ROLE_ACCOUN_PERIOD")
-    @GetMapping("dialog")
+    @GetMapping(value = "dialog")
     public ModelAndView dialog(String id, Model model) throws JsonProcessingException {
         AccounPeriodDto dto = new AccounPeriodDto();
         if (id != null && !id.isEmpty()) {
@@ -103,15 +81,9 @@ public class AccounPeriodController {
         return new ModelAndView("period/dialog");
     }
 
-    /**
-     * 新增（编辑）保存
-     *
-     * @param accounPeriodDto
-     * @param br
-     * @return
-     */
+
     @AuthMethod(role = "ROLE_ACCOUN_PERIOD")
-    @PostMapping("saveAccounPeriodDto")
+    @PostMapping(value = "saveAccounPeriodDto")
     public Message saveAccounPeriodDto(@Validated AccounPeriodDto accounPeriodDto, BindingResult br) {
         if (br.hasErrors()) {
             return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
@@ -125,13 +97,8 @@ public class AccounPeriodController {
         }
     }
 
-    /**
-     * 删除
-     * @param id
-     * @return
-     */
     @AuthMethod(role = "ROLE_ACCOUN_PERIOD")
-    @PostMapping("delete")
+    @PostMapping(value = "delete")
     public Message deleteAccounPeriod(String id) {
         return accounPeriodService.deleteAccounPeriod(id);
     }

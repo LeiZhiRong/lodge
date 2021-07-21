@@ -10,9 +10,9 @@ import com.shags.lodge.util.Message;
 import com.shags.lodge.util.SelectJson;
 import com.shags.lodge.primary.entity.AccounCode;
 import com.shags.lodge.primary.entity.CustomParame;
-import com.shags.lodge.service.IAccounCodeService;
-import com.shags.lodge.service.ICustomService;
-import com.shags.lodge.service.ITableHeaderService;
+import com.shags.lodge.service.primary.IAccounCodeService;
+import com.shags.lodge.service.primary.ICustomService;
+import com.shags.lodge.service.primary.ITableHeaderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.ui.Model;
@@ -27,8 +27,9 @@ import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Objects;
 
+@SuppressWarnings("SpellCheckingInspection")
 @RestController
-@RequestMapping("/accoun/")
+@RequestMapping(value = "/accoun/")
 @Scope("prototype")
 @AuthClass("login")
 public class AccounCodeController {
@@ -57,12 +58,8 @@ public class AccounCodeController {
         this.tableHeaderService = tableHeaderService;
     }
 
-    /**
-     * 首页
-     *
-     */
     @AuthMethod(role = "ROLE_ACCOUN")
-    @RequestMapping("index")
+    @RequestMapping(value = "index")
     public ModelAndView index(Model model, HttpSession session) throws JsonProcessingException {
         User user = (User) session.getAttribute("user");
         List<HeaderColumns> columns = tableHeaderService.listHeaderColumns(user.getId(), "accounGrid", "com.shags.lodge.dto.AccounCodeDto");
@@ -71,14 +68,8 @@ public class AccounCodeController {
     }
 
 
-    /**
-     * 获取数据列表
-     *
-     * @param session
-     * @return
-     */
     @AuthMethod(role = "ROLE_ACCOUN")
-    @RequestMapping("list")
+    @RequestMapping(value = "list")
     public List<AccounCodeDto> list(HttpSession session) {
         User user = (User) session.getAttribute("user");
         String bookSet = user.getBookSet();
@@ -87,25 +78,12 @@ public class AccounCodeController {
     }
 
 
-    /**
-     * 获取自定义日期格式
-     *
-     * @return
-     */
-    @RequestMapping("getDateFormat")
+    @RequestMapping(value = "getDateFormat")
     @AuthMethod(role = "ROLE_ACCOUN")
     public List<SelectJson> getDateFormat() {
         return customService.listCustomParameByCode("DateFormat");
     }
 
-    /**
-     * 保存
-     *
-     * @param dto
-     * @param br
-     * @param session
-     * @return
-     */
     @AuthMethod(role = "ROLE_ACCOUN")
     @RequestMapping(value = "saveAccounCode")
     public Message saveAccounCode(@Validated AccounCodeDto dto, BindingResult br, HttpSession session) {
@@ -161,15 +139,8 @@ public class AccounCodeController {
         }
     }
 
-    /**
-     * 单据编号自定义页
-     *
-     * @param id
-     * @param model
-     * @return
-     */
     @AuthMethod(role = "ROLE_ACCOUN")
-    @RequestMapping("addAccounCode")
+    @RequestMapping(value = "addAccounCode")
     public ModelAndView addAccounCode(String id, Model model) {
         AccounCodeDto dto = new AccounCodeDto();
         boolean edit = false;
@@ -193,7 +164,7 @@ public class AccounCodeController {
     }
 
     @AuthMethod(role = "ROLE_ACCOUN")
-    @PostMapping("deleteAccoun")
+    @PostMapping(value = "deleteAccoun")
     public Message deleteAccoun(String id) {
         return accounCodeService.deleteAccounCodeByID(id);
     }

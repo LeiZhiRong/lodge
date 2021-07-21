@@ -38,7 +38,7 @@
         <div id="m-toolbar">
             <div class="m-left">
                         <span>
-                            <img th:src="@{/static/images/logo3.png}" style="height:55px; padding-top: 10px; "/>
+                            <img th:src="@{/static/images/logo3.png}"/>
                         </span>
             </div>
             <div class="m-right">
@@ -86,11 +86,11 @@
         <div data-options="iconCls:'e-icon1 fa fa-close'" onclick="closeAllTab()">关闭所有页</div>
     </div>
 </div>
-<!--<div data-options="region:'south'" class="" style="height:28px;overflow-y:hidden;color: #0E2D5F;padding: 5px;">-->
-<!--    <div style="text-align: center">-->
-<!--        <span>Copyright©<span id="copy"></span>&nbsp;<span th:text="${session.user.corpName}"></span></span>-->
-<!--    </div>-->
-<!--</div>-->
+<div data-options="region:'south'" class="" style="height:28px;overflow-y:hidden;color: #0E2D5F;padding: 5px;">
+    <div style="text-align: center">
+        <span>Copyright©2021-<span id="copy"></span>&nbsp;<span th:text="${session.user.corpName}"></span></span>
+    </div>
+</div>div
 </div>
 <script th:inline="javascript">
     var basepath = [[${session.basePath}]];

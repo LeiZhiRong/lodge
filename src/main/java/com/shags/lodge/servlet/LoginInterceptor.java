@@ -3,11 +3,7 @@ package com.shags.lodge.servlet;
 import com.shags.lodge.dto.User;
 import com.shags.lodge.exception.exception.JsonException;
 import com.shags.lodge.exception.exception.PageException;
-import com.shags.lodge.service.IUserInfoService;
 import groovy.util.logging.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -19,24 +15,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-/**
- * mvc拦截器
- *
- * @author 雷智荣
- * @date 2021-01-29
- */
+@SuppressWarnings("unchecked")
 @Component
 @Slf4j
 public class LoginInterceptor implements HandlerInterceptor {
 
-    private static final Logger logger = LoggerFactory.getLogger(LoginInterceptor.class);
-
-
-    @Autowired
-    public void setUserInfoService(IUserInfoService userInfoService) {
-    }
-
-    @SuppressWarnings("unchecked")
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
@@ -65,8 +48,8 @@ public class LoginInterceptor implements HandlerInterceptor {
 
         } else {
             List<String> actions = (List<String>) session.getAttribute("allActions");
-            String aname = hm.getBean().getClass().getName() + "." + hm.getMethod().getName();
-            if (!actions.contains(aname)) {
+            String name = hm.getBean().getClass().getName() + "." + hm.getMethod().getName();
+            if (!actions.contains(name)) {
                 if (ajax) {
                     throw new JsonException(500, "禁止访问");
                 } else {

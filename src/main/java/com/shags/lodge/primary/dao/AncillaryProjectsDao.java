@@ -32,12 +32,6 @@ public class AncillaryProjectsDao extends LodgeBaseDAO<AncillaryProjects,String>
     }
 
     @Override
-    public boolean deleteAncillaryProjects(String id) {
-        Object o = super.executeByJpql("delete from AncillaryProjects m where m.id =?0", id);
-        return o != null;
-    }
-
-    @Override
     public AncillaryProjects queryAncillaryProjects(String id) {
         return (AncillaryProjects) super.queryObject("from AncillaryProjects m where m.id =?0",id);
     }

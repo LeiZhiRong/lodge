@@ -9,7 +9,7 @@ import com.shags.lodge.dto.User;
 import com.shags.lodge.util.CmsUtils;
 import com.shags.lodge.util.Message;
 import com.shags.lodge.primary.entity.TableHeader;
-import com.shags.lodge.service.TableHeaderService;
+import com.shags.lodge.service.primary.TableHeaderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.ui.Model;

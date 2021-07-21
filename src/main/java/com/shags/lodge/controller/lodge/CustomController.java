@@ -10,7 +10,7 @@ import com.shags.lodge.util.SelectJson;
 import com.shags.lodge.util.SystemContext;
 import com.shags.lodge.primary.entity.CustomParame;
 import com.shags.lodge.primary.entity.CustomType;
-import com.shags.lodge.service.ICustomService;
+import com.shags.lodge.service.primary.ICustomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.ui.Model;

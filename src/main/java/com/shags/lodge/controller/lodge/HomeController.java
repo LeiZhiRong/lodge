@@ -9,7 +9,7 @@ import com.shags.lodge.util.Message;
 import com.shags.lodge.util.MyJasyptStringEncryptor;
 import com.shags.lodge.util.RSAUtils;
 import com.shags.lodge.primary.entity.UserInfo;
-import com.shags.lodge.service.IUserInfoService;
+import com.shags.lodge.service.primary.IUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.ui.Model;

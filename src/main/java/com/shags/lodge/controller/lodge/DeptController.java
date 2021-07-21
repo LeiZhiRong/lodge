@@ -10,7 +10,7 @@ import com.shags.lodge.util.Message;
 import com.shags.lodge.util.Pager;
 import com.shags.lodge.util.SystemContext;
 import com.shags.lodge.primary.entity.DeptInfo;
-import com.shags.lodge.service.IDeptInfoService;
+import com.shags.lodge.service.primary.IDeptInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.ui.Model;

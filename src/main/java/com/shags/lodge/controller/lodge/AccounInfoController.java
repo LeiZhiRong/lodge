@@ -8,8 +8,8 @@ import com.shags.lodge.dto.HeaderColumns;
 import com.shags.lodge.dto.User;
 import com.shags.lodge.util.*;
 import com.shags.lodge.primary.entity.AccounInfo;
-import com.shags.lodge.service.IAccounInfoService;
-import com.shags.lodge.service.ITableHeaderService;
+import com.shags.lodge.service.primary.IAccounInfoService;
+import com.shags.lodge.service.primary.ITableHeaderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.ui.Model;
@@ -30,8 +30,9 @@ import java.util.Objects;
  *
  * @author 雷智荣
  */
+@SuppressWarnings("SpellCheckingInspection")
 @RestController
-@RequestMapping("/bookset/")
+@RequestMapping(value = "/bookset/")
 @Scope("prototype")
 @AuthClass("login")
 public class AccounInfoController {
@@ -52,16 +53,8 @@ public class AccounInfoController {
         this.tableHeaderService = tableHeaderService;
     }
 
-    /**
-     * 账套管理首页
-     *
-     * @param model
-     * @param session
-     * @return
-     * @throws JsonProcessingException
-     */
     @AuthMethod(role = "ROLE_BOOKSET")
-    @RequestMapping("index")
+    @RequestMapping(value = "index")
     public ModelAndView index(Model model, HttpSession session) throws JsonProcessingException {
         User user = (User) session.getAttribute("user");
         List<HeaderColumns> columns = tableHeaderService.listHeaderColumns(user.getId(), "bookSetGrid", "com.shags.lodge.dto.AccounInfoDto");
@@ -69,18 +62,9 @@ public class AccounInfoController {
         return new ModelAndView("bookset/index");
     }
 
-    /**
-     * 获取账套分页数据
-     *
-     * @param order
-     * @param sort
-     * @param page
-     * @param rows
-     * @param value
-     * @return
-     */
+
     @AuthMethod(role = "ROLE_BOOKSET")
-    @RequestMapping("list")
+    @RequestMapping(value = "list")
     public Pager<AccounInfoDto> findAccounInfoDto(String order, String sort, int page, int rows, String value) {
         SystemContext.setPageSize(rows);
         SystemContext.setPageNumber(page);
@@ -89,16 +73,8 @@ public class AccounInfoController {
         return accounInfoService.findAccounInfoDto(value, null);
     }
 
-    /**
-     * 添加页面dialog
-     *
-     * @param id    关键字
-     * @param model
-     * @return
-     * @throws JsonProcessingException
-     */
     @AuthMethod(role = "ROLE_BOOKSET")
-    @GetMapping("dialog")
+    @GetMapping(value = "dialog")
     public ModelAndView dialog(String id, Model model) throws JsonProcessingException {
         AccounInfoDto dto = new AccounInfoDto();
         boolean disabled = false;
@@ -116,15 +92,8 @@ public class AccounInfoController {
         return new ModelAndView("bookset/dialog");
     }
 
-    /**
-     * 保存（更新）
-     *
-     * @param dto
-     * @param br
-     * @return
-     */
     @AuthMethod(role = "ROLE_BOOKSET")
-    @PostMapping("save")
+    @PostMapping(value = "save")
     public Message save(@Validated AccounInfoDto dto, BindingResult br) {
         if (br.hasErrors()) {
             return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
@@ -153,12 +122,7 @@ public class AccounInfoController {
 
     }
 
-    /**
-     * 按ID删除账套
-     *
-     * @param id
-     * @return
-     */
+
     @AuthMethod(role = "ROLE_BOOKSET")
     @PostMapping(value = "delete")
     public Message delete(String id) {

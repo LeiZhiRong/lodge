@@ -11,7 +11,7 @@ public class CmsSessionContext {
   private CmsSessionContext() {
   }
 
-  public static void addSessoin(HttpSession session) {
+  public static void addSession(HttpSession session) {
     ctx.put(session.getId(), session);
   }
 
@@ -22,5 +22,6 @@ public class CmsSessionContext {
   public static void removeSession(HttpSession session) {
     ctx.remove(session.getId());
   }
+
 }
 

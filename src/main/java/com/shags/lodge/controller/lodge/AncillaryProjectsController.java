@@ -11,8 +11,8 @@ import com.shags.lodge.util.Pager;
 import com.shags.lodge.util.SelectJson;
 import com.shags.lodge.util.SystemContext;
 import com.shags.lodge.primary.entity.AncillaryProjects;
-import com.shags.lodge.service.IAncillaryProjectsService;
-import com.shags.lodge.service.ICustomService;
+import com.shags.lodge.service.primary.IAncillaryProjectsService;
+import com.shags.lodge.service.primary.ICustomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.ui.Model;
@@ -32,8 +32,9 @@ import java.util.Objects;
  *
  * @author 雷智荣
  */
+@SuppressWarnings("SpellCheckingInspection")
 @RestController
-@RequestMapping("/projects/")
+@RequestMapping(value = "/projects/")
 @Scope("prototype")
 @AuthClass("login")
 public class AncillaryProjectsController {
@@ -54,13 +55,9 @@ public class AncillaryProjectsController {
         this.customService = customService;
     }
 
-    /**
-     * 首页
-     *
-     * @return String
-     */
+
     @AuthMethod(role = "ROLE_PROJECTS")
-    @GetMapping("index")
+    @GetMapping(value = "index")
     public ModelAndView index() {
         return new ModelAndView("projects/index");
     }
@@ -93,7 +90,7 @@ public class AncillaryProjectsController {
 
 
     @AuthMethod(role = "ROLE_PROJECTS")
-    @PostMapping("save")
+    @PostMapping(value = "save")
     public Message save(@Validated AncillaryProjectsForm ancillaryProjectsDto, BindingResult br, String pid, String t_id) {
         if (br.hasErrors()) {
             return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
@@ -120,7 +117,7 @@ public class AncillaryProjectsController {
     }
 
     @AuthMethod(role = "ROLE_PROJECTS")
-    @RequestMapping("list")
+    @RequestMapping(value = "list")
     public Pager<AncillaryProjectsDto> findAncillaryProjectsDto(String order, String sort, int page, int rows, String pid, String t_id, String value) {
         SystemContext.setPageSize(rows);
         SystemContext.setPageNumber(page);
@@ -130,7 +127,7 @@ public class AncillaryProjectsController {
     }
 
     @AuthMethod(role = "ROLE_PROJECTS")
-    @RequestMapping("uporders")
+    @RequestMapping(value = "uporders")
     public Message uporders(String[] ids) {
         try {
             ancillaryProjectsService.updateSort(ids);
@@ -140,23 +137,14 @@ public class AncillaryProjectsController {
         }
     }
 
-    /**
-     * 科目信息目录树
-     *
-     * @return
-     */
+
     @AuthMethod(role = "ROLE_PROJECTS")
     @RequestMapping(value = "listParent")
     public List<TreeJson> listParent(String t_id) {
         return ancillaryProjectsService.getAncillaryProjects2TreeJson(null, t_id);
     }
 
-    /**
-     * 删除部门信息
-     *
-     * @param id
-     * @return
-     */
+
     @AuthMethod(role = "ROLE_PROJECTS")
     @PostMapping(value = "delete")
     public Message delete(String id) {
@@ -164,11 +152,6 @@ public class AncillaryProjectsController {
 
     }
 
-    /**
-     * 获取辅助项目分类列表
-     *
-     * @return
-     */
     @AuthMethod(role = "ROLE_PROJECTS")
     @PostMapping(value = "listProjectsType")
     public List<SelectJson> listProjectsType() {

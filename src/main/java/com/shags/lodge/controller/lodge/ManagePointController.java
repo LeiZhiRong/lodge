@@ -10,7 +10,7 @@ import com.shags.lodge.util.Message;
 import com.shags.lodge.util.Pager;
 import com.shags.lodge.util.SystemContext;
 import com.shags.lodge.primary.entity.ManagePoint;
-import com.shags.lodge.service.IManagePointService;
+import com.shags.lodge.service.primary.IManagePointService;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

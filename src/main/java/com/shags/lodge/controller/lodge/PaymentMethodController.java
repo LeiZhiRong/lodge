@@ -9,7 +9,7 @@ import com.shags.lodge.util.Message;
 import com.shags.lodge.util.Pager;
 import com.shags.lodge.util.SystemContext;
 import com.shags.lodge.primary.entity.PaymentMethod;
-import com.shags.lodge.service.IPaymentMethodService;
+import com.shags.lodge.service.primary.IPaymentMethodService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.ui.Model;
