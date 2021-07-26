@@ -89,7 +89,7 @@ function findAssetsType(pid) {
 function mergeRow(id) {
     var Parent = $('#content').parent();
     var Own = $('#content').clone();
-    var title=empty(id)?"新增【资产分类信息】":"编辑【资产分类信息】";
+    var title=empty(id)?"新增【房产分类信息】":"编辑【房产分类信息】";
     Own.hide();
     $('#content').dialog({
         iconCls: 'fa fa-ellipsis-v',
