@@ -37,14 +37,15 @@ public class AssetsTypeService implements IAssetsTypeService {
     public Message addAssetsType(AssetsType assetsType, String pid) {
         Message msg = new Message(0, "新增失败");
         //检测分类名称是否唯一
-        AssetsType temp = (AssetsType) assetsTypeDao.queryObject("from AssetsType a where a.bookSet =?0 and a.name =?1", new Object[]{assetsType.getBookSet(), assetsType.getName()});
-        if (temp != null) {
-            msg.setMessage("资产分类:【" + assetsType.getName() + "】已在使用中，请检测后重试！");
+        boolean check = assetsTypeDao.checkAssetsType(assetsType.getBookSet(), assetsType.getBh(), assetsType.getName(), null);
+        if (check) {
+            msg.setMessage("资产分类编号或资产分类名称存在重名，请检测后重试！");
             return msg;
         }
-        int orders = assetsTypeDao.getMaxOrderByParent(pid);
+        int orders = assetsTypeDao.getMaxOrderByParent(assetsType.getBookSet(), pid);
         String ids = null;
         AssetsType pc = null;
+        String bh = "";
         if (StringUtils.isNotEmpty(pid)) {
             pc = assetsTypeDao.load(pid);
             if (pc == null) {
@@ -52,9 +53,13 @@ public class AssetsTypeService implements IAssetsTypeService {
             } else {
                 ids = pc.getIds();
                 assetsType.setParent(pc);
+                bh = pc.getBh();
             }
         }
         assetsType.setOrders(orders + 1);
+        if (StringUtils.isEmpty(assetsType.getBh())) {
+            assetsType.setBh(bh + assetsType.getOrders());
+        }
         AssetsType mast = assetsTypeDao.add(assetsType);
         if (mast != null) {
             mast.setIds(ids != null && !ids.isEmpty() ? mast.getId() + "," + ids : mast.getId());
@@ -76,9 +81,9 @@ public class AssetsTypeService implements IAssetsTypeService {
     public Message updateAssetsType(AssetsType assetsType, String pid) {
         Message msg = new Message(0, "更新失败");
         //检测分类名称是否唯一
-        AssetsType temp = (AssetsType) assetsTypeDao.queryObject("from AssetsType a where a.bookSet =?0 and a.name =?1 and a.id !=?2", new Object[]{assetsType.getBookSet(), assetsType.getName(), assetsType.getId()});
-        if (temp != null) {
-            msg.setMessage("分类名称:【" + assetsType.getName() + "】已在使用中，请检测后重试！");
+        boolean check = assetsTypeDao.checkAssetsType(assetsType.getBookSet(), assetsType.getBh(), assetsType.getName(), assetsType.getId());
+        if (check) {
+            msg.setMessage("资产分类编号或资产分类名称存在重名，请检测后重试！");
             return msg;
         }
         //复制原分类上级分类
@@ -89,7 +94,8 @@ public class AssetsTypeService implements IAssetsTypeService {
             if (oldParent == null || !pid.equals(oldParent.getId())) {
                 parent = assetsTypeDao.load(pid);
                 assetsType.setParent(parent);
-                assetsType.setOrders(assetsTypeDao.getMaxOrderByParent(pid) + 1);
+                assetsType.setOrders(assetsTypeDao.getMaxOrderByParent(assetsType.getBookSet(), pid) + 1);
+                assetsType.setBh(parent.getBh() + assetsType.getOrders());
             }
         }
         //更新分类信息，上级分类处理
@@ -177,8 +183,9 @@ public class AssetsTypeService implements IAssetsTypeService {
             jpql.append("and a.parent is null ");
         }
         if (StringUtils.isNotEmpty(value)) {
-            jpql.append(" and a.name like:value  ");
+            jpql.append(" and ( a.name like:value or a.bh like:value ) and a.contents =:contents ");
             alias.put("value", "%" + value + "%");
+            alias.put("contents","F");
         }
         Pager<AssetsType> assetsTypePager = assetsTypeDao.find(jpql.toString(), alias);
         if (assetsTypePager != null) {
@@ -196,7 +203,7 @@ public class AssetsTypeService implements IAssetsTypeService {
     @Transactional(value = "businessTransactionManager", readOnly = true)
     public List<TreeJson> listTreeJson(String bookSet) {
         List<TreeJson> cts = new ArrayList<>();
-        String sql = "select m.id as id,m.name as text,m.pid as pid,m.contents as contents from assets_type  m  where  m.bookSet =:bookSet  order by m.pid asc,m.orders asc";
+        String sql = "select m.id as id,m.bh as bh,m.name as text,m.pid as pid,m.contents as contents from assets_type  m  where  m.bookSet =:bookSet  order by m.pid asc,m.orders asc";
         Map<String, Object> alias = new HashMap<>();
         alias.put("bookSet", bookSet);
         List<Map> dts = assetsTypeDao.listToMapByAliasSql(sql, alias);
@@ -204,7 +211,7 @@ public class AssetsTypeService implements IAssetsTypeService {
             dts.forEach(map -> {
                 TreeJson temp = new TreeJson();
                 temp.setId((String) map.get("id"));
-                temp.setText((String) map.get("text"));
+                temp.setText(map.get("text") + (StringUtils.isNotEmpty((CharSequence) map.get("bh")) ? "【" + map.get("bh") + "】" : ""));
                 temp.setPid((String) map.get("pid"));
                 temp.setArg(map.get("contents"));
                 cts.add(temp);
@@ -217,7 +224,7 @@ public class AssetsTypeService implements IAssetsTypeService {
     @Transactional(value = "businessTransactionManager")
     public void updateSort(String[] ids) {
         int index = 1;
-        String hql = "update DeptInfo m set m.orders=?0 where m.id=?1";
+        String hql = "update AssetsType m set m.orders=?0 where m.id=?1";
         for (String id : ids) {
             assetsTypeDao.executeByJpql(hql, new Object[]{index++, id});
         }

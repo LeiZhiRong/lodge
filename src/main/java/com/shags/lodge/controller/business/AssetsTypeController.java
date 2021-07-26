@@ -64,7 +64,7 @@ public class AssetsTypeController {
      * @return html
      */
     @AuthMethod(role = "ROLE_AssEto")
-    @GetMapping(value = "dialog")
+    @RequestMapping(value = "dialog")
     public ModelAndView dialog(String id, String pid, Model model) {
         AssetsTypeForm assetsType = new AssetsTypeForm();
         boolean disabled;
@@ -114,6 +114,7 @@ public class AssetsTypeController {
                 mast.setName(assetsTypeDto.getName());
                 mast.setZtBz(assetsTypeDto.getZtBz());
                 mast.setrVTime(CmsUtils.getTimeMillis());
+                mast.setBh(assetsTypeDto.getBh());
                 return assetsTypeService.updateAssetsType(mast, assetsTypeDto.getPid());
             }
         } catch (Exception e) {

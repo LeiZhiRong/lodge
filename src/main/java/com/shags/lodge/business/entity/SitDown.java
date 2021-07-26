@@ -15,9 +15,10 @@ import javax.validation.constraints.NotEmpty;
  */
 
 @Entity
-@Table(name = "location_info")
+@Table(name = "sitDown_info")
 @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
-public class LocationInfo {
+public class SitDown {
+
 
     /**
      * 关键字
@@ -100,7 +101,7 @@ public class LocationInfo {
         this.rVTime = rVTime;
     }
 
-    public LocationInfo() {
+    public SitDown() {
         super();
     }
 

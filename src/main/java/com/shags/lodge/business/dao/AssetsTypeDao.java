@@ -6,7 +6,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author yglei
@@ -18,12 +20,12 @@ public class AssetsTypeDao extends BusinessBaseDAO<AssetsType, String> implement
 
 
     @Override
-    public int getMaxOrderByParent(String pid) {
+    public int getMaxOrderByParent(String bookSet,String pid) {
         Object obj;
         if (StringUtils.isNotEmpty(pid)) {
-            obj = super.queryObject("select max(m.orders) from AssetsType m where m.parent.id=?0", pid);
+            obj = super.queryObject("select max(m.orders) from AssetsType m where m.parent.id=?0 and m.bookSet =?1 ", new Object[]{pid,bookSet});
         } else {
-            obj = super.queryObject("select max(m.orders) from AssetsType m where m.parent is null");
+            obj = super.queryObject("select max(m.orders) from AssetsType m where m.parent is null and m.bookSet =?0",bookSet);
         }
         if (obj == null)
             return 0;
@@ -50,6 +52,31 @@ public class AssetsTypeDao extends BusinessBaseDAO<AssetsType, String> implement
         if (obj == null)
             return 0;
         return ((Number) obj).intValue();
+    }
+
+    @Override
+    public boolean checkAssetsType(String bookSet, String bh, String name, String id) {
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
+        List<String> tj = new ArrayList<>();
+        jpql.append("from AssetsType a where a.bookSet =:bookSet ");
+        alias.put("bookSet", bookSet);
+        if (StringUtils.isNotEmpty(id)) {
+            jpql.append(" and a.id !=:id ");
+            alias.put("id", id);
+        }
+        if (StringUtils.isNotEmpty(bh)) {
+            tj.add(" a.bh =:bh ");
+            alias.put("bh", bh);
+        }
+        if (StringUtils.isNotEmpty(name)) {
+            tj.add(" a.name =:name ");
+            alias.put("name", name);
+        }
+        if (tj.size() > 0) {
+            jpql.append(" and ( ").append(StringUtils.join(tj, "or")).append(" ) ");
+        }
+        return super.queryObjectByAlias(jpql.toString(), alias) != null;
     }
 
 

@@ -13,7 +13,7 @@ public interface IAssetsTypeDao extends IBusinessBaseDAO<AssetsType> {
      * @param pid 上级类型编号
      * @return int
      */
-    int getMaxOrderByParent(String pid);
+    int getMaxOrderByParent(String bookSet,String pid);
 
     /**
      * 更新ids
@@ -29,4 +29,13 @@ public interface IAssetsTypeDao extends IBusinessBaseDAO<AssetsType> {
      * @return int
      */
     int getCountByPid(String pid);
+
+    /**
+     * @description: 检测
+     * @param: [bookSet, bh, name, id]
+     * @author: ygLei
+     * @return: {@link boolean}
+     * @date: 2021-07-23 17:11
+     */
+    boolean checkAssetsType(String bookSet,String bh,String name,String id);
 }

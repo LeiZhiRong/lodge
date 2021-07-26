@@ -4,17 +4,10 @@
     <meta charset="UTF-8">
 </head>
 <body>
-<form id="mergeFrom" th:action="@{save}" th:object="${assetsType}" method="post">
+<form id="mergeFrom" th:action="@{save}" th:object="${sitDown}" method="post">
     <table cellspacing="0" cellPadding="0" class="addTable">
         <tr>
-            <td class="rightTd" style="width:100px;">分类编号：</td>
-            <td>
-                <input id="bh" name="bh" class="easyui-textbox"style="width:200px;height:28px;"
-                       th:value="*{bh}"/>
-            </td>
-        </tr>
-        <tr>
-            <td class="rightTd" style="width:100px;">分类名称：</td>
+            <td class="rightTd" style="width:100px;">坐落位置：</td>
             <td>
                 <input id="name" name="name" class="easyui-textbox"
                        data-options="required:true,missingMessage:null" style="width:200px;height:28px;"
@@ -22,20 +15,23 @@
             </td>
         </tr>
         <tr>
-            <td class="rightTd" style="width:100px;">所属分类：</td>
+            <td class="rightTd" style="width:100px;">所属管理处：</td>
             <td class="leftTd">
-
-                <input id="pid" name="pid" class="easyui-combotree" th:value="${pid!='all'?pid:''}"
-                       th:disabled="${disabled}" style="width:200px;height:30px;"
-                       data-options="prompt:'请选择...', editable:false,panelMaxHeight : 200,panelHeight:'auto',panelWidth:280,url:'listParent',onLoadSuccess:function (row,data) {
-                }"/>
+                <select name="managerPoint" class="easyui-combobox"
+                        data-options="panelMaxHeight:200,panelHeight:'auto',editable:false"
+                        style="width:200px;;height:28px">
+                    <option th:each="item:${managePoint}"
+                            th:value="${item.id}"
+                            th:selected="${sitDown.managerPoint eq item.id}"
+                            th:text="${item.name}"></option>
+                </select>
 
             </td>
         </tr>
         <tr>
             <td class="rightTd" style="width:100px;">是否启用：</td>
             <td>
-                <input class="easyui-switchbutton" th:checked="${assetsType.ztBz=='T'?1:0}"
+                <input class="easyui-switchbutton" th:checked="${sitDown.ztBz=='T'?1:0}"
                        style="height:28px;"
                        data-options="onText:'启用',offText:'停用',
                         onChange:function(checked){
@@ -50,10 +46,6 @@
     </table>
     <input hidden="true" name="ztBz" id="ztBz" th:value="*{ztBz}"/>
     <input hidden="true" name="id" id="id" th:value="*{id}"/>
-    <input hidden="true" name="contents" id="contents" th:value="*{contents}"/>
-    <script th:inline="javascript">
-
-    </script>
 </form>
 </body>
 </html>

@@ -3,7 +3,7 @@ $(function () {
     $("#dg").datagrid({
         url: 'list',
         border: true,
-        sortName: 'orders',
+        sortName: 'bookSet',
         sortOrder: 'asc',
         pagination: true,
         singleSelect: true,
@@ -13,9 +13,10 @@ $(function () {
         header: '#top-toolbar',
         fit: true,
         columns: [[
-            {field: 'name', title: '分类名称', width: 250},
-            {field: 'parent_name', title: '所属分类', width: 250},
-            {field: 'ztBz', title: '状态', width: 80, align: 'center'},
+            {field: 'name', title: '坐落位置', width: 250},
+            {field: 'ztBz', title: '状态', width: 80, align: 'center',formatter: function (value, row) {
+                    return is_eq("T",value) ? "<i class='fa fa-check fa-fw green '></i>" : "<i class='fa fa-close fa-fw red'></i>";
+                }},
             {
                 field: 'action',
                 title: '操作',
@@ -27,15 +28,8 @@ $(function () {
                     return a + c;
                 }
             }
-        ]],
-        onLoadSuccess: function () {
-            $(this).datagrid('enableDnd');
-        },
-        onDrop: function (dRow, sRow, point) {
-            enableDnd(dRow, sRow, point);
-        }
-    }).datagrid('columnMoving');
-
+        ]]
+    });
     $('#searchbox').textbox().textbox('addClearBtn', 'icon-clear');
 
 })
@@ -54,11 +48,7 @@ function deleteRow(id) {
                     },
                     success: function (data) {
                         if (data.code == 1) {
-                            if (data.data != null) {
-                                findDeptInfo(data.data);
-                            } else {
-                                $('#dg').datagrid('reload');
-                            }
+                            $('#dg').datagrid('reload');
                         } else {
                             LG.alert("error", data.message);
                         }
@@ -74,22 +64,10 @@ function deleteRow(id) {
 
 }
 
-var data_pid = null;
-
-// 模块目录跳转
-function findAssetsType(pid) {
-    data_pid = pid;
-    var queryparams = {
-        pid: pid
-    };
-    $('#dg').datagrid('options').queryParams = queryparams;
-    $('#dg').datagrid('reload');
-}
-
 function mergeRow(id) {
     var Parent = $('#content').parent();
     var Own = $('#content').clone();
-    var title=empty(id)?"新增【资产分类信息】":"编辑【资产分类信息】";
+    var title=empty(id)?"新增【坐落位置信息】":"编辑【坐落位置信息】";
     Own.hide();
     $('#content').dialog({
         iconCls: 'fa fa-ellipsis-v',
@@ -107,7 +85,7 @@ function mergeRow(id) {
         href: 'dialog',
         queryParams: {
             id: id,
-            pid: data_pid
+            point_id: $("#point_id").combobox("getValue")
         },
         onClose: function () {
             Own.appendTo(Parent);
@@ -122,11 +100,7 @@ function mergeRow(id) {
                 var mergeFrom = $("#mergeFrom");
                 LG.ajaxSubmitForm(mergeFrom, function (data) {
                     if (data.code == 1) {
-                        if (data.data != null) {
-                            findDeptInfo(data.data);
-                        } else {
-                            $('#dg').datagrid('reload');
-                        }
+                        $('#dg').datagrid('reload');
                         $('#content').dialog('close');
                     } else {
                         LG.alert("error", data.message);
@@ -144,43 +118,13 @@ function mergeRow(id) {
     })
 }
 
-// 模块目录跳转
-function findDeptInfo(pid) {
-    data_pid = pid;
-    var queryparams = {
-        pid: pid
-    };
-    $('#dg').datagrid('options').queryParams = queryparams;
-    $('#dg').datagrid('reload');
-}
-
-// 拖动排序
-function enableDnd(dRow, sRow, point) {
-    var rows = $('#dg').datagrid('getRows');
-    var ids = $(rows).map(function () {
-        return this.id;
-    }).get().join(",");
-    var data = {
-        ids: ids
-    };
-    LG.ajax({
-        url: 'updateOrders',
-        data: data,
-        success: function () {
-            $('#dg').datagrid('reload');
-        },
-        error: function (message) {
-            LG.tip("error", message);
-            return false;
-        }
-    });
-}
-
 function f_search(value) {
     var queryparams = {
-        value: value
+        value: value,
+        point_id: $("#point_id").combobox("getValue")
     };
     $('#dg').datagrid('options').queryParams = queryparams;
     $('#dg').datagrid('reload');
 }
+
 /*]]>*/

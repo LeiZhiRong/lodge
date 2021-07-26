@@ -3,7 +3,6 @@ package com.shags.lodge.business.entity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
 
 /**
  * 资产分类实体类
@@ -13,15 +12,20 @@ import javax.validation.constraints.NotEmpty;
 @Table(name = "assets_type")
 @GenericGenerator(name = "uuid2", strategy = "org.hibernate.id.UUIDGenerator")
 public class AssetsType {
+
     /**
      * 关键字
      */
     private String id;
 
     /**
+     * 分类编号
+     */
+     private String bh;
+
+    /**
      * 名称
      */
-    @NotEmpty(message = "分类名称不能为空")
     private String name;
 
     /**
@@ -112,6 +116,7 @@ public class AssetsType {
         this.contents = contents;
     }
 
+    @Column(length = 1500)
     public String getIds() {
         return ids;
     }
@@ -140,4 +145,11 @@ public class AssetsType {
         this.ztBz = ztBz;
     }
 
+    public String getBh() {
+        return bh;
+    }
+
+    public void setBh(String bh) {
+        this.bh = bh;
+    }
 }

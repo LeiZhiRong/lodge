@@ -1,8 +1,6 @@
 package com.shags.lodge.dto.business;
 
 import com.shags.lodge.business.entity.AssetsType;
-import com.shags.lodge.dto.DeptInfoListDto;
-import com.shags.lodge.primary.entity.DeptInfo;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -19,6 +17,11 @@ public class AssetsTypePage {
      * 关键字
      */
     private String id;
+
+    /**
+     * 分类编号
+     */
+    private String bh;
 
     /**
      * 名称
@@ -108,22 +111,32 @@ public class AssetsTypePage {
         super();
     }
 
+    public String getBh() {
+        return bh;
+    }
+
+    public void setBh(String bh) {
+        this.bh = bh;
+    }
+
     public AssetsTypePage(AssetsType assetsType) {
+        String name = assetsType.getName() + (StringUtils.isNotEmpty(assetsType.getBh()) ? "【" + assetsType.getBh() + "】" : "");
         this.setId(assetsType.getId());
         this.setZtBz("T".equals(assetsType.getZtBz()) ? "<i class='fa fa-check  fa-lg green '></i>" : "<i class='fa fa-close fa-lg red '></i>");
         this.setContents(assetsType.getContents());
         if ("T".equals(assetsType.getContents())) {
-            this.setName("<a href='javascript:void(0)' onclick='findAssetsType(&quot;" + assetsType.getId() + "&quot;);'><i class='fa fa-folder-open-o fa-lg'></i> " + assetsType.getName() + "</a>");
+            this.setName("<a href='javascript:void(0)' onclick='findAssetsType(&quot;" + assetsType.getId() + "&quot;);'><i class='fa fa-folder-open-o fa-lg'></i> " + name + "</a>");
         } else {
-            this.setName(assetsType.getName());
+            this.setName(name);
         }
         if (assetsType.getParent() != null) {
+            String bh = StringUtils.isNotEmpty(assetsType.getParent().getBh()) ? "【" + assetsType.getParent().getBh() + "】" : "";
             AssetsType parent = assetsType.getParent();
             this.setParent_id(parent.getId());
             if (parent.getParent() != null) {
-                this.setParent_name("<a href='javascript:void(0)' onclick='findAssetsType(&quot;" + parent.getParent().getId() + "&quot;);'><i class='fa  fa-folder-open-o  fa-lg'></i> " + parent.getName() + "</a>");
+                this.setParent_name("<a href='javascript:void(0)' onclick='findAssetsType(&quot;" + parent.getParent().getId() + "&quot;);'><i class='fa  fa-folder-open-o  fa-lg'></i> " + parent.getName() + bh + "</a>");
             } else {
-                this.setParent_name("<a href='javascript:void(0)' onclick='findAssetsType(null);'><i class='fa fa-folder-open-o fa-lg'></i> " + parent.getName() + "</a>");
+                this.setParent_name("<a href='javascript:void(0)' onclick='findAssetsType(null);'><i class='fa fa-folder-open-o fa-lg'></i> " + parent.getName() + bh + "</a>");
             }
         } else {
             this.setParent_id(null);
@@ -141,7 +154,6 @@ public class AssetsTypePage {
         }
         return list;
     }
-
 
 
 }
