@@ -5,7 +5,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 
 /**
- * 房屋资产分类实体类
+ * 资产分类实体类
  */
 @SuppressWarnings("JpaDataSourceORMInspection")
 @Entity

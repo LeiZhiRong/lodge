@@ -100,6 +100,15 @@ public interface IDeptInfoDao extends IBaseDAO<DeptInfo> {
      */
     List<TreeJson> getMenuInfo2TreeJson(String keyword);
 
+
+    /**
+     * 客户端获取管理部门树
+     * @param keyword 已选择部门，多个以";"隔开
+     * @param status 状态标识
+     * @return list
+     */
+    List<TreeJson> getClientTreeJson(String keyword, Integer status,String userDeptID);
+
     /**
      * 批量删除
      * @param ids

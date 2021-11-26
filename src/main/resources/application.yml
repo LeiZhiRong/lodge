@@ -107,3 +107,5 @@ jwt:
   tokenPrefix: Shgs-
   # 过期时间 单位秒 1天后过期=86400 7天后过期=604800
   expiration: 604800
+UEditorConfig:
+  fileName: ueditor-conf-dev.json

@@ -1,8 +1,11 @@
 package com.shags.lodge.service.business;
 
 import com.shags.lodge.business.entity.SitDown;
+import com.shags.lodge.dto.TreeJson;
 import com.shags.lodge.util.Message;
 import com.shags.lodge.util.Pager;
+
+import java.util.List;
 
 /**
  * @author yglei
@@ -56,6 +59,15 @@ public interface ISitDownService {
      * @date: 2021-07-21 17:08
      */
     SitDown querySitDown(String id);
+
+    /**
+     * @description: 客户端获取座落位置树
+     * @param: [keyword, bookSet]
+     * @author: ygLei
+     * @return: {@link List< TreeJson>}
+     * @date: 2021-11-26 16:57
+     */
+    List<TreeJson> getClientSitDownToTreeJson(String keyword, String bookSet);
 
 
 }

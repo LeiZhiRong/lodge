@@ -3,12 +3,12 @@ package com.shags.lodge.business.entity;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 /**
  * @author yglei
  * @classname BuildingInfo
- * @description 房屋资产信息实体类
+ * @description 楼栋信息实体类
  * @date 2021-07-26 16:20
  */
 @Entity
@@ -19,12 +19,25 @@ public class AssetsInfo {
     /**
      * 关键字
      */
-    private  String id;
+    private String id;
 
     /**
      * 部门编号
      */
     private String deptID;
+
+    public String getDeptName() {
+        return deptName;
+    }
+
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
+    }
+
+    /**
+     * 管辖部门
+     */
+    private String deptName;
 
     /**
      * 卡片编号
@@ -32,14 +45,14 @@ public class AssetsInfo {
     private String cardNumber;
 
     /**
-     * 所属公司名称
+     * 公司名称
      */
     private String corporateName;
 
     /**
-     * 楼栋类型
+     * 房屋类型
      */
-    private  AssetsType assetsType;
+    private AssetsType assetsType;
 
     /**
      * 坐落位置
@@ -62,12 +75,12 @@ public class AssetsInfo {
     private Double assetArea;
 
     /**
-     * 房管所编号
+     * 攀钢自编名称
      */
     private String housingNumber;
 
     /**
-     * 社区编号
+     * 社区名称
      */
     private String communityNumber;
 
@@ -85,16 +98,6 @@ public class AssetsInfo {
      * 土地证号
      */
     private String landCertificateNo;
-
-    /**
-     * 证书登记人
-     */
-    private String certificateRegistrant;
-
-    /**
-     * 状态标志
-     */
-    private String ztBz;
 
     /**
      * 帐套编号
@@ -125,6 +128,16 @@ public class AssetsInfo {
      * 时间戳
      */
     private String sVTime;
+
+    /**
+     * 状态标志
+     */
+    private String ztBz;
+
+    /**
+     * 自定义卡片编号
+     */
+    private int customCardNumber;
 
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -244,14 +257,6 @@ public class AssetsInfo {
         this.landCertificateNo = landCertificateNo;
     }
 
-    public String getCertificateRegistrant() {
-        return certificateRegistrant;
-    }
-
-    public void setCertificateRegistrant(String certificateRegistrant) {
-        this.certificateRegistrant = certificateRegistrant;
-    }
-
     public String getZtBz() {
         return ztBz;
     }
@@ -308,9 +313,16 @@ public class AssetsInfo {
         this.sVTime = sVTime;
     }
 
+    public int getCustomCardNumber() {
+        return customCardNumber;
+    }
+
+    public void setCustomCardNumber(int customCardNumber) {
+        this.customCardNumber = customCardNumber;
+    }
+
     public AssetsInfo() {
         super();
     }
-
 
 }

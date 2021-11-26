@@ -4,6 +4,7 @@ import com.shags.lodge.business.dao.IAssetsTypeDao;
 import com.shags.lodge.business.entity.AssetsType;
 import com.shags.lodge.dto.TreeJson;
 import com.shags.lodge.dto.business.AssetsTypePage;
+import com.shags.lodge.util.CmsUtils;
 import com.shags.lodge.util.Message;
 import com.shags.lodge.util.Pager;
 import org.apache.commons.lang3.StringUtils;
@@ -214,6 +215,32 @@ public class AssetsTypeService implements IAssetsTypeService {
                 temp.setText(map.get("text") + (StringUtils.isNotEmpty((CharSequence) map.get("bh")) ? "【" + map.get("bh") + "】" : ""));
                 temp.setPid((String) map.get("pid"));
                 temp.setArg(map.get("contents"));
+                cts.add(temp);
+            });
+        }
+        return TreeJson.getfatherNode(cts);
+    }
+
+    @Override
+    @Transactional(value = "businessTransactionManager", readOnly = true)
+    public List<TreeJson> getClientTreeJson(String keyword,String bookSet,String ztBz) {
+        List<TreeJson> cts = new ArrayList<>();
+        String sql = "select m.id as id,m.bh as bh,m.name as text,m.pid as pid,m.contents as contents from assets_type  m  where  m.bookSet =:bookSet  and m.ztBz =:ztBz  order by m.pid asc,m.orders asc";
+        Map<String, Object> alias = new HashMap<>();
+        alias.put("bookSet", bookSet);
+        alias.put("ztBz", ztBz);
+        List<Map> dts = assetsTypeDao.listToMapByAliasSql(sql, alias);
+        if (dts != null && dts.size() > 0) {
+            List<String> list = CmsUtils.string2Array(keyword, ";");
+            dts.forEach(map -> {
+                TreeJson temp = new TreeJson();
+                temp.setId((String) map.get("id"));
+                temp.setText((String) map.get("text"));
+                temp.setPid((String) map.get("pid"));
+                temp.setArg(map.get("contents"));
+                if (list.contains(map.get("text"))) {
+                    temp.setChecked(true);
+                }
                 cts.add(temp);
             });
         }

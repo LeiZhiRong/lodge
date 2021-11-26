@@ -52,7 +52,7 @@ public class User {
      */
     private String manageDept;
     /**
-     * 结算部门
+     * 管理处
      */
     private String balanceDept;
 

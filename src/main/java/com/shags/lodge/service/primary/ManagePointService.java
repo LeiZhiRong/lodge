@@ -1,6 +1,8 @@
 package com.shags.lodge.service.primary;
 
 import com.shags.lodge.dto.ManagePointDto;
+import com.shags.lodge.dto.User;
+import com.shags.lodge.util.CmsUtils;
 import com.shags.lodge.util.Message;
 import com.shags.lodge.util.Pager;
 import com.shags.lodge.util.SelectJson;
@@ -36,7 +38,7 @@ public class ManagePointService implements IManagePointService {
     @Transactional(value = "primaryTransactionManager")
     public Message addManagePoint(ManagePoint managePoint) {
         Message msg = new Message(0, "新增失败");
-        ManagePoint m= (ManagePoint) managePointDao.queryObject("from ManagePoint m where ( m.bh =?0 or m.name =?1 ) and  m.bookSet =?2 ",new Object[]{managePoint.getBh(),managePoint.getName(),managePoint.getBookSet()});
+        ManagePoint m = (ManagePoint) managePointDao.queryObject("from ManagePoint m where ( m.bh =?0 or m.name =?1 ) and  m.bookSet =?2 ", new Object[]{managePoint.getBh(), managePoint.getName(), managePoint.getBookSet()});
         if (m != null) {
             msg.setMessage("编号或名称已经存在，请修改后重试！");
             return msg;
@@ -52,7 +54,7 @@ public class ManagePointService implements IManagePointService {
     @Transactional(value = "primaryTransactionManager")
     public Message updateManagePoint(ManagePoint managePoint) {
         Message msg = new Message(0, "修改失败");
-        ManagePoint m= (ManagePoint) managePointDao.queryObject("from ManagePoint m where ( m.bh =?0 or m.name =?1 ) and  m.bookSet =?2 and m.id !=?3 ",new Object[]{managePoint.getBh(),managePoint.getName(),managePoint.getBookSet(),managePoint.getId()});
+        ManagePoint m = (ManagePoint) managePointDao.queryObject("from ManagePoint m where ( m.bh =?0 or m.name =?1 ) and  m.bookSet =?2 and m.id !=?3 ", new Object[]{managePoint.getBh(), managePoint.getName(), managePoint.getBookSet(), managePoint.getId()});
         if (m != null) {
             msg.setMessage("编号或名称已经存在，请修改后重试！");
             return msg;
@@ -73,14 +75,41 @@ public class ManagePointService implements IManagePointService {
     @Override
     @Transactional(value = "primaryTransactionManager", readOnly = true)
     public List<SelectJson> listManagePointToSelectJson(String bookSet) {
-        List<ManagePoint> list=managePointDao.list("from ManagePoint m where m.bookSet =?0 and m.ztbz =?1  order by m.rVTime asc ",new Object[]{bookSet,"T"});
-        List<SelectJson> jsonList =new ArrayList<>();
-        if(list!=null&& list.size()>0){
-            for(ManagePoint managePoint:list){
-                jsonList.add(new SelectJson(managePoint.getId(),managePoint.getName()));
+        List<ManagePoint> list = managePointDao.list("from ManagePoint m where m.bookSet =?0 and m.ztbz =?1  order by m.rVTime asc ", new Object[]{bookSet, "T"});
+        List<SelectJson> jsonList = new ArrayList<>();
+        if (list != null && list.size() > 0) {
+            for (ManagePoint managePoint : list) {
+                jsonList.add(new SelectJson(managePoint.getId(), managePoint.getName()));
             }
         }
         return jsonList;
+    }
+
+    @Override
+    @Transactional(value = "primaryTransactionManager", readOnly = true)
+    public List<SelectJson> getClientManagePointByUser(User user) {
+        List<SelectJson> jsonList = new ArrayList<>();
+        if (user.isAdmin()) {
+            return this.listManagePointToSelectJson(user.getBookSet());
+        } else {
+            StringBuilder jpql = new StringBuilder();
+            Map<String, Object> alias = new HashMap<>();
+            jpql.append(" from ManagePoint m where m.bookSet =:bookSet and m.ztbz =:ztbz ");
+            alias.put("bookSet", user.getBookSet());
+            alias.put("ztbz", "T");
+            if(StringUtils.isNotEmpty(user.getManageDept())){
+                List<String> setId= CmsUtils.string2Array(user.getBalanceDept(),",");
+                jpql.append(" and m.name in(:setId) ");
+                alias.put("setId",setId);
+            }
+            List<ManagePoint> list=managePointDao.listByAlias(jpql.toString(),alias);
+            if (list != null && list.size() > 0) {
+                for (ManagePoint managePoint : list) {
+                    jsonList.add(new SelectJson(managePoint.getId(), managePoint.getName()));
+                }
+            }
+            return jsonList;
+        }
     }
 
     @Override
@@ -136,7 +165,7 @@ public class ManagePointService implements IManagePointService {
     @Override
     @Transactional(value = "primaryTransactionManager", readOnly = true)
     public String listNotInManagePoint(String bookSet, String name) {
-        List<Map> list = managePointDao.listNotInManagePoint(bookSet,name);
+        List<Map> list = managePointDao.listNotInManagePoint(bookSet, name);
         if (list != null && list.size() > 0) {
             List<String> strings = new ArrayList<>();
             for (Map map : list) {

@@ -1,10 +1,11 @@
 package com.shags.lodge.service.primary;
 
 import com.shags.lodge.dto.ManagePointDto;
+import com.shags.lodge.dto.User;
+import com.shags.lodge.primary.entity.ManagePoint;
 import com.shags.lodge.util.Message;
 import com.shags.lodge.util.Pager;
 import com.shags.lodge.util.SelectJson;
-import com.shags.lodge.primary.entity.ManagePoint;
 
 import java.util.List;
 
@@ -47,6 +48,13 @@ public interface IManagePointService {
      * @return
      */
     List<SelectJson> listManagePointToSelectJson(String bookSet);
+
+    /**
+     * 获取登录用户授权管理处列表
+     * @param user 登录用户信息
+     * @return selectJson
+     */
+    List<SelectJson> getClientManagePointByUser(User user);
 
     /**
      * 获取分页数据

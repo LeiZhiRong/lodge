@@ -1,5 +1,7 @@
 package com.shags.lodge.controller.lodge;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.shags.lodge.auth.AuthMethod;
 import com.shags.lodge.config.JWTConfig;
 import com.shags.lodge.dto.RSAPublicDto;
 import com.shags.lodge.dto.User;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -157,9 +160,14 @@ public class LoginController {
             msg.setData(url);
         } else {
             msg.setCode(0);
-            msg.setMessage("系统初始化错误");
         }
         return msg;
+    }
+
+    @AuthMethod
+    @GetMapping("test")
+    public ModelAndView list() throws JsonProcessingException {
+        return new ModelAndView("test");
     }
 
 }

@@ -78,6 +78,14 @@ public interface IDeptInfoService {
     List<TreeJson> getDeptInfo2TreeJson(String keyword);
 
     /**
+     * 客户端获取管理部门列表
+     * @param keyword 已选择部门,多个以“;”隔开
+     * @param status 状态标识
+     * @return list
+     */
+    List<TreeJson> getClientTreeJson(String keyword, Integer status, String userDeptID);
+
+    /**
      * 获取部门列表
      * @param pid
      * @param value

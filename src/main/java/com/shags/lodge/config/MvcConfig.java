@@ -41,7 +41,10 @@ public class MvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")     //所有路径都被拦截
                 .excludePathPatterns(
                         "/error/**",
+                        "/*/*.json",
+                        "/ueditor/**",        //添加不拦截路径
                         "/login/**",        //添加不拦截路径
+                        "/upload/**",        //添加不拦截路径
                         "/static/**"        //添加不拦截路径
 
                 );

@@ -8,9 +8,16 @@ import sun.misc.BASE64Decoder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.security.interfaces.RSAPrivateKey;
 import java.text.DateFormat;
@@ -28,6 +35,12 @@ import static java.net.URLDecoder.decode;
 public class CmsUtils {
 
     private static final Integer DEF_DIV_SCALE = 2;
+
+    private static final String UNKNOWN = "unknown";
+    private static final String LOCALHOST = "127.0.0.1";
+    private static final String LOCALHOST_IPV6 = "0:0:0:0:0:0:0:1";//客户端与服务器同为一台机器获取的ip有时候是ipv6格式表示的本地地址
+
+    private static final String SEPARATOR = ",";
 
     /**
      * 获取表头
@@ -146,23 +159,43 @@ public class CmsUtils {
      * @param request
      * @return
      */
-    public static String getIpAddr(HttpServletRequest request) {
-        String ip = request.getHeader("X-Real-IP");
-        if (!StringUtils.isBlank(ip) && !"unknown".equalsIgnoreCase(ip)) {
-            return ip;
-        }
-        ip = request.getHeader("X-Forwarded-For");
-        if (!StringUtils.isBlank(ip) && !"unknown".equalsIgnoreCase(ip)) {
-            // 多次反向代理后会有多个IP值，第一个为真实IP。
-            int index = ip.indexOf(',');
-            if (index != -1) {
-                return ip.substring(0, index);
-            } else {
-                return ip;
+    public static String getIpAddr(HttpServletRequest request) throws Exception {
+        String ipAddress;
+        try {
+            ipAddress = request.getHeader("x-forwarded-for");
+            //ipAddress = request.getHeader("X-Forwarded-For");//有时候是大写，在于nginx.conf中的proxy_set_header如何配置了
+            if (ipAddress == null || ipAddress.length() == 0 || UNKNOWN.equalsIgnoreCase(ipAddress)) {
+                ipAddress = request.getHeader("X-Real-IP");
             }
-        } else {
-            return request.getRemoteAddr();
+            if (ipAddress == null || ipAddress.length() == 0 || UNKNOWN.equalsIgnoreCase(ipAddress)) {
+                ipAddress = request.getHeader("Proxy-Client-IP");
+            }
+            if (ipAddress == null || ipAddress.length() == 0 || UNKNOWN.equalsIgnoreCase(ipAddress)) {
+                ipAddress = request.getHeader("WL-Proxy-Client-IP");
+            }
+            if (ipAddress == null || ipAddress.length() == 0 || UNKNOWN.equalsIgnoreCase(ipAddress)) {
+                ipAddress = request.getRemoteAddr();
+                if (LOCALHOST.equals(ipAddress) || LOCALHOST_IPV6.equals(ipAddress)) {
+                    InetAddress inet = null;
+                    try {
+                        inet = InetAddress.getLocalHost();
+                    } catch (UnknownHostException e) {
+                        e.printStackTrace();
+                    }
+                    ipAddress = inet.getHostAddress();
+                }
+            }
+            if (ipAddress != null && ipAddress.length() > 15) {
+                if (ipAddress.indexOf(SEPARATOR) > 0) {
+                    ipAddress = ipAddress.substring(0, ipAddress.indexOf(","));
+                }
+            }
+        } catch (Exception e) {
+            ipAddress = "";
         }
+        String mac= UdpGetClientMacAdder.getLocalMac(ipAddress);
+        return ipAddress;
+
     }
 
     /**
@@ -176,7 +209,6 @@ public class CmsUtils {
         formatter.setMinimumIntegerDigits(digit);
         formatter.setGroupingUsed(false);
         return formatter.format(number);
-
     }
 
     /**
@@ -376,7 +408,7 @@ public class CmsUtils {
                     str.add(corpBh);
                 } else if ("DATE".equals(parame.getParameCode())) {//日期
                     str.add(BeanUtil.timestampToStr(BeanUtil.dateToTimestamp(new Date()), accounCode.getPrefixOneCode()));
-                }else if("Serial".equals(parame.getParameCode())){
+                } else if ("Serial".equals(parame.getParameCode())) {
                     str.add(CmsUtils.int2Formatter(orderNum, accounCode.getJhSerialLength()));
                 }
             }
@@ -390,7 +422,7 @@ public class CmsUtils {
                     str.add(corpBh);
                 } else if ("DATE".equals(parame.getParameCode())) {//日期
                     str.add(BeanUtil.timestampToStr(BeanUtil.dateToTimestamp(new Date()), accounCode.getPrefixTwoCode()));
-                }else if("Serial".equals(parame.getParameCode())){
+                } else if ("Serial".equals(parame.getParameCode())) {
                     str.add(CmsUtils.int2Formatter(orderNum, accounCode.getJhSerialLength()));
                 }
             }
@@ -404,7 +436,7 @@ public class CmsUtils {
                     str.add(corpBh);
                 } else if ("DATE".equals(parame.getParameCode())) {//日期
                     str.add(BeanUtil.timestampToStr(BeanUtil.dateToTimestamp(new Date()), accounCode.getPrefixThreeCode()));
-                }else if("Serial".equals(parame.getParameCode())){
+                } else if ("Serial".equals(parame.getParameCode())) {
                     str.add(CmsUtils.int2Formatter(orderNum, accounCode.getJhSerialLength()));
                 }
             }
@@ -418,7 +450,7 @@ public class CmsUtils {
                     str.add(corpBh);
                 } else if ("DATE".equals(parame.getParameCode())) {//日期
                     str.add(BeanUtil.timestampToStr(BeanUtil.dateToTimestamp(new Date()), accounCode.getPrefixFourCode()));
-                }else if("Serial".equals(parame.getParameCode())){
+                } else if ("Serial".equals(parame.getParameCode())) {
                     str.add(CmsUtils.int2Formatter(orderNum, accounCode.getJhSerialLength()));
                 }
             }
@@ -447,7 +479,7 @@ public class CmsUtils {
             RSAPrivateKey privateKey = (RSAPrivateKey) session.getAttribute("loginKey");
             if (pwd != null && !pwd.isEmpty()) {
                 return decode(RSAUtils.decryptByPrivateKey(pwd, privateKey), "UTF-8");
-            }else {
+            } else {
                 return null;
             }
         } catch (Exception e) {
@@ -455,8 +487,47 @@ public class CmsUtils {
         } finally {
             session.removeAttribute("loginKey");
         }
-
     }
 
+    public static String getLocalMac(String ipAddress) throws SocketException, UnknownHostException {
+        String str = "";
+        String macAddress = "";
+        final String LOOPBACK_ADDRESS = "127.0.0.1";
+        if (LOOPBACK_ADDRESS.equals(ipAddress)) {
+            InetAddress inetAddress = InetAddress.getLocalHost();
+            byte[] mac = NetworkInterface.getByInetAddress(inetAddress)
+                    .getHardwareAddress();
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < mac.length; i++) {
+                if (i != 0) {
+                    sb.append("-");
+                }
+                String s = Integer.toHexString(mac[i] & 0xFF);
+                sb.append(s.length() == 1 ? 0 + s : s);
+            }
+            macAddress = sb.toString().trim().toUpperCase();
+        } else {
+            // 获取非本地IP的MAC地址
+            try {
+                Process p = Runtime.getRuntime()
+                        .exec("nbtstat -A " + ipAddress);
+                InputStreamReader ir = new InputStreamReader(p.getInputStream());
+
+                BufferedReader br = new BufferedReader(ir);
+                while ((str = br.readLine()) != null) {
+                    if (str.indexOf("MAC") > 1) {
+                        macAddress = str.substring(str.indexOf("MAC") + 9);
+                        macAddress = macAddress.trim();
+                        break;
+                    }
+                }
+                p.destroy();
+                br.close();
+                ir.close();
+            } catch (IOException ex) {
+            }
+        }
+        return macAddress;
+    }
 
 }

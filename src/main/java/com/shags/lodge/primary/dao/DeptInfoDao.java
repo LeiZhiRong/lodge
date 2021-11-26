@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 @Repository("deptInfoDao")
-public class DeptInfoDao extends LodgeBaseDAO<DeptInfo,String> implements IDeptInfoDao {
+public class DeptInfoDao extends LodgeBaseDAO<DeptInfo, String> implements IDeptInfoDao {
 
     @Override
     public int getMaxOrderByParent(String pid) {
@@ -55,14 +55,14 @@ public class DeptInfoDao extends LodgeBaseDAO<DeptInfo,String> implements IDeptI
 
     @Override
     public DeptInfo queryByDeptDeptIdORName(String value) {
-        return (DeptInfo) super.queryObject(" from DeptInfo d where d.deptID =?0 or d.deptName like?1 ",new Object[]{value,"%"+value+"%"});
+        return (DeptInfo) super.queryObject(" from DeptInfo d where d.deptID =?0 or d.deptName like?1 ", new Object[]{value, "%" + value + "%"});
     }
 
     @Override
     public List<DeptInfo> listByParent(String pid) {
-        if(StringUtils.isNotEmpty(pid)) {
+        if (StringUtils.isNotEmpty(pid)) {
             return super.list("from DeptInfo m where m.parent.id =?0 order by m.orders asc ", pid);
-        }else{
+        } else {
             return super.list("from DeptInfo m order by m.orders asc ");
         }
     }
@@ -96,7 +96,7 @@ public class DeptInfoDao extends LodgeBaseDAO<DeptInfo,String> implements IDeptI
         Pager<DeptInfoDto> deptInfoPager = new Pager<>();
         StringBuilder jpql;
         jpql = new StringBuilder();
-        Map<String, Object> alias  = new HashMap<>();
+        Map<String, Object> alias = new HashMap<>();
         jpql.append("from DeptInfo m where 1=1 ");
         if (pid != null && !pid.isEmpty()) {
             jpql.append("and m.parent.id =:pid ");
@@ -149,6 +149,43 @@ public class DeptInfoDao extends LodgeBaseDAO<DeptInfo,String> implements IDeptI
         }
         return TreeJson.getfatherNode(cts);
     }
+
+    @Override
+    public List<TreeJson> getClientTreeJson(String keyword, Integer status, String userDeptID) {
+        List<TreeJson> cts = new ArrayList<>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
+        jpql.append("select m.id as id,m.deptID as deptID,m.deptName as text,m.pid as pid,m.contents as contents from dept_info m where m.status =:status ");
+        alias.put("status", status);
+        if (StringUtils.isNotEmpty(userDeptID)) {
+            List<String> deptIds = CmsUtils.string2Array(userDeptID, ";");
+            jpql.append(" and m.deptID in(:deptID) ");
+            alias.put("deptID", deptIds);
+        }
+        jpql.append(" order by m.pid asc,m.orders asc ");
+        List<Map> dts = super.listToMapByAliasSql(jpql.toString(), alias);
+        if (dts.size() > 0) {
+            List<String> list = CmsUtils.string2Array(keyword, ";");
+            for (Map map : dts) {
+                TreeJson temp = new TreeJson();
+                temp.setId((String) map.get("id"));
+                if ("F".equals(map.get("contents"))) {
+                    temp.setText(map.get("deptID") + " " + map.get("text"));
+                }else{
+                    temp.setText((String) map.get("text"));
+                }
+                temp.setPid((String) map.get("pid"));
+                temp.setArg(map.get("deptID"));
+                if (list.contains(map.get("deptID"))) {
+                    temp.setChecked(true);
+                }
+                temp.setArg1(map.get("contents"));
+                cts.add(temp);
+            }
+        }
+        return TreeJson.getfatherNode(cts);
+    }
+
 
     @Override
     public int batchDelete(String ids) {
@@ -286,7 +323,7 @@ public class DeptInfoDao extends LodgeBaseDAO<DeptInfo,String> implements IDeptI
             List<DeptInfo> list = super.listByAlias("from DeptInfo d where d.status =1 and d.contents =:contents and  d.deptID in(:ids) order by d.orders asc ", alias);
             if (list != null && list.size() > 0) {
                 for (DeptInfo mast : list) {
-                    select.add(new SelectJson(mast.getId(),mast.getDeptID()+" "+mast.getDeptName(),mast.getDeptID()));
+                    select.add(new SelectJson(mast.getId(), mast.getDeptID() + " " + mast.getDeptName(), mast.getDeptID()));
                 }
             }
         }
@@ -295,8 +332,8 @@ public class DeptInfoDao extends LodgeBaseDAO<DeptInfo,String> implements IDeptI
 
     @Override
     public List<TreeJson> listUserSetllDept(String deptIDS) {
-        List<TreeJson> jsonList= new ArrayList<>();
-        jsonList.add(new TreeJson("all","all 所有部门",null));
+        List<TreeJson> jsonList = new ArrayList<>();
+        jsonList.add(new TreeJson("all", "all 所有部门", null));
         if (deptIDS != null && !deptIDS.isEmpty()) {
             List<String> array = CmsUtils.string2Array(deptIDS, ";");
             Map<String, Object> alias = new HashMap<>();
@@ -305,7 +342,7 @@ public class DeptInfoDao extends LodgeBaseDAO<DeptInfo,String> implements IDeptI
             List<DeptInfo> list = super.listByAlias("from DeptInfo d where d.status =1 and d.contents =:contents and  d.deptID in(:ids) order by d.orders asc ", alias);
             if (list != null && list.size() > 0) {
                 for (DeptInfo mast : list) {
-                    jsonList.add(new TreeJson(mast.getDeptID(),mast.getDeptID()+" "+mast.getDeptName(),"all"));
+                    jsonList.add(new TreeJson(mast.getDeptID(), mast.getDeptID() + " " + mast.getDeptName(), "all"));
                 }
             }
         }

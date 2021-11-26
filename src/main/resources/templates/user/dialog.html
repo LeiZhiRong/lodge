@@ -5,13 +5,13 @@
 </head>
 <body>
 <form id="userForm" th:action="@{saveUserInfo}" th:object="${userInfo}" method="post">
-        <table cellspacing="0" cellPadding="0" class="addTable">
-            <tr>
-                <td class="rightTd" style="width:100px;">用户状态：</td>
-                <td class="leftTd" colspan="3">
-                    <input class="easyui-switchbutton" th:checked="${userInfo.status==1?1:0}"
-                           style="height:28px;"
-                           data-options="onText:'启用',offText:'停用',
+    <table cellspacing="0" cellPadding="0" class="addTable">
+        <tr>
+            <td class="rightTd" style="width:100px;">用户状态：</td>
+            <td class="leftTd" colspan="3">
+                <input class="easyui-switchbutton" th:checked="${userInfo.status==1?1:0}"
+                       style="height:28px;"
+                       data-options="onText:'启用',offText:'停用',
                         onChange:function(checked){
                         if(checked){
                         $('#status').val(1);
@@ -19,58 +19,58 @@
                         $('#status').val(0);
                         }
                         }">
-                </td>
-            </tr>
-            <tr>
-                <td class="rightTd" style="width:100px;">用户名称：</td>
-                <td class="leftTd">
-                    <input name="userName" class="easyui-textbox" data-options="required:true,missingMessage:null"
-                           style="width:150px;height:28px;"
-                           th:value="*{userName}"/>
-                </td>
-                <td class="rightTd" width="120px">工作岗位：</td>
-                <td class="leftTd">
-                    <select name="station" class="easyui-combobox"
-                            data-options="panelMaxHeight:200,editable:false,panelHeight:'auto'"
-                            style="width:150px;height:28px;">
-                        <option th:each="item:${stations}"
-                                th:value="${item.values}"
-                                th:selected="${userInfo.station eq item.values}"
-                                th:text="${item.name}"></option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td class="rightTd" style="width:100px;">登录账号：</td>
-                <td class="leftTd">
-                    <input name="loginAccount" class="easyui-textbox" data-options="required:true,missingMessage:null"
-                           style="width:150px;height:28px;"
-                           th:value="*{loginAccount}"/>
-                </td>
-                <td class="rightTd" style="width:100px;">登录密码：</td>
-                <td class="leftTd">
-                    <input name="LoginPassword" class="easyui-passwordbox" style="width:150px;height:28px;"
-                           th:value="*{loginPassword}"/>
-                </td>
-            </tr>
-            <tr>
-                <td class="rightTd" style="width:100px;">管理部门：</td>
-                <td class="leftTd">
-                    <input id="deptID" name="deptID" th:value="*{deptID}" class="easyui-searchbox"
-                           data-options="prompt:'请选择...',editable:false,searcher:_searchDeptID,height:28,width:150">
-                </td>
-                <td class="rightTd" style="width:100px;">管理处：</td>
-                <td class="leftTd">
-                    <select id="settID" name="settID" data-options="panelMaxHeight:200,editable:false,panelHeight:'auto'"
-                            style="width:150px;height:28px;">
-                        <option th:each="item:${managePointList}"
-                                th:value="${item.name}"
-                                th:selected="${userInfo.settID eq item.name}"
-                                th:text="${item.name}"></option>
-                    </select>
-                </td>
-            </tr>
-        </table>
+            </td>
+        </tr>
+        <tr>
+            <td class="rightTd" style="width:100px;">用户名称：</td>
+            <td class="leftTd">
+                <input name="userName" class="easyui-textbox" data-options="required:true,missingMessage:null"
+                       style="width:150px;height:28px;"
+                       th:value="*{userName}"/>
+            </td>
+            <td class="rightTd" width="120px">工作岗位：</td>
+            <td class="leftTd">
+                <select name="station" class="easyui-combobox"
+                        data-options="panelMaxHeight:200,editable:false,panelHeight:'auto'"
+                        style="width:150px;height:28px;">
+                    <option th:each="item:${stations}"
+                            th:value="${item.values}"
+                            th:selected="${userInfo.station eq item.values}"
+                            th:text="${item.name}"></option>
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="rightTd" style="width:100px;">登录账号：</td>
+            <td class="leftTd">
+                <input name="loginAccount" class="easyui-textbox" data-options="required:true,missingMessage:null"
+                       style="width:150px;height:28px;"
+                       th:value="*{loginAccount}"/>
+            </td>
+            <td class="rightTd" style="width:100px;">登录密码：</td>
+            <td class="leftTd">
+                <input name="LoginPassword" class="easyui-passwordbox" style="width:150px;height:28px;"
+                       th:value="*{loginPassword}"/>
+            </td>
+        </tr>
+        <tr>
+            <td class="rightTd" style="width:100px;">管理部门：</td>
+            <td class="leftTd">
+                <input id="deptID" name="deptID" th:value="*{deptID}" class="easyui-searchbox"
+                       data-options="prompt:'请选择...',editable:false,searcher:_searchDeptID,height:28,width:150">
+            </td>
+            <td class="rightTd" style="width:100px;">管理处：</td>
+            <td class="leftTd">
+                <select id="settID" name="settID" data-options="panelMaxHeight:200,editable:false,panelHeight:'auto'"
+                        style="width:150px;height:28px;">
+                    <option th:each="item:${managePointList}"
+                            th:value="${item.name}"
+                            th:selected="${userInfo.settID eq item.name}"
+                            th:text="${item.name}"></option>
+                </select>
+            </td>
+        </tr>
+    </table>
     <input hidden="true" name="id" id="id" th:value="*{id}"/>
     <input hidden="true" name="status" id="status" th:value="*{status}"/>
 </form>
@@ -79,7 +79,6 @@
 <script th:inline="javascript">
 
     $(function () {
-
         //管理处复选框事件
         $("#settID").combobox({
             multiple: true,
@@ -175,8 +174,7 @@
                 handler: function () {
                     let rows = $('#deptTree').tree('getChecked', ['checked', 'indeterminate']);
                     let ids = $(rows).map(function () {
-                        if (is_eq("F", this.arg1))
-                            return this.arg;
+                        return this.arg;
                     }).get().join(";");
                     $("#deptID").textbox("setValue", ids);
                     $('#deptContent').dialog('close');

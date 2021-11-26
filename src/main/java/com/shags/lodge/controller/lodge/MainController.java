@@ -21,4 +21,6 @@ public class MainController {
     public ModelAndView list() throws JsonProcessingException {
         return new ModelAndView("index");
     }
+
+
 }

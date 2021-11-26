@@ -54,7 +54,7 @@ public class UserInfo {
     private String deptID;
 
     /**
-     * 结算部门
+     * 管理处
      */
     private String settID;
 

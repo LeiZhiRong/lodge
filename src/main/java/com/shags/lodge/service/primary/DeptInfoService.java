@@ -189,6 +189,12 @@ public class DeptInfoService implements IDeptInfoService {
 
     @Override
     @Transactional(value = "primaryTransactionManager",readOnly = true)
+    public List<TreeJson> getClientTreeJson(String keyword, Integer status, String userDeptID) {
+        return deptInfoDao.getClientTreeJson(keyword, status,userDeptID);
+    }
+
+    @Override
+    @Transactional(value = "primaryTransactionManager",readOnly = true)
     public List<DeptInfoDto> listDeptInfoDto(String pid, String value) {
         return deptInfoDao.listDeptInfoDto(pid, value);
     }

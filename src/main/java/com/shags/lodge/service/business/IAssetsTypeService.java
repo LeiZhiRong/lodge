@@ -71,6 +71,15 @@ public interface IAssetsTypeService {
     List<TreeJson> listTreeJson(String bookSet);
 
     /**
+     * 客户端获取房产类型静静
+     * @param keyword 已选择类型字符串,多个以";"隔开
+     * @param bookSet 账套
+     * @param ztBz 状态标识
+     * @return list
+     */
+    List<TreeJson> getClientTreeJson(String keyword,String bookSet,String ztBz);
+
+    /**
      * 更新排序
      * @param ids array
      */
