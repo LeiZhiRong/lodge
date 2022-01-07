@@ -1,6 +1,7 @@
 package com.shags.lodge.service.primary;
 
 import com.shags.lodge.dto.CorpInfoListDto;
+import com.shags.lodge.dto.TreeJson;
 import com.shags.lodge.util.Message;
 import com.shags.lodge.util.Pager;
 import com.shags.lodge.util.SelectJson;
@@ -139,6 +140,12 @@ public class BillCorpInfoService implements IBillCorpInfoService {
 
     @Override
     @Transactional(value = "primaryTransactionManager", readOnly = true)
+    public List<CorpInfoListDto> listCorpInfoListDto(String keyword, String corpType, Integer status) {
+        return billCorpInfoDao.listCorpInfoListDto(keyword, corpType, status);
+    }
+
+    @Override
+    @Transactional(value = "primaryTransactionManager", readOnly = true)
     public List<CorpInfoListDto> listCorpInfoListDto(String keyword, String pid) {
         if (StringUtils.isNotEmpty(pid)) {
             return billCorpInfoDao.listCorpInfoListDto(keyword, pid);
@@ -151,5 +158,12 @@ public class BillCorpInfoService implements IBillCorpInfoService {
             return new CorpInfoListDto().listCorpInfoListDto(billCorpInfoList, "T");
         }
     }
+
+    @Override
+    @Transactional(value = "primaryTransactionManager", readOnly = true)
+    public List<TreeJson> listCorpInfoToTreeJson(String keyword, String corpType, Integer status) {
+        return billCorpInfoDao.listCorpInfoToTreeJson(keyword, corpType, status);
+    }
+
 
 }

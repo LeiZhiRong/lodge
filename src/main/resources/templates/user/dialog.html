@@ -64,8 +64,8 @@
                 <select id="settID" name="settID" data-options="panelMaxHeight:200,editable:false,panelHeight:'auto'"
                         style="width:150px;height:28px;">
                     <option th:each="item:${managePointList}"
-                            th:value="${item.name}"
-                            th:selected="${userInfo.settID eq item.name}"
+                            th:value="${item.id}"
+                            th:selected="${userInfo.settID eq item.id}"
                             th:text="${item.name}"></option>
                 </select>
             </td>

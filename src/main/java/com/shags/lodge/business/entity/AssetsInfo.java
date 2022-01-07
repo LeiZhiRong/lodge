@@ -22,20 +22,17 @@ public class AssetsInfo {
     private String id;
 
     /**
-     * 部门编号
+     * 部门ID
      */
-    private String deptID;
-
-    public String getDeptName() {
-        return deptName;
-    }
-
-    public void setDeptName(String deptName) {
-        this.deptName = deptName;
-    }
+    private String deptId;
 
     /**
-     * 管辖部门
+     * 部门编号
+     */
+    private String deptBh;
+
+    /**
+     * 部门名称
      */
     private String deptName;
 
@@ -45,14 +42,34 @@ public class AssetsInfo {
     private String cardNumber;
 
     /**
-     * 公司名称
+     * 公司ID
      */
-    private String corporateName;
+    private String companyId;
 
     /**
-     * 房屋类型
+     * 公司编号
+     */
+    private String companyBh;
+
+    /**
+     * 公司名称
+     */
+    private String companyName;
+
+    /**
+     * 房产类型
      */
     private AssetsType assetsType;
+
+    /**
+     * 管理处ID
+     */
+    private String managePointId;
+
+    /**
+     * 管理处名称
+     */
+    private String managePointName;
 
     /**
      * 坐落位置
@@ -70,9 +87,29 @@ public class AssetsInfo {
     private String nowName;
 
     /**
-     * 资产面积
+     * 计量单位
+     */
+    private String assetUnit;
+
+    /**
+     * 数量
      */
     private Double assetArea;
+
+    /**
+     * 总层数
+     */
+    private Double totalLayers;
+
+    /**
+     * 使用层数
+     */
+    private Double usedLayers;
+
+    /**
+     * 使用房间数
+     */
+    private Double usedRooms;
 
     /**
      * 攀钢自编名称
@@ -83,6 +120,11 @@ public class AssetsInfo {
      * 社区名称
      */
     private String communityNumber;
+
+    /**
+     * 结构
+     */
+    private String structure;
 
     /**
      * 产权证号
@@ -139,6 +181,11 @@ public class AssetsInfo {
      */
     private int customCardNumber;
 
+    /**
+     * 备注
+     */
+    private String bz;
+
     @Id
     @GeneratedValue(generator = "uuid2")
     public String getId() {
@@ -149,12 +196,13 @@ public class AssetsInfo {
         this.id = id;
     }
 
-    public String getDeptID() {
-        return deptID;
+
+    public String getDeptName() {
+        return deptName;
     }
 
-    public void setDeptID(String deptID) {
-        this.deptID = deptID;
+    public void setDeptName(String deptName) {
+        this.deptName = deptName;
     }
 
     public String getCardNumber() {
@@ -165,33 +213,7 @@ public class AssetsInfo {
         this.cardNumber = cardNumber;
     }
 
-    public String getCorporateName() {
-        return corporateName;
-    }
 
-    public void setCorporateName(String corporateName) {
-        this.corporateName = corporateName;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "assetsType_id")
-    public AssetsType getAssetsType() {
-        return assetsType;
-    }
-
-    public void setAssetsType(AssetsType assetsType) {
-        this.assetsType = assetsType;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "sitDown_id")
-    public SitDown getSitDown() {
-        return sitDown;
-    }
-
-    public void setSitDown(SitDown sitDown) {
-        this.sitDown = sitDown;
-    }
 
     public String getAssetName() {
         return assetName;
@@ -233,6 +255,14 @@ public class AssetsInfo {
         this.communityNumber = communityNumber;
     }
 
+    public String getStructure() {
+        return structure;
+    }
+
+    public void setStructure(String structure) {
+        this.structure = structure;
+    }
+
     public String getPropertyCertificateNo() {
         return propertyCertificateNo;
     }
@@ -257,6 +287,24 @@ public class AssetsInfo {
         this.landCertificateNo = landCertificateNo;
     }
 
+    public String getBookSet() {
+        return bookSet;
+    }
+
+    public void setBookSet(String bookSet) {
+        this.bookSet = bookSet;
+    }
+
+
+
+    public String getsVTime() {
+        return sVTime;
+    }
+
+    public void setsVTime(String sVTime) {
+        this.sVTime = sVTime;
+    }
+
     public String getZtBz() {
         return ztBz;
     }
@@ -265,12 +313,80 @@ public class AssetsInfo {
         this.ztBz = ztBz;
     }
 
-    public String getBookSet() {
-        return bookSet;
+    public int getCustomCardNumber() {
+        return customCardNumber;
     }
 
-    public void setBookSet(String bookSet) {
-        this.bookSet = bookSet;
+    public void setCustomCardNumber(int customCardNumber) {
+        this.customCardNumber = customCardNumber;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "assetsTypeId")
+    public AssetsType getAssetsType() {
+        return assetsType;
+    }
+
+    public void setAssetsType(AssetsType assetsType) {
+        this.assetsType = assetsType;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "sitDownId")
+    public SitDown getSitDown() {
+        return sitDown;
+    }
+
+    public void setSitDown(SitDown sitDown) {
+        this.sitDown = sitDown;
+    }
+
+    public String getDeptBh() {
+        return deptBh;
+    }
+
+    public void setDeptBh(String deptBh) {
+        this.deptBh = deptBh;
+    }
+
+    public String getCompanyId() {
+        return companyId;
+    }
+
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getCompanyBh() {
+        return companyBh;
+    }
+
+    public void setCompanyBh(String companyBh) {
+        this.companyBh = companyBh;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getManagePointId() {
+        return managePointId;
+    }
+
+    public void setManagePointId(String managePointId) {
+        this.managePointId = managePointId;
+    }
+
+    public String getManagePointName() {
+        return managePointName;
+    }
+
+    public void setManagePointName(String managePointName) {
+        this.managePointName = managePointName;
     }
 
     public String getCreateUser() {
@@ -305,24 +421,59 @@ public class AssetsInfo {
         this.updateTime = updateTime;
     }
 
-    public String getsVTime() {
-        return sVTime;
+    public String getBz() {
+        return bz;
     }
 
-    public void setsVTime(String sVTime) {
-        this.sVTime = sVTime;
+    public void setBz(String bz) {
+        this.bz = bz;
     }
 
-    public int getCustomCardNumber() {
-        return customCardNumber;
+    public String getAssetUnit() {
+        return assetUnit;
     }
 
-    public void setCustomCardNumber(int customCardNumber) {
-        this.customCardNumber = customCardNumber;
+    public Double getTotalLayers() {
+        return totalLayers;
     }
+
+    public void setTotalLayers(Double totalLayers) {
+        this.totalLayers = totalLayers;
+    }
+
+    public Double getUsedLayers() {
+        return usedLayers;
+    }
+
+    public void setUsedLayers(Double usedLayers) {
+        this.usedLayers = usedLayers;
+    }
+
+    public Double getUsedRooms() {
+        return usedRooms;
+    }
+
+    public void setUsedRooms(Double usedRooms) {
+        this.usedRooms = usedRooms;
+    }
+
+    public String getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(String deptId) {
+        this.deptId = deptId;
+    }
+
+    public void setAssetUnit(String assetUnit) {
+        this.assetUnit = assetUnit;
+    }
+
 
     public AssetsInfo() {
         super();
     }
+
+
 
 }

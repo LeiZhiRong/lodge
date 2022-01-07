@@ -1,6 +1,7 @@
 package com.shags.lodge.service.primary;
 
 import com.shags.lodge.dto.CorpInfoListDto;
+import com.shags.lodge.dto.TreeJson;
 import com.shags.lodge.util.Message;
 import com.shags.lodge.util.Pager;
 import com.shags.lodge.primary.entity.BillCorpInfo;
@@ -84,7 +85,18 @@ public interface IBillCorpInfoService {
 
    List<BillCorpInfo> listBillCorpInfoByKeyWord(String corpType,String keyword);
 
+    List<CorpInfoListDto> listCorpInfoListDto(String keyword, String corpType, Integer status);
+
    List<CorpInfoListDto> listCorpInfoListDto(String keyword, String pid);
+
+    /**
+     * 获取客商目录树
+     * @param keyword 已选择客商，多个以“;”隔开
+     * @param corpType 客商类型
+     * @param status 状态标识
+     * @return list
+     */
+    List<TreeJson> listCorpInfoToTreeJson(String keyword, String corpType, Integer status);
 
 
 

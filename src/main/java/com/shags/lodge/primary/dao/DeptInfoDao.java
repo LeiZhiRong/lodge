@@ -260,7 +260,7 @@ public class DeptInfoDao extends LodgeBaseDAO<DeptInfo, String> implements IDept
     }
 
     @Override
-    public List<DeptInfoListDto> listDeptInfoListDto(String pid, String value) {
+    public List<DeptInfoListDto> listDeptInfoListDto(String pid, String value,boolean bh) {
         pid = "all".equals(pid) ? null : pid;
         List<DeptInfoListDto> deptInfoDtos = new ArrayList<>();
         StringBuilder jpql = new StringBuilder();
@@ -279,7 +279,37 @@ public class DeptInfoDao extends LodgeBaseDAO<DeptInfo, String> implements IDept
         jpql.append(" order by m.deptID ");
         List<DeptInfo> dptInfoPager = super.listByAlias(jpql.toString(), alias);
         if (dptInfoPager != null && dptInfoPager.size() > 0) {
-            deptInfoDtos = new DeptInfoListDto().listDeptInfoListDto(dptInfoPager);
+            deptInfoDtos = new DeptInfoListDto().listDeptInfoListDto(dptInfoPager,bh);
+        }
+        return deptInfoDtos;
+    }
+
+    @Override
+    public List<DeptInfoListDto> listDeptInfoListDto(String pid, String value, boolean bh, String userDeptID) {
+        pid = "all".equals(pid) ? null : pid;
+        List<DeptInfoListDto> deptInfoDtos = new ArrayList<>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
+        jpql.append("from DeptInfo m where m.status =1 ");
+        if (pid != null && !pid.isEmpty()) {
+            jpql.append("and m.parent.id =:pid ");
+            alias.put("pid", pid);
+        } else if (value == null || value.isEmpty()) {
+            jpql.append("and m.parent is null ");
+        }
+        if (value != null && !value.isEmpty()) {
+            jpql.append(" and ( m.deptName like:value or m.deptID like:value ) ");
+            alias.put("value", "%" + value + "%");
+        }
+        if (StringUtils.isNotEmpty(userDeptID)) {
+            List<String> deptIds = CmsUtils.string2Array(userDeptID, ";");
+            jpql.append(" and m.deptID in(:deptID) ");
+            alias.put("deptID", deptIds);
+        }
+        jpql.append(" order by m.deptID ");
+        List<DeptInfo> dptInfoPager = super.listByAlias(jpql.toString(), alias);
+        if (dptInfoPager != null && dptInfoPager.size() > 0) {
+            deptInfoDtos = new DeptInfoListDto().listDeptInfoListDto(dptInfoPager,bh);
         }
         return deptInfoDtos;
     }

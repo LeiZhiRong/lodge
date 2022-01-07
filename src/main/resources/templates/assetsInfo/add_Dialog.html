@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<form id="assetsInfoForm" th:action="@{save}" th:object="${assetsInfo}" method="post">
+    <div class="easyui-tabs searchFrame" data-options="fit:true,border:false,plain:true"
+         style="width:100%;height:300px">
+        <div title="基础信息">
+            <table cellspacing="0" cellPadding="0" class="addTable">
+                <tr>
+                    <td class="rightTd" style="width:100px;">房产状态：</td>
+                    <td>
+                        <input class="easyui-switchbutton" th:checked="${assetsInfo.ztBz=='T'?1:0}"
+                               style="height:28px;"
+                               data-options="onText:'在用',offText:'停用',
+                        onChange:function(checked){
+                        if(checked){
+                        $('#ztBz').val('T');
+                        } else{
+                        $('#ztBz').val('F');
+                        }
+                        }">
+                    </td>
+                    <td class="rightTd" style="width:100px;">卡片编号：</td>
+                    <td>
+                        <input id="cardNumber" name="cardNumber" class="easyui-textbox" style="width:200px;height:28px;"
+                               th:value="*{cardNumber}"/>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" style="width:100px;">公司名称：</td>
+                    <td>
+                        <input id="companyName" name="companyName" class="easyui-textbox"
+                               data-options="editable:false,height:28,width:200,icons:[{
+				               iconCls:'icon-search',
+				               handler: function(e){
+					            listBillCorpInfo();
+				               }
+			                   }]" th:value="*{companyName}"/>
+                    </td>
+                    <td class="rightTd" style="width:100px;">管辖部门：</td>
+                    <td>
+                        <input id="deptName" name="deptName" class="easyui-textbox"
+                               data-options="editable:false,height:28,width:200,icons:[{
+				               iconCls:'icon-search',
+				               handler: function(e){
+					            listDeptInfo();
+				               }
+			                   }]" th:value="*{deptName}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" style="width:100px;">管理处：</td>
+                    <td>
+                        <input id="managePointName" name="managePointName" class="easyui-textbox"
+                               data-options="editable:false,height:28,width:200,icons:[{
+				               iconCls:'icon-search',
+				               handler: function(e){
+					            listManagePointInfo();
+				               }
+			                   }]" th:value="*{managePointName}"/>
+                    </td>
+                    <td class="rightTd" style="width:100px;">坐落位置：</td>
+                    <td>
+                        <input id="sitDownName" name="sitDownName"
+                               data-options="editable:true,height:28,width:200,icons:[{
+				               iconCls:'icon-search',
+				               handler: function(e){
+					            listObject();
+				               }
+			                   }]"
+                               th:value="*{sitDownName}"/>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="rightTd" style="width:100px;">房产类型：</td>
+                    <td>
+                        <input id="assetsTypeName" name="assetsTypeName" class="easyui-textbox"
+                               style="width:200px;height:28px;"
+                               th:value="*{assetsTypeName}"/>
+                    </td>
+                    <td class="rightTd" style="width:100px;">资产结构：</td>
+                    <td>
+                        <input id="structure" name="structure" class="easyui-textbox" style="width:200px;height:28px;"
+                               th:value="*{structure}"/>
+                    </td>
+
+                </tr>
+                <tr>
+                    <td class="rightTd" style="width:100px;">资产名称：</td>
+                    <td>
+                        <input id="assetName" name="assetName" class="easyui-textbox" style="width:200px;height:28px;"
+                               th:value="*{assetName}"/>
+                    </td>
+                    <td class="rightTd" style="width:100px;">现用名：</td>
+                    <td>
+                        <input id="nowName" name="nowName" class="easyui-textbox" style="width:200px;height:28px;"
+                               th:value="*{nowName}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" style="width:100px;">计量单位：</td>
+                    <td>
+                        <input id="assetUnit" name="assetUnit" class="easyui-textbox" style="width:200px;height:28px;"
+                               th:value="*{assetUnit}"/>
+                    </td>
+                    <td class="rightTd" style="width:100px;">数量：</td>
+                    <td>
+                        <input id="assetArea" name="assetArea" class="easyui-textbox" style="width:200px;height:28px;"
+                               th:value="*{assetArea}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" style="width:100px;">总楼层数：</td>
+                    <td>
+                        <input id="totalLayers" name="totalLayers" class="easyui-textbox"
+                               style="width:200px;height:28px;"
+                               th:value="*{totalLayers}"/>
+                    </td>
+                    <td class="rightTd" style="width:100px;">使用层数：</td>
+                    <td>
+                        <input id="usedLayers" name="usedLayers" class="easyui-textbox" style="width:200px;height:28px;"
+                               th:value="*{usedLayers}"/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div title="附加信息" style="padding:10px">
+            <table cellspacing="0" cellPadding="0" class="addTable" style="margin-bottom: 10px;">
+                <tr>
+                    <td class="rightTd" style="width:100px;">攀钢自编号：</td>
+                    <td>
+                        <input id="housingNumber" name="housingNumber" class="easyui-textbox"
+                               style="width:200px;height:28px;"
+                               th:value="*{housingNumber}"/>
+                    </td>
+                    <td class="rightTd" style="width:100px;">社区编号：</td>
+                    <td>
+                        <input id="communityNumber" name="communityNumber" class="easyui-textbox"
+                               style="width:200px;height:28px;"
+                               th:value="*{communityNumber}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" style="width:100px;">产权证号：</td>
+                    <td>
+                        <input id="propertyCertificateNo" name="propertyCertificateNo" class="easyui-textbox"
+                               style="width:200px;height:28px;"
+                               th:value="*{propertyCertificateNo}"/>
+                    </td>
+                    <td class="rightTd" style="width:100px;">土地资产编号：</td>
+                    <td>
+                        <input id="landAssetNo" name="landAssetNo" class="easyui-textbox"
+                               style="width:200px;height:28px;"
+                               th:value="*{landAssetNo}"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="rightTd" style="width:100px;">土地证号：</td>
+                    <td>
+                        <input id="landCertificateNo" name="landCertificateNo" class="easyui-textbox"
+                               style="width:200px;height:28px;"
+                               th:value="*{landCertificateNo}"/>
+                    </td>
+                    <td class="rightTd" style="width:100px;">备注：</td>
+                    <td>
+                        <input id="bz" name="bz" class="easyui-textbox" style="width:200px;height:28px;"
+                               th:value="*{bz}"/>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <input hidden="true" name="deptId" id="deptId" th:value="*{deptId}"/>
+        <input hidden="true" name="deptBh" id="deptBh" th:value="*{deptBh}"/>
+        <input hidden="true" name="companyId" id="companyId" th:value="*{companyId}"/>
+        <input hidden="true" name="companyBh" id="companyBh" th:value="*{companyBh}"/>
+        <input hidden="true" name="managePointId" id="managePointId" th:value="*{managePointId}"/>
+        <input hidden="true" name="sitDownId" id="sitDownId" th:value="*{sitDownId}"/>
+        <input hidden="true" name="ztBz" id="ztBz" th:value="*{ztBz}"/>
+        <input hidden="true" name="id" id="id" th:value="*{id}"/>
+    </div>
+</form>
+<script type="text/javascript" th:inline="none">
+    $(function () {
+        $('#sitDownName').textbox().textbox('addClearBtn', 'icon-clear');
+    });
+
+    function listObject(object, objectId, objectName) {
+        alert("object:" + object + " objectId:" + objectId + " objectName:" + objectName);
+    }
+
+    //listDeptInfo
+    function listDeptInfo() {
+        $("body").append("<div id='deptListContent' Style='display: none;'></div>");
+        $('#deptListContent').dialog({
+            title: "【部门】选择器...",
+            iconCls: 'fa fa-check-square-o red',
+            loadingMessage: '数据加载中,请稍等...',
+            modal: true,
+            height: 400,
+            width: 500,
+            top: '8%',
+            href: 'findDeptInfo',
+            onClose: function () {
+                $(this).dialog("destroy").remove();
+            }
+        });
+    }
+
+    //listBillCorpInfo
+    function listBillCorpInfo() {
+        $("body").append("<div id='billCorpListContent' Style='display: none;'></div>");
+        $('#billCorpListContent').dialog({
+            title: "【公司】选择器...",
+            iconCls: 'fa fa-check-square-o red',
+            loadingMessage: '数据加载中,请稍等...',
+            modal: true,
+            height: 400,
+            width: 500,
+            top: '8%',
+            href: 'findBillCorpInfo',
+            onClose: function () {
+                $(this).dialog("destroy").remove();
+            }
+        });
+    }
+    //listManagePointInfo
+    function listManagePointInfo() {
+        $("body").append("<div id='managePointInfoListContent' Style='display: none;'></div>");
+        $('#managePointInfoListContent').dialog({
+            title: "【管理处】选择器...",
+            iconCls: 'fa fa-check-square-o red',
+            loadingMessage: '数据加载中,请稍等...',
+            modal: true,
+            height: 400,
+            width: 500,
+            top: '8%',
+            href: 'findManagePointInfo',
+            onClose: function () {
+                $(this).dialog("destroy").remove();
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

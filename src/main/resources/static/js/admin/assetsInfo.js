@@ -50,92 +50,33 @@ $(function () {
 })
 
 //添加
-function addCorp() {
-    altCorpDialog(null);
+function addAssetsInfo() {
+    altAssetsInfoDialog(null);
 }
 
 //编辑
 function editRow(id) {
-    altCorpDialog(id);
-}
-
-//查询
-function _searchCorpInfo(value) {
-    var queryparams = {
-        keyword: value,
-        corpType: $("#corpCode").combobox("getValue")
-    };
-    $('#assetsInfoGrid').datagrid('options').queryParams = queryparams;
-    $('#assetsInfoGrid').datagrid('reload');
-
-}
-
-//删除
-function deleteRow(id) {
-    $.messager.confirm({
-        msg: '是否删除所选记录！',
-        title: '提示',
-        top: '10%',
-        fn: function (r) {
-            if (r) {
-                LG.ajax({
-                    url: 'deleteCorpInfo',
-                    data: {
-                        id: id
-                    },
-                    success: function (data) {
-                        if (data.code == 1) {
-                            $('#assetsInfoGrid').datagrid('reload');
-                        } else {
-                            LG.alert("error", data.message);
-                        }
-                    },
-                    error: function (message) {
-                        LG.tip('error', message);
-                    }
-                });
-            }
-        }
-    });
-
-
-}
-
-//导出
-function exportDown() {
-    $.messager.confirm({
-        msg: '是否将客商信息导出为Excel！',
-        title: '提示',
-        top: '10%',
-        fn: function (r) {
-            if (r) {
-                var corpType=$("#corpCode").combobox("getValue");
-                var keyword = $("#pcode").searchbox('getValue');
-                window.location.href = "exportDown?keyword=" + keyword+"&corpType="+corpType;
-            }
-        }
-    });
-
+    altAssetsInfoDialog(id);
 }
 
 //Dialog
-function altCorpDialog(id) {
-    var title = empty(id) ? "增加【客商信息】" : "编辑【客商信息】";
-    $("body").append("<div id='corpContent' Style='display: none;padding: 5px;'></div>");
-    $('#corpContent').dialog({
+function altAssetsInfoDialog(id) {
+    var title = empty(id) ? "新增【楼栋信息】" : "修改【楼栋信息】";
+    $("body").append("<div id='assetsInfoContent' Style='display: none;padding: 5px;'></div>");
+    $('#assetsInfoContent').dialog({
         title: title,
         iconCls: 'fa fa-ellipsis-v',
         loadingMessage: '数据加载中,请稍等...',
         modal: true,
-        height: 500,
-        width: 760,
+        height: 400,
+        width: 680,
         top: '5%',
-        left: '20%',
+        left: '23%',
         inline: true,
         border: 'thin',
-        cls: 'c8',
+        cls: 'c4',
         constrain: true,
-        href: 'dialog',
+        href: 'add_Dialog',
         queryParams: {
             id: id
         },
@@ -146,20 +87,13 @@ function altCorpDialog(id) {
             iconCls: 'e-icon1 fa fa-floppy-o blue',
             text: '保存',
             handler: function () {
-                if (!$("#corpForm").form('enableValidation').form('validate'))
+                if (!$("#assetsInfoForm").form('enableValidation').form('validate'))
                     return false;
-                var rows = $('#corpBankGrid').datagrid('getRows');
-                var _corpId = $("#id").val();
-                if (rows.length > 0 && empty(_corpId)) {
-                    $("#bankAccount").val(base64_encode(JSON.stringify(rows)));
-                } else {
-                    $("#bankAccount").val("");
-                }
-                var actiform = $("#corpForm");
+                var actiform = $("#assetsInfoForm");
                 LG.ajaxSubmitForm(actiform, function (data) {
                     if (data.code == 1) {
                         $('#assetsInfoGrid').datagrid('reload');
-                        $('#corpContent').dialog('close');
+                        $('#assetsInfoContent').dialog('close');
                     } else {
                         LG.alert("error", data.message);
                     }
@@ -169,7 +103,7 @@ function altCorpDialog(id) {
             iconCls: 'icon1 fa fa-reply blue',
             text: '取消',
             handler: function () {
-                $('#corpContent').dialog('close');
+                $('#assetsInfoContent').dialog('close');
             }
         }]
     });
@@ -195,7 +129,7 @@ function getChecked() {
 }
 
 //批量删除
-function batchdeleteCorp() {
+function batchdeleteAssetsInfo() {
     if (empty(data_ids)) {
         LG.alert("error", "请选择客商信息，然后重试！");
         return false;
@@ -207,7 +141,7 @@ function batchdeleteCorp() {
         fn: function (r) {
             if (r) {
                 LG.ajax({
-                    url: 'batchDeleteCorp',
+                    url: 'batchDeleteAssetsInfo',
                     data: {
                         ids: data_ids
                     },

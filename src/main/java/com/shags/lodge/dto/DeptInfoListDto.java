@@ -86,8 +86,10 @@ public class DeptInfoListDto {
         super();
     }
 
-    public DeptInfoListDto(DeptInfo deptInfo) {
+    public DeptInfoListDto(DeptInfo deptInfo,boolean bh) {
         String pid;
+        String str;
+        String _str;
         this.setId(deptInfo.getId());
         this.setDeptName(deptInfo.getDeptName());
         this.setDeptID(deptInfo.getDeptID());
@@ -100,25 +102,32 @@ public class DeptInfoListDto {
             this.setParent_id(null);
             pid = "";
         }
-        String str = deptInfo.getDeptID() + "\\" + deptInfo.getDeptName();
-        String _str=str.replace("\\","\\\\");
+        if(bh) {
+            str = deptInfo.getDeptID() + "\\" + deptInfo.getDeptName();
+            _str = str.replace("\\", "\\\\");
+        }else{
+            str = deptInfo.getDeptName();
+            _str = str;
+        }
         if ("T".equals(deptInfo.getContents())) {
-            this.setDeptName("<a href='javascript:void(0)' onclick='findDeptInfo(&quot;" + deptInfo.getId() + "&quot;,&quot;" + pid + "&quot;);'><i class='fa fa-caret-right fa-lg'></i> " + str + "</a>");
+            this.setDeptName("<a href='javascript:void(0)' onclick='findDeptInfo(&quot;" + deptInfo.getId() + "&quot;,&quot;" + pid + "&quot;);'><i class='fa fa-caret-right fa-lg'></i> " + deptInfo.getDeptName() + "</a>");
         } else {
             this.setDeptName(str);
+            this.setHandle("<div style='padding-right:10px;'><a href='javascript:void(0)' onclick='getDeptInfoIdAndName(&quot;" + deptInfo.getId() + "&quot;,&quot;" +  _str + "&quot;,&quot;" +  deptInfo.getDeptID() + "&quot;);'><i class='fa fa-caret-right fa-lg'></i>选择</a></div>");
         }
-        this.setHandle("<div style='padding-right:10px;'><a href='javascript:void(0)' onclick='getDeptInfoIdAndName(&quot;" + deptInfo.getId() + "&quot;,&quot;" +  _str + "&quot;);'>选择</a></div>");
+
 
 
     }
 
-    public List<DeptInfoListDto> listDeptInfoListDto(List<DeptInfo> deptInfoList) {
+    public List<DeptInfoListDto> listDeptInfoListDto(List<DeptInfo> deptInfoList,boolean bh) {
         List<DeptInfoListDto> list = new ArrayList<>();
         if (deptInfoList.size() > 0) {
             for (DeptInfo mast : deptInfoList) {
-                list.add(new DeptInfoListDto(mast));
+                list.add(new DeptInfoListDto(mast,bh));
             }
         }
         return list;
     }
+
 }

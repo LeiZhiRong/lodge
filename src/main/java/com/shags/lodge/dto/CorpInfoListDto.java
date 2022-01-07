@@ -116,5 +116,20 @@ public class CorpInfoListDto {
         return list;
     }
 
+    public List<CorpInfoListDto> listClientCorpInfoListDto(List<BillCorpInfo> billCorpInfoList) {
+        List<CorpInfoListDto> list = new ArrayList<>();
+        if (billCorpInfoList.size() > 0) {
+            for (BillCorpInfo mast : billCorpInfoList) {
+                CorpInfoListDto temp = new CorpInfoListDto();
+                temp.setSaleCorpId(mast.getId());
+                temp.setSaleCorpName(mast.getCorpMC());
+                temp.setSaleCorpBh(mast.getCorpBM());
+                temp.setHandle("<div style='padding-right:10px;'><a href='javascript:void(0)' onclick='getBillCorpInfoIdAndName(&quot;" + mast.getId() + "&quot;,&quot;" +  mast.getCorpMC() + "&quot;,&quot;" +  mast.getCorpBM() + "&quot;);'><i class='fa fa-caret-right fa-lg'></i>选择</a></div>");
+                list.add(temp);
+            }
+        }
+        return list;
+    }
+
 
 }

@@ -33,7 +33,7 @@ public class SitDown {
     /**
      * 所属管理区
      */
-    @NotEmpty(message = "请选择管理区")
+    @NotEmpty(message = "请选择管理处")
     private String managerPoint;
 
     /**

@@ -2,6 +2,7 @@ package com.shags.lodge.service.primary;
 
 import com.shags.lodge.dto.ManagePointDto;
 import com.shags.lodge.dto.User;
+import com.shags.lodge.dto.business.ManagePointListDto;
 import com.shags.lodge.util.CmsUtils;
 import com.shags.lodge.util.Message;
 import com.shags.lodge.util.Pager;
@@ -97,12 +98,12 @@ public class ManagePointService implements IManagePointService {
             jpql.append(" from ManagePoint m where m.bookSet =:bookSet and m.ztbz =:ztbz ");
             alias.put("bookSet", user.getBookSet());
             alias.put("ztbz", "T");
-            if(StringUtils.isNotEmpty(user.getManageDept())){
-                List<String> setId= CmsUtils.string2Array(user.getBalanceDept(),",");
+            if (StringUtils.isNotEmpty(user.getManageDept())) {
+                List<String> setId = CmsUtils.string2Array(user.getBalanceDept(), ",");
                 jpql.append(" and m.name in(:setId) ");
-                alias.put("setId",setId);
+                alias.put("setId", setId);
             }
-            List<ManagePoint> list=managePointDao.listByAlias(jpql.toString(),alias);
+            List<ManagePoint> list = managePointDao.listByAlias(jpql.toString(), alias);
             if (list != null && list.size() > 0) {
                 for (ManagePoint managePoint : list) {
                     jsonList.add(new SelectJson(managePoint.getId(), managePoint.getName()));
@@ -152,8 +153,9 @@ public class ManagePointService implements IManagePointService {
     public ManagePoint queryManagePoint(String bookSet, String keyword) {
         StringBuilder jpql = new StringBuilder();
         Map<String, Object> alias = new HashMap<>();
-        jpql.append(" from ManagePoint m where m.ztbz=1 and m.bookSet =:bookSet  ");
+        jpql.append(" from ManagePoint m where m.ztbz=:ztbz and m.bookSet =:bookSet  ");
         alias.put("bookSet", bookSet);
+        alias.put("ztbz", "T");
         if (StringUtils.isNotEmpty(keyword)) {
             jpql.append(" and ( m.bh =:keyword  or m.name =:keyword ");
             alias.put("keyword", keyword);
@@ -176,4 +178,34 @@ public class ManagePointService implements IManagePointService {
             return null;
         }
     }
+
+    @Override
+    @Transactional(value = "primaryTransactionManager", readOnly = true)
+    public List<ManagePointListDto> listManagePointListDto(String bookSet, String keyword, String ztbz, String userBalanceDept) {
+        List<ManagePointListDto> dto = new ArrayList<>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
+        jpql.append(" from ManagePoint m where m.bookSet =:bookSet  ");
+        alias.put("bookSet", bookSet);
+        if (StringUtils.isNotEmpty(ztbz)) {
+            jpql.append(" and m.ztbz =:ztbz ");
+            alias.put("ztbz", ztbz);
+        }
+        if (StringUtils.isNotEmpty(keyword)) {
+            jpql.append(" and ( m.bh like:keyword  or m.name like:keyword )");
+            alias.put("keyword", keyword+"%");
+        }
+        if (StringUtils.isNotEmpty(userBalanceDept)) {
+            List<String> dept = CmsUtils.string2Array(userBalanceDept, ",");
+            jpql.append(" and m.id in(:dept) ");
+            alias.put("dept", dept);
+        }
+        jpql.append(" order by m.rVTime asc ");
+        List<ManagePoint> list = managePointDao.listByAlias(jpql.toString(), alias);
+        if (list != null && list.size() > 0) {
+            dto = new ManagePointListDto().listManagePointDto(list);
+        }
+        return dto;
+    }
+
 }

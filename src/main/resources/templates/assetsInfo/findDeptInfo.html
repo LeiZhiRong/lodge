@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<!--suppress ThymeleafVariablesResolveInspection -->
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<div class="easyui-navpanel">
+    <div id="deptInfo-toolbar" style="height: 40px;padding-top: 5px;padding-left: 5px;">
+        <div class="m-toolbar">
+            <div class="m-left">
+                快速查询：<input id="cashBankValue" class="easyui-searchbox"
+                            data-options="prompt:'输入关键字过滤',searcher:f_searchDeptInfo,icons:[{
+				iconCls:'icon-clear',
+				handler: function(e){
+					 $(e.data.target).textbox('setValue','');
+				}
+			}]"
+                            style="width:200px;height: 28px;">
+            </div>
+        </div>
+    </div>
+    <table id="deptInfoDG"></table>
+    <div id="deptInfo-ftools" style="border-bottom: 0;border-left:0;border-right:0;padding: 5px 10px;text-align:right;">
+        <button id="deptInfoUpPageBtn" onclick="deptInfoUpPage();" class="easyui-linkbutton"
+                data-options="plain:true,disabled:true,height:25,iconCls: 'e-icon1 fa fa-level-up fa-1g blue'">返回上级
+        </button>
+        <button id="goDeptInfoHomeBtn" onclick="gotoDeptInfoHome();" class="easyui-linkbutton"
+                data-options="plain:true,disabled:true,height:25,iconCls: 'e-icon1 fa fa-home fa-1g blue'">返回首页
+        </button>
+        <span class="datagrid-btn-separator"
+              style="vertical-align: middle;display:inline-block;float:none"></span>
+        <button id="closeDeptBtn" onclick="closeDeptInfoDialog();" class="easyui-linkbutton"
+                data-options="plain:true,height:25,iconCls: 'e-icon1 fa fa-sign-out fa-1g blue'">关闭
+        </button>
+    </div>
+</div>
+<script type="text/javascript" th:inline="none">
+    var deptInfoParent_id = [];
+    $(function () {
+          let eu = $("#deptInfoDG").datagrid({
+            url: 'listDeptInfo',
+            showHeader:false,
+            loadMsg: false,
+            border: false,
+            singleSelect: true,
+            fitColumns:true,
+            toolbar: '#deptInfo-toolbar',
+            footer:'#deptInfo-ftools',
+            fit: true,
+            //scrollbarSize:0,
+            onLoadSuccess: function () {
+                if(deptInfoParent_id.length>0) {
+                    $('#deptInfoUpPageBtn').linkbutton('enable');
+                    $('#goDeptInfoHomeBtn').linkbutton('enable');
+                }else{
+                    $('#deptInfoUpPageBtn').linkbutton('disable');
+                    $('#goDeptInfoHomeBtn').linkbutton('disable');
+                }
+            },
+            columns: [[
+                {field: 'deptName', title: '部门名称', width: 250,
+                    formatter: function(value,row,index){
+                      return "<div style='padding-left: 10px;'>"+value+"</div>"
+                    }
+                },
+                {field: 'handle', title: '选择', align:'right', width: 80 }
+            ]]
+        }).datagrid('getPanel').addClass("lines-no");
+    })
+    function f_search(value) {
+        $("#deptInfoDG").datagrid("search", value);
+    }
+    // 目录跳转
+    function findDeptInfo(id,pid) {
+        deptInfoParent_id.push(pid);
+        var queryparams = {
+            pid: id
+        };
+        $('#deptInfoDG').datagrid('options').queryParams = queryparams;
+        $('#deptInfoDG').datagrid('reload');
+
+    }
+    //选择确认退出窗口
+    function getDeptInfoIdAndName(id,name,bh) {
+        $("#deptId").val(id);
+        $("#deptBh").val(bh);
+        $("#deptName").textbox("setValue",name);
+        $('#deptListContent').dialog('close');
+
+    }
+    //返回上一级
+    function deptInfoUpPage() {
+        if(deptInfoParent_id.length>0){
+            var id=deptInfoParent_id[deptInfoParent_id.length-1];
+             var queryparams = {
+                pid: id
+            };
+            $('#deptInfoDG').datagrid('options').queryParams = queryparams;
+            $('#deptInfoDG').datagrid('reload');
+
+            var new_deptInfoParent_id=[];
+            for(var i=0;i<deptInfoParent_id.length-1;i++){
+                if(!is_eq(id,deptInfoParent_id[i])){
+                    new_deptInfoParent_id.push(deptInfoParent_id[i])
+                }
+            }
+            deptInfoParent_id=new_deptInfoParent_id;
+         }
+    }
+
+    //返回首页
+    function gotoDeptInfoHome() {
+        deptInfoParent_id=[];
+        var queryparams = {
+            pid: null
+        };
+        $('#deptInfoDG').datagrid('options').queryParams = queryparams;
+        $('#deptInfoDG').datagrid('reload');
+    }
+
+    //关闭
+    function closeDeptInfoDialog() {
+        $('#deptListContent').dialog('close');
+    }
+
+    //过滤查询
+    function f_searchDeptInfo(value) {
+        deptInfoParent_id=[];
+        var queryparams = {
+            pid: null,
+            keyword: value
+        };
+        $('#deptInfoDG').datagrid('options').queryParams = queryparams;
+        $('#deptInfoDG').datagrid('reload');
+    }
+
+</script>
+
+</html>

@@ -16,6 +16,7 @@ public class DeptInfo {
      */
 
     private String id;
+
     /**
      * 部门编号
      */

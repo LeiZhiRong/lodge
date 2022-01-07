@@ -401,7 +401,7 @@ public class ReveExpeItemController {
     @AuthMethod(role = "ROLE_REVE_EXPE_ITEM")
     @RequestMapping("findDeptInfo")
     public List<DeptInfoListDto> findDeptInfo(String pid, String keyword) {
-        return deptInfoService.listDeptInfoListDto(pid, keyword);
+        return deptInfoService.listDeptInfoListDto(pid, keyword,true);
     }
 
     /**

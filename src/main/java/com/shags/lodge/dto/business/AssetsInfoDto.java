@@ -1,7 +1,6 @@
 package com.shags.lodge.dto.business;
 
 import com.shags.lodge.business.entity.AssetsInfo;
-import com.shags.lodge.business.entity.SitDown;
 import com.shags.lodge.util.BeanUtil;
 import com.shags.lodge.util.HeaderEnum;
 import org.apache.commons.lang3.StringUtils;
@@ -12,7 +11,7 @@ import java.util.List;
 /**
  * @author yglei
  * @classname AssetsInfoDto
- * @description TODO
+ * @description 资产信息实体类
  * @date 2021-11-23 11:37
  */
 public class AssetsInfoDto {
@@ -23,11 +22,6 @@ public class AssetsInfoDto {
     private String id;
 
     /**
-     * 部门编号
-     */
-    private String deptID;
-
-    /**
      * 管辖部门
      */
     @HeaderEnum(field = "deptName", title = "管辖部门", width = 150)
@@ -36,36 +30,39 @@ public class AssetsInfoDto {
     /**
      * 卡片编号
      */
-    @HeaderEnum(field = "cardNumber", title = "卡片编号",width = 150)
+    @HeaderEnum(field = "cardNumber", title = "卡片编号", width = 150)
     private String cardNumber;
 
     /**
      * 公司名称
      */
-    @HeaderEnum(field = "corporateName", title = "公司名称" ,width = 250)
+    @HeaderEnum(field = "corporateName", title = "公司名称", width = 250, hidden = true)
     private String corporateName;
-
-    /**
-     * 房屋类型ID
-     */
-    private String assetsTypeId;
 
     /**
      * 房屋类型名称
      */
-    @HeaderEnum(field = "assetsTypeName", title = "房屋类型", width = 100)
+    @HeaderEnum(field = "assetsTypeName", title = "房屋类型")
     private String assetsTypeName;
+
+
+    /**
+     * 管理处
+     */
+    @HeaderEnum(field = "managePointName", title = "管理处", width = 150, hidden = true)
+    private String managePointName;
+
 
     /**
      * 坐落位置
      */
-    @HeaderEnum(field = "sitDown", title = "坐落位置", width = 100)
-    private SitDown sitDown;
+    @HeaderEnum(field = "sitDownName", title = "坐落位置")
+    private String sitDownName;
 
     /**
      * 资产名称
      */
-    @HeaderEnum(field = "assetName", title = "资产名称", width = 250)
+    @HeaderEnum(field = "assetName", title = "房产名称", width = 250)
     private String assetName;
 
     /**
@@ -87,10 +84,40 @@ public class AssetsInfoDto {
     private String communityNumber;
 
     /**
-     * 资产面积
+     * 结构
      */
-    @HeaderEnum(field = "assetArea", title = "资产面积", width = 80)
+    private String structureName;
+
+    /**
+     * 计量单位
+     */
+    @HeaderEnum(field = "assetUnit", title = "计量单位", width = 80)
+    private String assetUnit;
+
+
+    /**
+     * 数量
+     */
+    @HeaderEnum(field = "assetArea", title = "数量", width = 80)
     private Double assetArea;
+
+    /**
+     * 总层数
+     */
+    @HeaderEnum(field = "totalLayers", title = "总层数", width = 80,hidden = true)
+    private Double totalLayers;
+
+    /**
+     * 使用层数
+     */
+    @HeaderEnum(field = "usedLayers", title = "使用层数", width = 80,hidden = true)
+    private Double usedLayers;
+
+    /**
+     * 使用房间数
+     */
+    @HeaderEnum(field = "usedRooms", title = "使用房间数", width = 80,hidden = true)
+    private Double usedRooms;
 
     /**
      * 产权证号
@@ -148,7 +175,7 @@ public class AssetsInfoDto {
     /**
      * 关联操作
      */
-    @HeaderEnum(field = "handle", title = "关联操作", width = 150,sortable = false)
+    @HeaderEnum(field = "handle", title = "关联操作", width = 150, sortable = false)
     private String handle;
 
 
@@ -158,14 +185,6 @@ public class AssetsInfoDto {
 
     public void setId(String id) {
         this.id = id;
-    }
-
-    public String getDeptID() {
-        return deptID;
-    }
-
-    public void setDeptID(String deptID) {
-        this.deptID = deptID;
     }
 
     public String getDeptName() {
@@ -198,14 +217,6 @@ public class AssetsInfoDto {
 
     public void setAssetsTypeName(String assetsTypeName) {
         this.assetsTypeName = assetsTypeName;
-    }
-
-    public SitDown getSitDown() {
-        return sitDown;
-    }
-
-    public void setSitDown(SitDown sitDown) {
-        this.sitDown = sitDown;
     }
 
     public String getAssetName() {
@@ -320,20 +331,68 @@ public class AssetsInfoDto {
         this.ztBz = ztBz;
     }
 
-    public String getAssetsTypeId() {
-        return assetsTypeId;
-    }
-
-    public void setAssetsTypeId(String assetsTypeId) {
-        this.assetsTypeId = assetsTypeId;
-    }
-
     public String getHandle() {
         return handle;
     }
 
     public void setHandle(String handle) {
         this.handle = handle;
+    }
+
+    public String getManagePointName() {
+        return managePointName;
+    }
+
+    public void setManagePointName(String managePointName) {
+        this.managePointName = managePointName;
+    }
+
+    public String getSitDownName() {
+        return sitDownName;
+    }
+
+    public void setSitDownName(String sitDownName) {
+        this.sitDownName = sitDownName;
+    }
+
+    public String getStructureName() {
+        return structureName;
+    }
+
+    public void setStructureName(String structureName) {
+        this.structureName = structureName;
+    }
+
+    public String getAssetUnit() {
+        return assetUnit;
+    }
+
+    public void setAssetUnit(String assetUnit) {
+        this.assetUnit = assetUnit;
+    }
+
+    public Double getTotalLayers() {
+        return totalLayers;
+    }
+
+    public void setTotalLayers(Double totalLayers) {
+        this.totalLayers = totalLayers;
+    }
+
+    public Double getUsedLayers() {
+        return usedLayers;
+    }
+
+    public void setUsedLayers(Double usedLayers) {
+        this.usedLayers = usedLayers;
+    }
+
+    public Double getUsedRooms() {
+        return usedRooms;
+    }
+
+    public void setUsedRooms(Double usedRooms) {
+        this.usedRooms = usedRooms;
     }
 
     public AssetsInfoDto() {
@@ -343,13 +402,8 @@ public class AssetsInfoDto {
     public AssetsInfoDto(AssetsInfo assetsInfo) {
         if (assetsInfo != null) {
             this.setId(assetsInfo.getId());
-            this.setDeptID(assetsInfo.getDeptID());
             this.setDeptName(assetsInfo.getDeptName());
             this.setCardNumber(assetsInfo.getCardNumber());
-            this.setCorporateName(assetsInfo.getCorporateName());
-            this.setAssetsTypeName(assetsInfo.getAssetsType() != null ? assetsInfo.getAssetsType().getName() : "");
-            this.setAssetsTypeId(assetsInfo.getAssetsType() != null ? assetsInfo.getAssetsType().getId() : "");
-            this.setSitDown(assetsInfo.getSitDown());
             this.setAssetName(assetsInfo.getAssetName());
             this.setNowName(assetsInfo.getNowName());
             this.setHousingNumber(assetsInfo.getHousingNumber());
@@ -364,6 +418,14 @@ public class AssetsInfoDto {
             this.setUpdateTime(assetsInfo.getUpdateTime() != null ? BeanUtil.timestampToStr(assetsInfo.getUpdateTime(), "yyyy-MM-dd HH:mm") : "");
             this.setUpdateUser(assetsInfo.getUpdateUser());
             this.setZtBz(assetsInfo.getZtBz());
+            this.setAssetUnit(assetsInfo.getAssetUnit());
+            this.setTotalLayers(assetsInfo.getTotalLayers());
+            this.setUsedLayers(assetsInfo.getUsedLayers());
+            this.setUsedRooms(assetsInfo.getUsedRooms());
+            if(assetsInfo.getAssetsType()!=null)
+                this.setAssetsTypeName(assetsInfo.getAssetsType().getName());
+            if(assetsInfo.getSitDown()!=null)
+                this.setSitDownName(assetsInfo.getSitDown().getName());
         }
     }
 
@@ -377,16 +439,12 @@ public class AssetsInfoDto {
         return dto;
     }
 
-
     public AssetsInfo getAssetsInfoDto(AssetsInfoDto dto) {
         AssetsInfo assetsInfo = new AssetsInfo();
         if (dto != null) {
             assetsInfo.setId(StringUtils.isNotEmpty(dto.getId()) ? dto.getId() : null);
-            assetsInfo.setDeptID(dto.getDeptID());
             assetsInfo.setDeptName(dto.getDeptName());
             assetsInfo.setCardNumber(dto.getCardNumber());
-            assetsInfo.setCorporateName(dto.getCorporateName());
-            assetsInfo.setSitDown(dto.getSitDown());
             assetsInfo.setAssetName(dto.getAssetName());
             assetsInfo.setNowName(dto.getNowName());
             assetsInfo.setHousingNumber(dto.getHousingNumber());
@@ -399,6 +457,10 @@ public class AssetsInfoDto {
             assetsInfo.setCreateUser(dto.getCreateUser());
             assetsInfo.setUpdateUser(dto.getUpdateUser());
             assetsInfo.setZtBz(dto.getZtBz());
+            assetsInfo.setAssetUnit(dto.getAssetUnit());
+            assetsInfo.setTotalLayers(dto.getTotalLayers());
+            assetsInfo.setUsedLayers(dto.getUsedLayers());
+            assetsInfo.setUsedRooms(dto.getUsedRooms());
         }
         return assetsInfo;
     }

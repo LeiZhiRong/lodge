@@ -15,7 +15,7 @@
             </div>
         </div>
     </header>
-    <ul id="sitDownTree"  data-options=" border: true,
+    <ul id="billCorpTree"  data-options=" border: true,
             loadMsg: false,
             checkbox: true,
             onlyLeafCheck: false,
@@ -30,14 +30,18 @@
             }
             "></ul>
     <input type="hidden" id="keyword" th:value="${keyword}">
+    <input type="hidden" id="corpType" th:value="${corpType}">
+    <input type="hidden" id="status" th:value="${status}">
 </div>
 
 <script type="text/javascript" th:inline="none">
      $(function () {
-        let eu = $("#sitDownTree").tree({
-            url: 'getSitDownList',
+        let eu = $("#billCorpTree").tree({
+            url: 'getBillCorpList',
             queryParams:{
-                keyword:$("#keyword").val()
+                keyword:$("#keyword").val(),
+                corpType:$("#corpType").val(),
+                status:$("#status").val(),
             },
             border: true,
             loadMsg: false,
@@ -61,7 +65,7 @@
      })
 
     function f_search(value) {
-        $("#sitDownTree").tree("search", value);
+        $("#billCorpTree").tree("search", value);
     }
 </script>
 

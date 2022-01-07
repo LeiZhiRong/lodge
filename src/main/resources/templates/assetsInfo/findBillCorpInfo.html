@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<!--suppress ThymeleafVariablesResolveInspection -->
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<div class="easyui-navpanel">
+    <div id="corpInfoToolbar" style="height: 40px;padding-top: 5px;padding-left: 5px;">
+        <div class="m-toolbar">
+            <div class="m-left">
+                快速查询：<input id="cashBankValue" class="easyui-searchbox"
+                            data-options="prompt:'输入关键字过滤',searcher:f_searchbillCorpInfo,icons:[{
+				iconCls:'icon-clear',
+				handler: function(e){
+					 $(e.data.target).textbox('setValue','');
+				}
+			}]" style="width:200px;height: 28px;">
+            </div>
+        </div>
+    </div>
+    <table id="billCorpInfoDG"></table>
+    <div id="corpInfoFtools" style="border-bottom: 0;border-left:0;border-right:0;padding: 5px 10px;text-align:right;">
+        <button id="closeBillCorpBtn" onclick="closeBillCorpInfoDialog();" class="easyui-linkbutton"
+                data-options="plain:true,height:25,iconCls: 'e-icon1 fa fa-sign-out fa-1g blue'">关闭
+        </button>
+    </div>
+</div>
+<script type="text/javascript" th:inline="none">
+    $(function () {
+        $("#billCorpInfoDG").datagrid({
+            url: 'listBillCorpInfo',
+            queryParams: {
+                corpType: "0",
+                status: 1
+            },
+            showHeader: false,
+            loadMsg: false,
+            border: false,
+            singleSelect: true,
+            fitColumns: true,
+            toolbar: '#corpInfoToolbar',
+            footer: '#corpInfoFtools',
+            fit: true,
+            columns: [[
+                {
+                    field: 'saleCorpName', title: '公司名称', width: 250,
+                    formatter: function (value, row, index) {
+                        return "<div style='padding-left: 10px;'>" + value + "</div>"
+                    }
+                },
+                {field: 'handle', title: '选择', align: 'right', width: 80}
+            ]]
+        }).datagrid('getPanel').addClass("lines-no");
+    })
+
+    //选择确认退出窗口
+    function getBillCorpInfoIdAndName(id, name, bh) {
+        $("#companyId").val(id);
+        $("#companyBh").val(bh);
+        $("#companyName").textbox("setValue", name);
+        $('#billCorpListContent').dialog('close');
+
+    }
+
+    //关闭
+    function closeBillCorpInfoDialog() {
+        $('#billCorpListContent').dialog('close');
+    }
+
+    //过滤查询
+    function f_searchbillCorpInfo(value) {
+        billCorpInfoParent_id = [];
+        var queryparams = {
+            keyword: value,
+            corpType: "0",
+            status: 1
+        };
+        $('#billCorpInfoDG').datagrid('options').queryParams = queryparams;
+        $('#billCorpInfoDG').datagrid('reload');
+    }
+
+</script>
+
+</html>

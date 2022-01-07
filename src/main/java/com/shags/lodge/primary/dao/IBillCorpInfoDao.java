@@ -1,6 +1,7 @@
 package com.shags.lodge.primary.dao;
 
 import com.shags.lodge.dto.CorpInfoListDto;
+import com.shags.lodge.dto.TreeJson;
 import com.shags.lodge.primary.dao.basic.IBaseDAO;
 import com.shags.lodge.primary.entity.BillCorpInfo;
 import com.shags.lodge.util.Pager;
@@ -80,7 +81,19 @@ public interface IBillCorpInfoDao extends IBaseDAO<BillCorpInfo> {
 
     List<BillCorpInfo> listBillCorpInfo(String corpType,String keyword);
 
+
     List<CorpInfoListDto> listCorpInfoListDto(String keyword, String pid);
+
+    /**
+     * @description: 获取客商目录树
+     * @param: [keyword, corpType, status]
+     * @author: ygLei
+     * @return: {@link List< TreeJson>}
+     * @date: 2021-12-02 9:03
+     */
+    List<TreeJson> listCorpInfoToTreeJson(String keyword,String corpType,Integer status);
+
+    List<CorpInfoListDto> listCorpInfoListDto(String keyword, String corpType, Integer status);
 
 
 

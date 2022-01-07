@@ -152,10 +152,7 @@ progressbar-value,
     color: #fff;
 }
 
-.sidemenu .tree-node-selected {
-    color: #333;
-    background: #ffffff;
-}
+
 
 .lines-no .datagrid-body td {
     border-right: 0px dotted transparent;
@@ -239,11 +236,6 @@ a.box:hover {
     padding: 10px;
 }
 
-.sidemenu-tree{
-    overflow-x:hidden;
-    overflow-y:hidden;
-}
-
 .loginbackg{
     background: url(../images/bj.jpg) no-repeat center 0px;
     background-position:center 0;
@@ -322,6 +314,72 @@ input.mytext {
     vertical-align: middle;
     white-space: nowrap;
     font-size: 12px;
+
+}
+.sidemenu .tree-title {
+    margin: 0;
+}
+.sidemenu .tree-node-selected {
+    color: #333;
+    background: #ffffff;
+}
+
+.sidemenu-tree{
+    overflow-x:hidden;
+    overflow-y:hidden;
+}
+.tree-title {
+    display: inline-block;
+    font-size: 12px;
+    height: 0px;
+    line-height: 0px;
+    margin: 4px 0;
+    padding: 0 2px;
+    text-decoration: none;
+    vertical-align: middle;
+    white-space: nowrap;
+}
+.sidemenu .tree-node {
+    height: 35px;
+}
+
+.datalist .datagrid-cell, .m-list li {
+    padding: 5px 10px;
+}
+.searchFrame{
+
+    position: relative;
+
+    display: inline-block;
+
+}
+
+
+
+.inputBox{
+
+    padding-right: 20px;
+
+    width:120px;
+
+}
+
+
+.searchFrame .clearButton{
+
+    width: 13px;
+
+    height: 13px;
+
+    position: absolute;
+
+    right: 2px;
+
+    top: 1px;
+
+    background: url(../images/bj.jpg) no-repeat left center;
+
+    cursor: pointer;
 
 }
 

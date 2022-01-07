@@ -93,7 +93,23 @@ public interface IDeptInfoService {
      */
     List<DeptInfoDto> listDeptInfoDto(String pid, String value);
 
-    List<DeptInfoListDto> listDeptInfoListDto(String pid, String value);
+    /**
+     * @description: 获取部门列表
+     * @param: [pid, value, bh]
+     * @author: ygLei
+     * @return: {@link List< DeptInfoListDto>}
+     * @date: 2022-01-06 10:35
+     */
+    List<DeptInfoListDto> listDeptInfoListDto(String pid, String value,boolean bh);
+
+    /**
+     * @description: 获取用户授权管理部门列表
+     * @param: [pid, value, bh, userDeptID]
+     * @author: ygLei
+     * @return: {@link List< DeptInfoListDto>}
+     * @date: 2022-01-06 10:36
+     */
+    List<DeptInfoListDto> listDeptInfoListDto(String pid, String value,boolean bh, String userDeptID);
 
     /**
      * 按部门编号查询部门信息

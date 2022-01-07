@@ -141,7 +141,24 @@ public interface IDeptInfoDao extends IBaseDAO<DeptInfo> {
      */
     List<DeptInfoDto> listDeptInfoDto(String pid, String value);
 
-    List<DeptInfoListDto> listDeptInfoListDto(String pid, String value);
+    /**
+     * 获取管理部门列表
+     * @param pid
+     * @param value
+     * @param bh
+     * @return
+     */
+    List<DeptInfoListDto> listDeptInfoListDto(String pid, String value,boolean bh);
+
+    /**
+     * 获取用户授权管理部门列表
+     * @param pid
+     * @param value
+     * @param bh
+     * @param userDeptID
+     * @return
+     */
+    List<DeptInfoListDto> listDeptInfoListDto(String pid, String value,boolean bh, String userDeptID);
 
     /**
      * 按部门编号查询部门信息

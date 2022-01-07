@@ -1,6 +1,7 @@
 package com.shags.lodge.primary.dao;
 
 import com.shags.lodge.dto.CorpInfoListDto;
+import com.shags.lodge.dto.TreeJson;
 import com.shags.lodge.primary.dao.basic.LodgeBaseDAO;
 import com.shags.lodge.primary.entity.BillCorpInfo;
 import com.shags.lodge.util.CmsUtils;
@@ -121,6 +122,8 @@ public class BillCorpInfoDao extends LodgeBaseDAO<BillCorpInfo, String> implemen
         return list;
     }
 
+
+
     @Override
     public List<CorpInfoListDto> listCorpInfoListDto(String keyword, String pid) {
         StringBuilder jpql = new StringBuilder();
@@ -141,6 +144,52 @@ public class BillCorpInfoDao extends LodgeBaseDAO<BillCorpInfo, String> implemen
         billCorpInfoList = super.listByAlias(jpql.toString(), alias);
         if (billCorpInfoList != null && billCorpInfoList.size() > 0) {
             return new CorpInfoListDto().listCorpInfoListDto(billCorpInfoList, "F");
+        } else {
+            return new ArrayList<>();
+        }
+    }
+
+    @Override
+    public List<TreeJson> listCorpInfoToTreeJson(String keyword,String corpType, Integer status) {
+        List<TreeJson> cts = new ArrayList<>();
+        String sql = "select m.id as id,m.corpBM as bh,m.corpMC as text from bill_corp_info  m  where  m.corpType =:corpType  and m.status =:status ";
+        Map<String, Object> alias = new HashMap<>();
+        alias.put("corpType", corpType);
+        alias.put("status", status);
+        List<Map> dts = super.listToMapByAliasSql(sql, alias);
+        if (dts != null && dts.size() > 0) {
+            cts.add(0,new TreeJson("all","<所有公司>",null));
+            List<String> list = CmsUtils.string2Array(keyword, ";");
+            dts.forEach(map -> {
+                TreeJson temp = new TreeJson();
+                temp.setId((String) map.get("id"));
+                temp.setText((String) map.get("text"));
+                temp.setPid("all");
+                 if (list.contains(map.get("text"))) {
+                    temp.setChecked(true);
+                }
+                cts.add(temp);
+            });
+        }
+        return TreeJson.getfatherNode(cts);
+    }
+
+    @Override
+    public List<CorpInfoListDto> listCorpInfoListDto(String keyword, String corpType, Integer status) {
+        StringBuilder jpql = new StringBuilder();
+        List<BillCorpInfo> billCorpInfoList;
+        Map<String, Object> alias = new HashMap<>();
+        jpql.append(" from BillCorpInfo b where b.status =:status and b.corpType =:corpType ");
+        alias.put("status",status);
+        alias.put("corpType",corpType);
+        if (keyword != null && !keyword.isEmpty()) {
+            jpql.append(" and ( b.corpMC like:keyword or b.corpBM like:keyword ) ");
+            alias.put("keyword", "%" + keyword + "%");
+        }
+        jpql.append(" order by b.corpBM asc ");
+        billCorpInfoList = super.listByAlias(jpql.toString(), alias);
+        if (billCorpInfoList != null && billCorpInfoList.size() > 0) {
+            return new CorpInfoListDto().listClientCorpInfoListDto(billCorpInfoList);
         } else {
             return new ArrayList<>();
         }

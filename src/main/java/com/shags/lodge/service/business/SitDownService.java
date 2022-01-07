@@ -101,7 +101,7 @@ public class SitDownService implements ISitDownService {
         jpql.append(" order by l.name  asc ");
         List<SitDown> dts = sitDownDao.listByAlias(jpql.toString(), alias);
         if (dts.size() > 0) {
-            cts.add(0, new TreeJson("all", "所有", null));
+            cts.add(0, new TreeJson("all", "<所有位置>", null));
             List<String> list = CmsUtils.string2Array(keyword, ";");
             for (SitDown map : dts) {
                 TreeJson temp = new TreeJson();

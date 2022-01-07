@@ -2,6 +2,7 @@ package com.shags.lodge.service.primary;
 
 import com.shags.lodge.dto.ManagePointDto;
 import com.shags.lodge.dto.User;
+import com.shags.lodge.dto.business.ManagePointListDto;
 import com.shags.lodge.primary.entity.ManagePoint;
 import com.shags.lodge.util.Message;
 import com.shags.lodge.util.Pager;
@@ -89,6 +90,17 @@ public interface IManagePointService {
      * @return
      */
     String listNotInManagePoint(String bookSet,String name);
+
+
+    /**
+     * 获取用户授权管理处列表
+     * @param bookSet 账套
+     * @param keyword 关键字
+     * @param ztbz 状态标识
+     * @param userBalanceDept 授权列表
+     * @return
+     */
+    List<ManagePointListDto> listManagePointListDto(String bookSet,String keyword, String ztbz,String userBalanceDept);
 
 
 

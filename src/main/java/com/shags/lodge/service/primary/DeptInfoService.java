@@ -201,8 +201,13 @@ public class DeptInfoService implements IDeptInfoService {
 
     @Override
     @Transactional(value = "primaryTransactionManager",readOnly = true)
-    public List<DeptInfoListDto> listDeptInfoListDto(String pid, String value) {
-        return deptInfoDao.listDeptInfoListDto(pid, value);
+    public List<DeptInfoListDto> listDeptInfoListDto(String pid, String value,boolean bh) {
+        return deptInfoDao.listDeptInfoListDto(pid, value,bh);
+    }
+
+    @Override
+    public List<DeptInfoListDto> listDeptInfoListDto(String pid, String value, boolean bh, String userDeptID) {
+        return deptInfoDao.listDeptInfoListDto(pid, value,bh,userDeptID);
     }
 
     @Override

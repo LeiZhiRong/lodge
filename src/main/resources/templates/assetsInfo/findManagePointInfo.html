@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<!--suppress ThymeleafVariablesResolveInspection -->
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<div class="easyui-navpanel">
+    <div id="managePointInfoToolbar" style="height: 40px;padding-top: 5px;padding-left: 5px;">
+        <div class="m-toolbar">
+            <div class="m-left">
+                快速查询：<input id="searchValue" class="easyui-searchbox"
+                            data-options="prompt:'输入关键字过滤',searcher:f_searchManagePointInfo,icons:[{
+				iconCls:'icon-clear',
+				handler: function(e){
+					 $(e.data.target).textbox('setValue','');
+				}
+			}]" style="width:200px;height: 28px;">
+            </div>
+        </div>
+    </div>
+    <table id="managePointInfoDG"></table>
+    <div id="managePointInfoFtools" style="border-bottom: 0;border-left:0;border-right:0;padding: 5px 10px;text-align:right;">
+        <button id="closeManagePointInfoBtn" onclick="closeManagePointInfoDialog();" class="easyui-linkbutton"
+                data-options="plain:true,height:25,iconCls: 'e-icon1 fa fa-sign-out fa-1g blue'">关闭
+        </button>
+    </div>
+</div>
+<script type="text/javascript" th:inline="none">
+    $(function () {
+        $("#managePointInfoDG").datagrid({
+            url: 'listManagePointInfo',
+            queryParams: {
+                ztbz:"T"
+            },
+            showHeader: false,
+            loadMsg: false,
+            border: false,
+            singleSelect: true,
+            fitColumns: true,
+            toolbar: '#managePointInfoToolbar',
+            footer: '#managePointInfoFtools',
+            fit: true,
+            columns: [[
+                {
+                    field: 'name', title: '管理处', width: 250,
+                    formatter: function (value, row, index) {
+                        return "<div style='padding-left: 10px;'>" + value + "</div>"
+                    }
+                },
+                {field: 'handle', title: '选择', align: 'right', width: 80}
+            ]]
+        }).datagrid('getPanel').addClass("lines-no");
+    })
+
+    //选择确认退出窗口
+    function getManagePointInfoIdAndName(id, name, bh) {
+        $("#managePointId").val(id);
+         $("#managePointName").textbox("setValue", name);
+        $('#managePointInfoListContent').dialog('close');
+
+    }
+
+    //关闭
+    function closeManagePointInfoDialog() {
+        $('#managePointInfoListContent').dialog('close');
+    }
+
+    //过滤查询
+    function f_searchManagePointInfo(value) {
+        var queryparams = {
+            keyword: value,
+            ztbz:"T"
+        };
+        $('#managePointInfoDG').datagrid('options').queryParams = queryparams;
+        $('#managePointInfoDG').datagrid('reload');
+    }
+
+</script>
+
+</html>
