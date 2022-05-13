@@ -165,28 +165,28 @@ $.fn.combobox.defaults.filter = function (q, row) {
 }
 
 $.extend($.fn.textbox.methods, {
-    addClearBtn: function(jq, iconCls){
-        return jq.each(function(){
+    addClearBtn: function (jq, iconCls) {
+        return jq.each(function () {
             var t = $(this);
             var opts = t.textbox('options');
             opts.icons = opts.icons || [];
             opts.icons.unshift({
                 iconCls: iconCls,
-                handler: function(e){
+                handler: function (e) {
                     $(e.data.target).textbox('clear').textbox('textbox').focus();
-                    $(this).css('visibility','hidden');
+                    $(this).css('visibility', 'hidden');
                 }
             });
             t.textbox();
-            if (!t.textbox('getText')){
-                t.textbox('getIcon',0).css('visibility','hidden');
+            if (!t.textbox('getText')) {
+                t.textbox('getIcon', 0).css('visibility', 'hidden');
             }
-            t.textbox('textbox').bind('keyup', function(){
-                var icon = t.textbox('getIcon',0);
-                if ($(this).val()){
-                    icon.css('visibility','visible');
+            t.textbox('textbox').bind('keyup', function () {
+                var icon = t.textbox('getIcon', 0);
+                if ($(this).val()) {
+                    icon.css('visibility', 'visible');
                 } else {
-                    icon.css('visibility','hidden');
+                    icon.css('visibility', 'hidden');
                 }
             });
         });
@@ -498,5 +498,27 @@ function accSub(arg1, arg2) {
 Number.prototype.sub = function (arg) {
     return accSub(arg, this);
 }
+
+//验证输入的值是否为下拉框里的值,否-则清空
+function validateComboboxInputValue(self) {
+    var $this = $(self),
+        result = true,//为true说明输入的值在下拉框数据中不存在
+        valueField = $this.combobox('options').valueField,
+        allData = $this.combobox('getData'),
+        val = $this.combobox("getValue");
+    for (var i = 0; i < allData.length; i++) {
+        if (val == allData[i][valueField]) {
+            result = false;
+        }
+    }
+    if (result) {
+        $this.combobox("clear");
+    } else {
+        $this.combobox('unselect', val);
+        $this.combobox('select', val);
+    }
+}
+
+$
 
 

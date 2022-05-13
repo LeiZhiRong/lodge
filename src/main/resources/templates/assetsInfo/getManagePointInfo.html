@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!--suppress ThymeleafVariablesResolveInspection -->
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<div class="easyui-navpanel">
+    <header>
+        <div id="managePoint-top-toolbar" style="height: 28px">
+            <div class="m-toolbar">
+                <div class="m-left">
+                    快速查询：<input id="searchManagePointbox" class=" easyui-searchbox"
+                                data-options="prompt:'输入关键字过滤',searcher:f_search"
+                                style="width:200px;height: 28px;">
+                </div>
+            </div>
+        </div>
+    </header>
+    <ul id="managePointTree"  data-options=" border: true,
+            loadMsg: false,
+            checkbox: true,
+            onlyLeafCheck: false,
+            header: '#managePoint-top-toolbar',
+            fit: true,
+            onClick: function (node) {
+                if (node.checked) {
+                    $(this).tree('uncheck', node.target);
+                } else {
+                    $(this).tree('check', node.target);
+                }
+            }
+            "></ul>
+    <input type="hidden" id="keyword" th:value="${keyword}">
+</div>
+
+<script type="text/javascript" th:inline="none">
+     $(function () {
+        let eu = $("#managePointTree").tree({
+            url: 'getManagePointList',
+            queryParams:{
+                keyword:$("#keyword").val()
+            },
+            border: true,
+            loadMsg: false,
+            checkbox: true,
+            onlyLeafCheck: false,
+            header: '#managePoint-top-toolbar',
+            fit: true,
+            onClick: function (node) {
+                if (node.checked) {
+                    $(this).tree('uncheck', node.target);
+                } else {
+                    $(this).tree('check', node.target);
+                }
+            },
+            onLoadSuccess:function () {
+                $(".tree-icon,.tree-file").removeClass("tree-icon tree-file");
+                $(".tree-icon,.tree-folder").removeClass("tree-icon tree-folder tree-folder-open tree-folder-closed");
+            }
+        });
+
+     })
+
+    function f_search(value) {
+        $("#managePointTree").tree("search", value);
+    }
+</script>
+
+</html>

@@ -3,24 +3,20 @@ package com.shags.lodge.controller.business;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.shags.lodge.auth.AuthClass;
 import com.shags.lodge.auth.AuthMethod;
+import com.shags.lodge.business.entity.AssetsInfo;
 import com.shags.lodge.dto.*;
-import com.shags.lodge.dto.business.AssetsInfoDto;
-import com.shags.lodge.dto.business.AssetsInfoForm;
-import com.shags.lodge.dto.business.ManagePointListDto;
+import com.shags.lodge.dto.business.*;
 import com.shags.lodge.service.business.IAssetsInfoService;
 import com.shags.lodge.service.business.IAssetsTypeService;
 import com.shags.lodge.service.business.ISitDownService;
-import com.shags.lodge.service.primary.IBillCorpInfoService;
-import com.shags.lodge.service.primary.IDeptInfoService;
-import com.shags.lodge.service.primary.IManagePointService;
-import com.shags.lodge.service.primary.ITableHeaderService;
-import com.shags.lodge.util.Pager;
-import com.shags.lodge.util.SelectJson;
-import com.shags.lodge.util.SystemContext;
+import com.shags.lodge.service.primary.*;
+import com.shags.lodge.util.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author yglei
@@ -56,6 +53,13 @@ public class AssetsInfoController {
     private ISitDownService sitDownService;
 
     private IBillCorpInfoService billCorpInfoService;
+
+    private ICustomService customService;
+
+    @Autowired
+    public void setCustomService(ICustomService customService) {
+        this.customService = customService;
+    }
 
     @Autowired
     public void setAssetsInfoService(IAssetsInfoService assetsInfoService) {
@@ -124,14 +128,16 @@ public class AssetsInfoController {
      */
     @AuthMethod(role = "ROLE_ASSETSINFO")
     @RequestMapping("list")
-    public Pager<AssetsInfoDto> list(String order, String sort, int page, int rows, String field, String value, HttpSession session) {
+    public Pager<AssetsInfoDto> list(String order, String sort, int page, int rows, String codeType, String codeValue,String corp_Name,String dept_ID,String managePoint_Name,String sitDown_Name,String assetsType_Name, HttpSession session) {
         SystemContext.setPageSize(rows);
         SystemContext.setPageNumber(page);
         SystemContext.setOrder(order);
         SystemContext.setSort(sort);
-        Pager<AssetsInfoDto> dto = new Pager<AssetsInfoDto>();
-        return dto;
+        User user = (User) session.getAttribute("user");
+        return assetsInfoService.listAssetsInfoDto(codeType,codeValue,corp_Name,dept_ID,managePoint_Name,sitDown_Name,assetsType_Name,user);
     }
+
+
 
     /**
      * 获取房屋类型
@@ -210,6 +216,30 @@ public class AssetsInfoController {
         return sitDownService.getClientSitDownToTreeJson(keyword, user.getBookSet());
     }
 
+
+    /**
+     * @description: 获取管理处
+     * @param: [keyword, model]
+     * @author: ygLei
+     * @return: {@link ModelAndView}
+     * @date: 2022-01-18 14:04
+     */
+    @AuthMethod(role = "ROLE_ASSETSINFO")
+    @GetMapping("getManagePointInfo")
+    public ModelAndView getManagePointInfo(String keyword, Model model) {
+        model.addAttribute("keyword", keyword);
+        return new ModelAndView("assetsInfo/getManagePointInfo");
+    }
+
+
+    @AuthMethod(role = "ROLE_ASSETSINFO")
+    @RequestMapping(value = "getManagePointList")
+    public List<TreeJson> getManagePointList(String keyword, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        return managePointService.getClientManagePointToTreeJson(user.getBookSet(),keyword,"T",user.getBalanceDept());
+    }
+
+
     /**
      * 获取客商目录树
      *
@@ -248,13 +278,57 @@ public class AssetsInfoController {
         } else {
             assetsInfo.setZtBz("T");
         }
+        //房产状态
+        List<SelectJson> houseState = customService.listCustomParameByCode("HouseState");
+        //房产结构
+        List<SelectJson> structure = customService.listCustomParameByCode("structure");
+        //计量单位
+        List<SelectJson> assetUnit = customService.listCustomParameByCode("assetUnit");
+        model.addAttribute("houseState", houseState);
         model.addAttribute("assetsInfo", assetsInfo);
+        model.addAttribute("structure", structure);
+        model.addAttribute("assetUnit", assetUnit);
         return new ModelAndView("assetsInfo/add_Dialog");
+    }
+
+    /**
+     * @description: 保存/更新 房产信息
+     * @param: [assetsInfoForm, br, session]
+     * @author: ygLei
+     * @return: {@link Message}
+     * @date: 2022-01-18 9:17
+     */
+    @AuthMethod(role = "ROLE_ASSETSINFO")
+    @PostMapping("save")
+    public Message save(@Validated AssetsInfoForm assetsInfoForm, BindingResult br, HttpSession session) {
+        if (br.hasErrors()) {
+            return new Message(0, Objects.requireNonNull(br.getFieldError()).getDefaultMessage());
+        }
+        try {
+            User user = (User) session.getAttribute("user");
+            AssetsInfo assetsInfo = new AssetsInfoForm().getAssetsInfo(assetsInfoForm);
+            String id = assetsInfo.getId();
+            if (StringUtils.isEmpty(id)) {
+                assetsInfo.setBookSet(user.getBookSet());
+                assetsInfo.setrVTime(CmsUtils.getTimeMillis());
+                assetsInfo.setCreateUser(user.getUserName());
+                assetsInfo.setCreateTime(BeanUtil.strToTimestampTime(CmsUtils.getNowDate()));
+                return assetsInfoService.addAssetsInfo(assetsInfo);
+            } else {
+                //更新
+               assetsInfo.setUpdateTime(BeanUtil.strToTimestampTime(CmsUtils.getNowDate()));
+               assetsInfo.setUpdateUser(user.getUserName());
+               return assetsInfoService.updateAssetsInfo(assetsInfo);
+            }
+        } catch (Exception e) {
+            return new Message(0, e.getMessage());
+        }
+
     }
 
 
     /**
-     * @description: 获取部门列表
+     * @description: 部门选择器
      * @param: []
      * @author: ygLei
      * @return: {@link ModelAndView}
@@ -269,13 +343,13 @@ public class AssetsInfoController {
 
     @AuthMethod(role = "ROLE_ASSETSINFO")
     @PostMapping("listDeptInfo")
-    public List<DeptInfoListDto> listDeptInfo(String pid, String keyword,HttpSession session) {
+    public List<DeptInfoListDto> listDeptInfo(String pid, String keyword, HttpSession session) {
         User user = (User) session.getAttribute("user");
-        return deptInfoService.listDeptInfoListDto(pid, keyword,false,user.getManageDept());
+        return deptInfoService.listDeptInfoListDto(pid, keyword, false, user.getManageDept());
     }
 
     /**
-     * @description: 获取公司列表
+     * @description: 公司选择器
      * @param: []
      * @author: ygLei
      * @return: {@link ModelAndView}
@@ -290,12 +364,12 @@ public class AssetsInfoController {
 
     @AuthMethod(role = "ROLE_ASSETSINFO")
     @PostMapping("listBillCorpInfo")
-    public List<CorpInfoListDto> listBillCorpInfo(String keyword, String corpType,Integer status) {
-         return billCorpInfoService.listCorpInfoListDto(keyword,corpType,status);
+    public List<CorpInfoListDto> listBillCorpInfo(String keyword, String corpType, Integer status) {
+        return billCorpInfoService.listCorpInfoListDto(keyword, corpType, status);
     }
 
     /**
-     * @description: 获取管理处列表
+     * @description: 管理处选择器
      * @param: []
      * @author: ygLei
      * @return: {@link ModelAndView}
@@ -310,9 +384,51 @@ public class AssetsInfoController {
 
     @AuthMethod(role = "ROLE_ASSETSINFO")
     @PostMapping("listManagePointInfo")
-    public List<ManagePointListDto> listManagePointInfo(String keyword, String ztbz,HttpSession session) {
+    public List<ManagePointListDto> listManagePointInfo(String keyword, String ztbz, HttpSession session) {
         User user = (User) session.getAttribute("user");
-        return managePointService.listManagePointListDto(user.getBookSet(),keyword,ztbz,user.getBalanceDept());
+        return managePointService.listManagePointListDto(user.getBookSet(), keyword, ztbz, user.getBalanceDept());
     }
+
+    /**
+     * @description: 坐落位置选择器
+     * @param: []
+     * @author: ygLei
+     * @return: {@link ModelAndView}
+     * @date: 2022-01-10 14:56
+     */
+    @AuthMethod(role = "ROLE_ASSETSINFO")
+    @GetMapping("findSitDownInfo")
+    public ModelAndView findSitDownInfo() {
+        return new ModelAndView("assetsInfo/findSitDownInfo");
+    }
+
+
+    @AuthMethod(role = "ROLE_ASSETSINFO")
+    @PostMapping("listSitDownInfo")
+    public List<SitDownInfoListDto> listSitDownInfo(String keyword, String ztbz, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        return sitDownService.listSitDownInfoDto(user.getBookSet(), keyword, ztbz);
+    }
+
+
+    /**
+     * 资产类型选择器
+     *
+     * @return
+     */
+    @AuthMethod(role = "ROLE_ASSETSINFO")
+    @GetMapping("findAssetsTypeInfo")
+    public ModelAndView findAssetsTypeInfo() {
+        return new ModelAndView("assetsInfo/findAssetsTypeInfo");
+    }
+
+
+    @AuthMethod(role = "ROLE_ASSETSINFO")
+    @PostMapping("listAssetsTypeInfo")
+    public List<AssetsTypeListDto> listAssetsTypeInfo(String pid, String keyword, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        return assetsTypeService.listAssetsTypeListDto(user.getBookSet(), pid, keyword, "T");
+    }
+
 
 }

@@ -1,14 +1,15 @@
 package com.shags.lodge.service.primary;
 
 import com.shags.lodge.dto.ManagePointDto;
+import com.shags.lodge.dto.TreeJson;
 import com.shags.lodge.dto.User;
 import com.shags.lodge.dto.business.ManagePointListDto;
+import com.shags.lodge.primary.dao.IManagePointDao;
+import com.shags.lodge.primary.entity.ManagePoint;
 import com.shags.lodge.util.CmsUtils;
 import com.shags.lodge.util.Message;
 import com.shags.lodge.util.Pager;
 import com.shags.lodge.util.SelectJson;
-import com.shags.lodge.primary.dao.IManagePointDao;
-import com.shags.lodge.primary.entity.ManagePoint;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -206,6 +207,39 @@ public class ManagePointService implements IManagePointService {
             dto = new ManagePointListDto().listManagePointDto(list);
         }
         return dto;
+    }
+
+    @Override
+    @Transactional(value = "primaryTransactionManager", readOnly = true)
+    public List<TreeJson> getClientManagePointToTreeJson(String bookSet,String keyword,  String ztbz,String userManageDept) {
+        List<TreeJson> cts = new ArrayList<>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
+        jpql.append(" from ManagePoint m where m.bookSet =:bookSet and m.ztbz =:ztbz  ");
+        alias.put("bookSet", bookSet);
+        alias.put("ztbz", ztbz);
+        if (StringUtils.isNotEmpty(userManageDept)) {
+            List<String> setId = CmsUtils.string2Array(userManageDept, ",");
+            jpql.append(" and m.id in(:setId) ");
+            alias.put("setId", setId);
+        }
+        jpql.append(" order by m.name  asc ");
+        List<ManagePoint> dts = managePointDao.listByAlias(jpql.toString(), alias);
+        if (dts.size() > 0) {
+            cts.add(0, new TreeJson("all", "<所有管理处>", null));
+            List<String> list = CmsUtils.string2Array(keyword, ";");
+            for (ManagePoint map : dts) {
+                TreeJson temp = new TreeJson();
+                temp.setId(map.getId());
+                temp.setPid("all");
+                temp.setText(map.getName());
+                if (list.contains(map.getName())) {
+                    temp.setChecked(true);
+                }
+                cts.add(temp);
+            }
+        }
+        return TreeJson.getfatherNode(cts);
     }
 
 }

@@ -156,7 +156,6 @@ public class ManagePointController {
     @AuthMethod(role = "ROLE_MANAGEPOINT")
     @GetMapping(value = "test")
     public void test() {
-
         System.out.println(CmsUtils.isNumeric("中"));
 
 

@@ -3,6 +3,7 @@ package com.shags.lodge.service.business;
 import com.shags.lodge.business.dao.ISitDownDao;
 import com.shags.lodge.business.entity.SitDown;
 import com.shags.lodge.dto.TreeJson;
+import com.shags.lodge.dto.business.SitDownInfoListDto;
 import com.shags.lodge.util.CmsUtils;
 import com.shags.lodge.util.Message;
 import com.shags.lodge.util.Pager;
@@ -91,6 +92,7 @@ public class SitDownService implements ISitDownService {
     }
 
     @Override
+    @Transactional(value = "businessTransactionManager", readOnly = true)
     public List<TreeJson> getClientSitDownToTreeJson(String keyword, String bookSet) {
         List<TreeJson> cts = new ArrayList<>();
         StringBuilder jpql = new StringBuilder();
@@ -115,6 +117,31 @@ public class SitDownService implements ISitDownService {
             }
         }
         return TreeJson.getfatherNode(cts);
+    }
+
+    @Override
+    @Transactional(value = "businessTransactionManager", readOnly = true)
+    public List<SitDownInfoListDto> listSitDownInfoDto(String bookSet, String keyword, String ztBz) {
+        List<SitDownInfoListDto> dto = new ArrayList<>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
+        jpql.append(" from SitDown m where m.bookSet =:bookSet  ");
+        alias.put("bookSet", bookSet);
+        if (StringUtils.isNotEmpty(ztBz)) {
+            jpql.append(" and m.ztBz =:ztBz ");
+            alias.put("ztBz", ztBz);
+        }
+        if (StringUtils.isNotEmpty(keyword)) {
+            jpql.append(" and m.name like:keyword ");
+            alias.put("keyword", keyword+"%");
+        }
+
+        jpql.append(" order by m.rVTime asc ");
+        List<SitDown> list = sitDownDao.listByAlias(jpql.toString(), alias);
+        if (list != null && list.size() > 0) {
+            dto = new SitDownInfoListDto().listSitDownInfoListDto(list);
+        }
+        return dto;
     }
 
 

@@ -169,14 +169,10 @@ public class DeptInfoDao extends LodgeBaseDAO<DeptInfo, String> implements IDept
             for (Map map : dts) {
                 TreeJson temp = new TreeJson();
                 temp.setId((String) map.get("id"));
-                if ("F".equals(map.get("contents"))) {
-                    temp.setText(map.get("deptID") + " " + map.get("text"));
-                }else{
-                    temp.setText((String) map.get("text"));
-                }
+                temp.setText((String) map.get("text"));
                 temp.setPid((String) map.get("pid"));
                 temp.setArg(map.get("deptID"));
-                if (list.contains(map.get("deptID"))) {
+                if (list.contains(map.get("text"))) {
                     temp.setChecked(true);
                 }
                 temp.setArg1(map.get("contents"));

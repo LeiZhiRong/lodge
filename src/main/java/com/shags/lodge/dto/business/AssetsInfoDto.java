@@ -74,7 +74,7 @@ public class AssetsInfoDto {
     /**
      * 攀钢自编名称
      */
-    @HeaderEnum(field = "housingNumber", title = "攀钢自编名称", width = 250, hidden = true)
+    @HeaderEnum(field = "housingNumber", title = "攀钢自编号", width = 250, hidden = true)
     private String housingNumber;
 
     /**
@@ -104,19 +104,19 @@ public class AssetsInfoDto {
     /**
      * 总层数
      */
-    @HeaderEnum(field = "totalLayers", title = "总层数", width = 80,hidden = true)
+    @HeaderEnum(field = "totalLayers", title = "总层数", width = 80, hidden = true)
     private Double totalLayers;
 
     /**
      * 使用层数
      */
-    @HeaderEnum(field = "usedLayers", title = "使用层数", width = 80,hidden = true)
+    @HeaderEnum(field = "usedLayers", title = "使用层数", width = 80, hidden = true)
     private Double usedLayers;
 
     /**
      * 使用房间数
      */
-    @HeaderEnum(field = "usedRooms", title = "使用房间数", width = 80,hidden = true)
+    @HeaderEnum(field = "usedRooms", title = "使用房间数", width = 80, hidden = true)
     private Double usedRooms;
 
     /**
@@ -169,7 +169,7 @@ public class AssetsInfoDto {
     /**
      * 状态标志
      */
-    @HeaderEnum(field = "ztBz", title = "状态标识", width = 80)
+    @HeaderEnum(field = "ztBz", title = "房产状态", width = 80)
     private String ztBz;
 
     /**
@@ -422,10 +422,8 @@ public class AssetsInfoDto {
             this.setTotalLayers(assetsInfo.getTotalLayers());
             this.setUsedLayers(assetsInfo.getUsedLayers());
             this.setUsedRooms(assetsInfo.getUsedRooms());
-            if(assetsInfo.getAssetsType()!=null)
-                this.setAssetsTypeName(assetsInfo.getAssetsType().getName());
-            if(assetsInfo.getSitDown()!=null)
-                this.setSitDownName(assetsInfo.getSitDown().getName());
+            this.setAssetsTypeName(assetsInfo.getAssetsTypeName());
+            this.setSitDownName(assetsInfo.getSitDownName());
         }
     }
 
@@ -439,7 +437,7 @@ public class AssetsInfoDto {
         return dto;
     }
 
-    public AssetsInfo getAssetsInfoDto(AssetsInfoDto dto) {
+    public AssetsInfo getAssetsInfo(AssetsInfoDto dto) {
         AssetsInfo assetsInfo = new AssetsInfo();
         if (dto != null) {
             assetsInfo.setId(StringUtils.isNotEmpty(dto.getId()) ? dto.getId() : null);

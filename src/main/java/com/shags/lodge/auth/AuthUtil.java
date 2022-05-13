@@ -12,7 +12,7 @@ public class AuthUtil {
      */
     public static Map<String, Set<String>> initAuth(String pName) {
         try {
-            Map<String, Set<String>> auths = new HashMap<>();
+            Map<String, Set<String>> auths = new HashMap<String, Set<String>>();
             List<String> list = CmsUtils.string2Array(pName, ",");
             if (list.size() > 0) {
                 for (String name : list) {

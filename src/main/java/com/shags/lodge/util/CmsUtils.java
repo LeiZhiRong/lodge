@@ -1,5 +1,9 @@
 package com.shags.lodge.util;
 
+import com.github.dadiyang.equator.Equator;
+import com.github.dadiyang.equator.FieldInfo;
+import com.github.dadiyang.equator.GetterBaseEquator;
+import com.shags.lodge.business.entity.OperationLogDetail;
 import com.shags.lodge.dto.HeaderColumns;
 import com.shags.lodge.primary.entity.AccounCode;
 import com.shags.lodge.primary.entity.CustomParame;
@@ -20,6 +24,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 import java.security.interfaces.RSAPrivateKey;
+import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -193,7 +198,7 @@ public class CmsUtils {
         } catch (Exception e) {
             ipAddress = "";
         }
-        String mac= UdpGetClientMacAdder.getLocalMac(ipAddress);
+        String mac = UdpGetClientMacAdder.getLocalMac(ipAddress);
         return ipAddress;
 
     }
@@ -528,6 +533,87 @@ public class CmsUtils {
             }
         }
         return macAddress;
+    }
+
+    /**
+     * @description: 实体类比较
+     * @param: [obj1, obj2]
+     * @author: ygLei
+     * @return: {@link List< OperationLogDetail>}
+     * @date: 2022-01-11 17:20
+     */
+    public static List<OperationLogDetail> CompareProperties(Object obj1, Object obj2, String operation_log_id) throws NoSuchFieldException, IllegalAccessException {
+        Equator equator = new GetterBaseEquator();
+        List<OperationLogDetail> list = new ArrayList<>();
+        if (!equator.isEquals(obj1, obj2)) {
+            List<FieldInfo> diff = equator.getDiffFields(obj1, obj2);
+            if (diff != null && diff.size() > 0) {
+                for (FieldInfo temp : diff) {
+                    OperationLogDetail mast = new OperationLogDetail();
+                    mast.setClm_name(temp.getFieldName());
+                    Class<?> cls = temp.getFieldType();
+                    if (temp.getFirstVal() != null) {
+                        String str = ObjectToString(temp.getFirstVal());
+                        if (StringUtils.isNotEmpty(str)) {
+                            mast.setOld_string(str);
+                            mast.setClm_comment(cls.getTypeName());
+                        } else {
+                            Object ct = temp.getFirstVal();
+                            Field field = ct.getClass().getDeclaredField("id");
+                            field.setAccessible(true);
+                            mast.setClm_comment("java.lang.String");
+                            mast.setOld_string((String) field.get(ct));
+                        }
+
+                    }
+                    if (temp.getSecondVal() != null) {
+                        String str = ObjectToString(temp.getSecondVal());
+                        if (StringUtils.isNotEmpty(str)) {
+                            mast.setNew_string(str);
+                            mast.setClm_comment(cls.getTypeName());
+                        } else {
+                            Object ct = temp.getSecondVal();
+                            Field field = ct.getClass().getDeclaredField("id");
+                            field.setAccessible(true);
+                            mast.setClm_comment("java.lang.String");
+                            mast.setNew_string((String) field.get(ct));
+                        }
+
+                    }
+                    if (StringUtils.isNotEmpty(operation_log_id))
+                        mast.setOperation_log_id(operation_log_id);
+                    list.add(mast);
+                }
+
+            }
+        }
+        return list;
+    }
+
+    public static String ObjectToString(Object param) {
+        if (param != null) {
+            if (param instanceof Integer) {
+                return String.valueOf(param);
+            } else if (param instanceof String) {
+                return (String) param;
+            } else if (param instanceof Double) {
+                return param.toString();
+            } else if (param instanceof Float) {
+                return Float.toString((Float) param);
+            } else if (param instanceof Long) {
+                return String.valueOf(param);
+            } else if (param instanceof Boolean) {
+                boolean b = ((Boolean) param).booleanValue();
+                return b ? "T" : "F";
+            } else if (param instanceof Date) {
+                Date d = (Date) param;
+                return BeanUtil.dateToStr(d, "yyyy-MM-dd HH:mm");
+            } else if (param instanceof Timestamp) {
+                Timestamp d = (Timestamp) param;
+                return BeanUtil.timestampToStr(d, "yyyy-MM-dd HH:mm");
+            }
+        }
+        return null;
     }
 
 }

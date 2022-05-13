@@ -12,8 +12,8 @@ $(function () {
         striped: true,
         maximized: true,
         rownumbers: true,
-        sortName: 'corpBM',
-        sortOrder: 'asc',
+        sortName: 'rVTime',
+        sortOrder: 'desc',
         border: true,
         pagination: true,
         pageSize: 20,
@@ -61,7 +61,7 @@ function editRow(id) {
 
 //Dialog
 function altAssetsInfoDialog(id) {
-    var title = empty(id) ? "新增【楼栋信息】" : "修改【楼栋信息】";
+    var title = empty(id) ? "房产信息登记" : "房产信息修改";
     $("body").append("<div id='assetsInfoContent' Style='display: none;padding: 5px;'></div>");
     $('#assetsInfoContent').dialog({
         title: title,

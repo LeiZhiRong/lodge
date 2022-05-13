@@ -12,16 +12,13 @@
                 <tr>
                     <td class="rightTd" style="width:100px;">房产状态：</td>
                     <td>
-                        <input class="easyui-switchbutton" th:checked="${assetsInfo.ztBz=='T'?1:0}"
-                               style="height:28px;"
-                               data-options="onText:'在用',offText:'停用',
-                        onChange:function(checked){
-                        if(checked){
-                        $('#ztBz').val('T');
-                        } else{
-                        $('#ztBz').val('F');
-                        }
-                        }">
+                        <select id="ztBz" name="ztBz"  class="easyui-combobox" data-options="
+                panelMaxHeight:200,editable:false" style="width:200px;height:28px;">
+                            <option th:each="item:${houseState}"
+                                    th:value="${item.values}"
+                                    th:selected="${assetsInfo.ztBz eq item.values}"
+                                    th:text="${item.name}"></option>
+                        </select>
                     </td>
                     <td class="rightTd" style="width:100px;">卡片编号：</td>
                     <td>
@@ -31,7 +28,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="rightTd" style="width:100px;">公司名称：</td>
+                    <td class="rightTd" style="width:100px;"><i class="info">*</i>公司名称：</td>
                     <td>
                         <input id="companyName" name="companyName" class="easyui-textbox"
                                data-options="editable:false,height:28,width:200,icons:[{
@@ -41,7 +38,7 @@
 				               }
 			                   }]" th:value="*{companyName}"/>
                     </td>
-                    <td class="rightTd" style="width:100px;">管辖部门：</td>
+                    <td class="rightTd" style="width:100px;"><i class="info">*</i>管辖部门：</td>
                     <td>
                         <input id="deptName" name="deptName" class="easyui-textbox"
                                data-options="editable:false,height:28,width:200,icons:[{
@@ -53,7 +50,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="rightTd" style="width:100px;">管理处：</td>
+                    <td class="rightTd" style="width:100px;"><i class="info">*</i>管理处：</td>
                     <td>
                         <input id="managePointName" name="managePointName" class="easyui-textbox"
                                data-options="editable:false,height:28,width:200,icons:[{
@@ -63,35 +60,44 @@
 				               }
 			                   }]" th:value="*{managePointName}"/>
                     </td>
-                    <td class="rightTd" style="width:100px;">坐落位置：</td>
+                    <td class="rightTd" style="width:100px;"><i class="info">*</i>坐落位置：</td>
                     <td>
                         <input id="sitDownName" name="sitDownName"
-                               data-options="editable:true,height:28,width:200,icons:[{
+                               data-options="editable:false,height:28,width:200,icons:[{
 				               iconCls:'icon-search',
 				               handler: function(e){
-					            listObject();
+					            listSitDownInfo();
 				               }
-			                   }]"
-                               th:value="*{sitDownName}"/>
+			                   }]" th:value="*{sitDownName}"/>
                     </td>
 
                 </tr>
                 <tr>
-                    <td class="rightTd" style="width:100px;">房产类型：</td>
+                    <td class="rightTd" style="width:100px;"><i class="info">*</i>房产类型：</td>
                     <td>
                         <input id="assetsTypeName" name="assetsTypeName" class="easyui-textbox"
-                               style="width:200px;height:28px;"
-                               th:value="*{assetsTypeName}"/>
+                               data-options="editable:false,height:28,width:200,icons:[{
+				               iconCls:'icon-search',
+				               handler: function(e){
+					            listAssetsTypeInfo();
+				               }
+			                   }]" th:value="*{assetsTypeName}"/>
                     </td>
-                    <td class="rightTd" style="width:100px;">资产结构：</td>
+
+                    <td class="rightTd" style="width:100px;">房产结构：</td>
                     <td>
-                        <input id="structure" name="structure" class="easyui-textbox" style="width:200px;height:28px;"
-                               th:value="*{structure}"/>
+                        <select id="structure" name="structure"  data-options="
+                panelMaxHeight:200,editable:true" style="width:200px;height:28px;">
+                            <option th:each="item:${structure}"
+                                    th:value="${item.values}"
+                                    th:selected="${assetsInfo.structure eq item.values}"
+                                    th:text="${item.name}"></option>
+                        </select>
                     </td>
 
                 </tr>
                 <tr>
-                    <td class="rightTd" style="width:100px;">资产名称：</td>
+                    <td class="rightTd" style="width:100px;"><i class="info">*</i>房产名称：</td>
                     <td>
                         <input id="assetName" name="assetName" class="easyui-textbox" style="width:200px;height:28px;"
                                th:value="*{assetName}"/>
@@ -105,12 +111,18 @@
                 <tr>
                     <td class="rightTd" style="width:100px;">计量单位：</td>
                     <td>
-                        <input id="assetUnit" name="assetUnit" class="easyui-textbox" style="width:200px;height:28px;"
-                               th:value="*{assetUnit}"/>
+                        <select id="assetUnit" name="assetUnit" class="easyui-combobox" data-options="
+                panelMaxHeight:200,editable:true,onHidePanel:function(){validateComboboxInputValue(this)}" style="width:200px;height:28px;">
+                            <option th:each="item:${assetUnit}"
+                                    th:value="${item.values}"
+                                    th:selected="${assetsInfo.assetUnit eq item.values}"
+                                    th:text="${item.name}"></option>
+                        </select>
+
                     </td>
                     <td class="rightTd" style="width:100px;">数量：</td>
                     <td>
-                        <input id="assetArea" name="assetArea" class="easyui-textbox" style="width:200px;height:28px;"
+                        <input id="assetArea" name="assetArea" class="easyui-numberbox"  data-options="min:0,precision:4" style="width:200px;height:28px;"
                                th:value="*{assetArea}"/>
                     </td>
                 </tr>
@@ -180,20 +192,25 @@
         <input hidden="true" name="companyBh" id="companyBh" th:value="*{companyBh}"/>
         <input hidden="true" name="managePointId" id="managePointId" th:value="*{managePointId}"/>
         <input hidden="true" name="sitDownId" id="sitDownId" th:value="*{sitDownId}"/>
-        <input hidden="true" name="ztBz" id="ztBz" th:value="*{ztBz}"/>
+        <input hidden="true" name="assetsTypeId" id="assetsTypeId" th:value="*{assetsTypeId}"/>
         <input hidden="true" name="id" id="id" th:value="*{id}"/>
     </div>
 </form>
 <script type="text/javascript" th:inline="none">
+    //初始化
     $(function () {
         $('#sitDownName').textbox().textbox('addClearBtn', 'icon-clear');
-    });
+
+        $('#structure').combobox({
+            onHidePanel:function(){validateComboboxInputValue(this)}
+        })
+     });
 
     function listObject(object, objectId, objectName) {
         alert("object:" + object + " objectId:" + objectId + " objectName:" + objectName);
     }
 
-    //listDeptInfo
+    //部门选择器
     function listDeptInfo() {
         $("body").append("<div id='deptListContent' Style='display: none;'></div>");
         $('#deptListContent').dialog({
@@ -202,7 +219,7 @@
             loadingMessage: '数据加载中,请稍等...',
             modal: true,
             height: 400,
-            width: 500,
+            width: 450,
             top: '8%',
             href: 'findDeptInfo',
             onClose: function () {
@@ -211,7 +228,7 @@
         });
     }
 
-    //listBillCorpInfo
+    //公司选择器
     function listBillCorpInfo() {
         $("body").append("<div id='billCorpListContent' Style='display: none;'></div>");
         $('#billCorpListContent').dialog({
@@ -220,7 +237,7 @@
             loadingMessage: '数据加载中,请稍等...',
             modal: true,
             height: 400,
-            width: 500,
+            width: 450,
             top: '8%',
             href: 'findBillCorpInfo',
             onClose: function () {
@@ -228,7 +245,8 @@
             }
         });
     }
-    //listManagePointInfo
+
+    //管理区选择器
     function listManagePointInfo() {
         $("body").append("<div id='managePointInfoListContent' Style='display: none;'></div>");
         $('#managePointInfoListContent').dialog({
@@ -237,9 +255,45 @@
             loadingMessage: '数据加载中,请稍等...',
             modal: true,
             height: 400,
-            width: 500,
+            width: 450,
             top: '8%',
             href: 'findManagePointInfo',
+            onClose: function () {
+                $(this).dialog("destroy").remove();
+            }
+        });
+    }
+
+    //坐落位置选择器
+    function listSitDownInfo() {
+        $("body").append("<div id='sitDownListContent' Style='display: none;'></div>");
+        $('#sitDownListContent').dialog({
+            title: "【坐落位置】选择器...",
+            iconCls: 'fa fa-check-square-o red',
+            loadingMessage: '数据加载中,请稍等...',
+            modal: true,
+            height: 400,
+            width: 450,
+            top: '8%',
+            href: 'findSitDownInfo',
+            onClose: function () {
+                $(this).dialog("destroy").remove();
+            }
+        });
+    }
+
+    //房产类型选择器
+    function listAssetsTypeInfo() {
+        $("body").append("<div id='assetsTypeInfoContent' Style='display: none;'></div>");
+        $('#assetsTypeInfoContent').dialog({
+            title: "【房产类型】选择器...",
+            iconCls: 'fa fa-check-square-o red',
+            loadingMessage: '数据加载中,请稍等...',
+            modal: true,
+            height: 400,
+            width: 450,
+            top: '8%',
+            href: 'findAssetsTypeInfo',
             onClose: function () {
                 $(this).dialog("destroy").remove();
             }

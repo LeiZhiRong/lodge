@@ -2,10 +2,8 @@ package com.shags.lodge.controller.lodge;
 
 import com.shags.lodge.auth.AuthClass;
 import com.shags.lodge.auth.AuthMethod;
-import com.shags.lodge.dto.User;
 import com.shags.lodge.primary.entity.Attachment;
 import com.shags.lodge.service.primary.IAttachmentService;
-import com.shags.lodge.util.BeanUtil;
 import com.shags.lodge.util.Message;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,47 +50,47 @@ public class AttachmentController {
      * @param session session
      * @return Message
      */
-    @AuthMethod
-    @RequestMapping("save")
-    public Message save(String tableId, String tableName, HttpSession session) {
-        try {
-            User user = (User) session.getAttribute("user");
-            List<Attachment> attachment = (List<Attachment>) session.getAttribute("attachment");
-            List<Attachment> list=new ArrayList<>();
-            if (attachment != null) {
-                if (attachment.size() > 0) {
-                    for (Attachment mast : attachment) {
-                        Attachment att = new Attachment();
-                        att.setFilesize(mast.getFilesize());
-                        att.setTableId(tableId);
-                        att.setTableName(tableName);
-                        att.setBookSet(user.getBookSet());
-                        att.setNewName(mast.getNewName());
-                        att.setOldName(mast.getOldName());
-                        att.setSavePath(mast.getSavePath());
-                        att.setAnnexUrl(mast.getAnnexUrl());
-                        att.setSuffix(mast.getSuffix());
-                        att.setAnnexUrl(user.getAccount());
-                        att.setCreateTime(BeanUtil.dateToTimestamp(new Date()));
-                        list.add(att);
-                    }
-                }
-            }
-            if(list.size()>0){
-                Message msg=attachmentService.batchSaveAttachment(list);
-                if(msg.getCode()==1){
-                    session.setAttribute("attachment", new ArrayList<Attachment>());
-                }
-                return msg;
-            }else{
-               return new Message(0,"无数据可以保存！");
-            }
-
-        } catch (Exception e) {
-            return new Message(0, e.getMessage());
-        }
-
-    }
+//    @AuthMethod
+//    @RequestMapping("save")
+//    public Message save(String tableId, String tableName, HttpSession session) {
+//        try {
+//            User user = (User) session.getAttribute("user");
+//            List<Attachment> attachment = (List<Attachment>) session.getAttribute("attachment");
+//            List<Attachment> list=new ArrayList<>();
+//            if (attachment != null) {
+//                if (attachment.size() > 0) {
+//                    for (Attachment mast : attachment) {
+//                        Attachment att = new Attachment();
+//                        att.setFilesize(mast.getFilesize());
+//                        att.setTableId(tableId);
+//                        att.setTableName(tableName);
+//                        att.setBookSet(user.getBookSet());
+//                        att.setNewName(mast.getNewName());
+//                        att.setOldName(mast.getOldName());
+//                        att.setSavePath(mast.getSavePath());
+//                        att.setAnnexUrl(mast.getAnnexUrl());
+//                        att.setSuffix(mast.getSuffix());
+//                        att.setAnnexUrl(user.getAccount());
+//                        att.setCreateTime(BeanUtil.dateToTimestamp(new Date()));
+//                        list.add(att);
+//                    }
+//                }
+//            }
+//            if(list.size()>0){
+//                Message msg=attachmentService.batchSaveAttachment(list);
+//                if(msg.getCode()==1){
+//                    session.setAttribute("attachment", new ArrayList<Attachment>());
+//                }
+//                return msg;
+//            }else{
+//               return new Message(0,"无数据可以保存！");
+//            }
+//
+//        } catch (Exception e) {
+//            return new Message(0, e.getMessage());
+//        }
+//
+//    }
 
     /**
      * 删除附件

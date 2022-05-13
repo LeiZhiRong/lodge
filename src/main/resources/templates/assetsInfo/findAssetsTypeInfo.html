@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<!--suppress ThymeleafVariablesResolveInspection -->
+<html xmlns:v-on="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity3"
+      xmlns:layout="http://www.ultraq.net.nz/web/thymeleaf/layout">
+<div class="easyui-navpanel">
+    <div id="assetsInfo-toolbar" style="height: 40px;padding-top: 5px;padding-left: 5px;">
+        <div class="m-toolbar">
+            <div class="m-left">
+                快速查询：<input id="assetsTypeValue" class="easyui-searchbox"
+                            data-options="prompt:'输入关键字过滤',searcher:f_searchAssetsInfo,icons:[{
+				iconCls:'icon-clear',
+				handler: function(e){
+					 $(e.data.target).textbox('setValue','');
+				}
+			}]"
+                            style="width:200px;height: 28px;">
+            </div>
+        </div>
+    </div>
+    <table id="assetsTypeInfoDG"></table>
+    <div id="assetsInfo-ftools" style="border-bottom: 0;border-left:0;border-right:0;padding: 5px 10px;text-align:right;">
+        <button id="assetsInfoUpPageBtn" onclick="assetsInfoUpPage();" class="easyui-linkbutton"
+                data-options="plain:true,disabled:true,height:25,iconCls: 'e-icon1 fa fa-level-up fa-1g blue'">返回上级
+        </button>
+        <button id="goAssetsInfoHomeBtn" onclick="gotoAssetsInfoHome();" class="easyui-linkbutton"
+                data-options="plain:true,disabled:true,height:25,iconCls: 'e-icon1 fa fa-home fa-1g blue'">返回首页
+        </button>
+        <span class="datagrid-btn-separator"
+              style="vertical-align: middle;display:inline-block;float:none"></span>
+        <button id="closeAssetsInfoBtn" onclick="closeAssetsInfoDialog();" class="easyui-linkbutton"
+                data-options="plain:true,height:25,iconCls: 'e-icon1 fa fa-sign-out fa-1g blue'">关闭
+        </button>
+    </div>
+</div>
+<script type="text/javascript" th:inline="none">
+    var assetsInfoParent_id = [];
+    $(function () {
+          let eu = $("#assetsTypeInfoDG").datagrid({
+            url: 'listAssetsTypeInfo',
+            showHeader:false,
+            loadMsg: false,
+            border: false,
+            singleSelect: true,
+            fitColumns:true,
+            toolbar: '#assetsInfo-toolbar',
+            footer:'#assetsInfo-ftools',
+            fit: true,
+            scrollbarSize:0,
+            onLoadSuccess: function () {
+                if(assetsInfoParent_id.length>0) {
+                    $('#assetsInfoUpPageBtn').linkbutton('enable');
+                    $('#goAssetsInfoHomeBtn').linkbutton('enable');
+                }else{
+                    $('#assetsInfoUpPageBtn').linkbutton('disable');
+                    $('#goAssetsInfoHomeBtn').linkbutton('disable');
+                }
+            },
+            columns: [[
+                {field: 'name', title: '资产类型', width: 250,
+                    formatter: function(value,row,index){
+                      return "<div style='padding-left: 10px;'>"+value+"</div>"
+                    }
+                },
+                {field: 'handle', title: '选择', align:'center', width: 100 }
+            ]]
+        }).datagrid('getPanel').addClass("lines-no");
+    })
+    function f_search(value) {
+        $("#assetsTypeInfoDG").datagrid("search", value);
+    }
+    // 目录跳转
+    function findAssetsTypeInfo(id,pid) {
+        assetsInfoParent_id.push(pid);
+        var queryparams = {
+            pid: id
+        };
+        $('#assetsTypeInfoDG').datagrid('options').queryParams = queryparams;
+        $('#assetsTypeInfoDG').datagrid('reload');
+
+    }
+    //选择确认退出窗口
+    function getAssetsTypeIdAndName(id,name,bh) {
+        $("#assetsTypeId").val(id);
+        $("#assetsTypeName").textbox("setValue",name);
+        $('#assetsTypeInfoContent').dialog('close');
+
+    }
+    //返回上一级
+    function assetsInfoUpPage() {
+        if(assetsInfoParent_id.length>0){
+            var id=assetsInfoParent_id[assetsInfoParent_id.length-1];
+             var queryparams = {
+                pid: id
+            };
+            $('#assetsTypeInfoDG').datagrid('options').queryParams = queryparams;
+            $('#assetsTypeInfoDG').datagrid('reload');
+
+            var new_assetsInfoParent_id=[];
+            for(var i=0;i<assetsInfoParent_id.length-1;i++){
+                if(!is_eq(id,assetsInfoParent_id[i])){
+                    new_assetsInfoParent_id.push(assetsInfoParent_id[i])
+                }
+            }
+            assetsInfoParent_id=new_assetsInfoParent_id;
+         }
+    }
+
+    //返回首页
+    function gotoAssetsInfoHome() {
+        assetsInfoParent_id=[];
+        var queryparams = {
+            pid: null
+        };
+        $('#assetsTypeInfoDG').datagrid('options').queryParams = queryparams;
+        $('#assetsTypeInfoDG').datagrid('reload');
+    }
+
+    //关闭
+    function closeAssetsInfoDialog() {
+        $('#assetsTypeInfoContent').dialog('close');
+    }
+
+    //过滤查询
+    function f_searchAssetsInfo(value) {
+        assetsInfoParent_id=[];
+        var queryparams = {
+            pid: null,
+            keyword: value
+        };
+        $('#assetsTypeInfoDG').datagrid('options').queryParams = queryparams;
+        $('#assetsTypeInfoDG').datagrid('reload');
+    }
+
+</script>
+
+</html>

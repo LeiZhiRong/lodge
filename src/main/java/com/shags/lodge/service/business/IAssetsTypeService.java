@@ -2,6 +2,7 @@ package com.shags.lodge.service.business;
 
 import com.shags.lodge.business.entity.AssetsType;
 import com.shags.lodge.dto.TreeJson;
+import com.shags.lodge.dto.business.AssetsTypeListDto;
 import com.shags.lodge.dto.business.AssetsTypePage;
 import com.shags.lodge.util.Message;
 import com.shags.lodge.util.Pager;
@@ -80,10 +81,22 @@ public interface IAssetsTypeService {
     List<TreeJson> getClientTreeJson(String keyword,String bookSet,String ztBz);
 
     /**
+     * 获取房产类型列表
+     * @param bookSet
+     * @param pid
+     * @param value
+     * @param ztBz
+     * @return
+     */
+    List<AssetsTypeListDto> listAssetsTypeListDto(String bookSet, String pid, String value, String ztBz);
+
+    /**
      * 更新排序
      * @param ids array
      */
     void updateSort(String[] ids);
+
+
 
 
 

@@ -57,9 +57,14 @@ public class AssetsInfo {
     private String companyName;
 
     /**
-     * 房产类型
+     * 房产类型ID
      */
-    private AssetsType assetsType;
+    private String assetsTypeId;
+
+    /**
+     * 房产类型名称
+     */
+    private String assetsTypeName;
 
     /**
      * 管理处ID
@@ -72,9 +77,14 @@ public class AssetsInfo {
     private String managePointName;
 
     /**
-     * 坐落位置
+     * 坐落位置Id
      */
-    private SitDown sitDown;
+    private String sitDownId;
+
+    /**
+     * 坐落位置名称
+     */
+    private String sitDownName;
 
     /**
      * 资产名称
@@ -106,13 +116,20 @@ public class AssetsInfo {
      */
     private Double usedLayers;
 
+
+    /**
+     * 总房间数
+     */
+    private Double countRomms;
+
+
     /**
      * 使用房间数
      */
     private Double usedRooms;
 
     /**
-     * 攀钢自编名称
+     * 攀钢自编号
      */
     private String housingNumber;
 
@@ -169,7 +186,7 @@ public class AssetsInfo {
     /**
      * 时间戳
      */
-    private String sVTime;
+    private String rVTime;
 
     /**
      * 状态标志
@@ -196,6 +213,25 @@ public class AssetsInfo {
         this.id = id;
     }
 
+    public AssetsInfo() {
+        super();
+    }
+
+    public String getDeptId() {
+        return deptId;
+    }
+
+    public void setDeptId(String deptId) {
+        this.deptId = deptId;
+    }
+
+    public String getDeptBh() {
+        return deptBh;
+    }
+
+    public void setDeptBh(String deptBh) {
+        this.deptBh = deptBh;
+    }
 
     public String getDeptName() {
         return deptName;
@@ -213,7 +249,77 @@ public class AssetsInfo {
         this.cardNumber = cardNumber;
     }
 
+    public String getCompanyId() {
+        return companyId;
+    }
 
+    public void setCompanyId(String companyId) {
+        this.companyId = companyId;
+    }
+
+    public String getCompanyBh() {
+        return companyBh;
+    }
+
+    public void setCompanyBh(String companyBh) {
+        this.companyBh = companyBh;
+    }
+
+    public String getCompanyName() {
+        return companyName;
+    }
+
+    public void setCompanyName(String companyName) {
+        this.companyName = companyName;
+    }
+
+    public String getAssetsTypeId() {
+        return assetsTypeId;
+    }
+
+    public void setAssetsTypeId(String assetsTypeId) {
+        this.assetsTypeId = assetsTypeId;
+    }
+
+    public String getAssetsTypeName() {
+        return assetsTypeName;
+    }
+
+    public void setAssetsTypeName(String assetsTypeName) {
+        this.assetsTypeName = assetsTypeName;
+    }
+
+    public String getManagePointId() {
+        return managePointId;
+    }
+
+    public void setManagePointId(String managePointId) {
+        this.managePointId = managePointId;
+    }
+
+    public String getManagePointName() {
+        return managePointName;
+    }
+
+    public void setManagePointName(String managePointName) {
+        this.managePointName = managePointName;
+    }
+
+    public String getSitDownId() {
+        return sitDownId;
+    }
+
+    public void setSitDownId(String sitDownId) {
+        this.sitDownId = sitDownId;
+    }
+
+    public String getSitDownName() {
+        return sitDownName;
+    }
+
+    public void setSitDownName(String sitDownName) {
+        this.sitDownName = sitDownName;
+    }
 
     public String getAssetName() {
         return assetName;
@@ -231,12 +337,44 @@ public class AssetsInfo {
         this.nowName = nowName;
     }
 
+    public String getAssetUnit() {
+        return assetUnit;
+    }
+
+    public void setAssetUnit(String assetUnit) {
+        this.assetUnit = assetUnit;
+    }
+
     public Double getAssetArea() {
         return assetArea;
     }
 
     public void setAssetArea(Double assetArea) {
         this.assetArea = assetArea;
+    }
+
+    public Double getTotalLayers() {
+        return totalLayers;
+    }
+
+    public void setTotalLayers(Double totalLayers) {
+        this.totalLayers = totalLayers;
+    }
+
+    public Double getUsedLayers() {
+        return usedLayers;
+    }
+
+    public void setUsedLayers(Double usedLayers) {
+        this.usedLayers = usedLayers;
+    }
+
+    public Double getUsedRooms() {
+        return usedRooms;
+    }
+
+    public void setUsedRooms(Double usedRooms) {
+        this.usedRooms = usedRooms;
     }
 
     public String getHousingNumber() {
@@ -295,100 +433,6 @@ public class AssetsInfo {
         this.bookSet = bookSet;
     }
 
-
-
-    public String getsVTime() {
-        return sVTime;
-    }
-
-    public void setsVTime(String sVTime) {
-        this.sVTime = sVTime;
-    }
-
-    public String getZtBz() {
-        return ztBz;
-    }
-
-    public void setZtBz(String ztBz) {
-        this.ztBz = ztBz;
-    }
-
-    public int getCustomCardNumber() {
-        return customCardNumber;
-    }
-
-    public void setCustomCardNumber(int customCardNumber) {
-        this.customCardNumber = customCardNumber;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "assetsTypeId")
-    public AssetsType getAssetsType() {
-        return assetsType;
-    }
-
-    public void setAssetsType(AssetsType assetsType) {
-        this.assetsType = assetsType;
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "sitDownId")
-    public SitDown getSitDown() {
-        return sitDown;
-    }
-
-    public void setSitDown(SitDown sitDown) {
-        this.sitDown = sitDown;
-    }
-
-    public String getDeptBh() {
-        return deptBh;
-    }
-
-    public void setDeptBh(String deptBh) {
-        this.deptBh = deptBh;
-    }
-
-    public String getCompanyId() {
-        return companyId;
-    }
-
-    public void setCompanyId(String companyId) {
-        this.companyId = companyId;
-    }
-
-    public String getCompanyBh() {
-        return companyBh;
-    }
-
-    public void setCompanyBh(String companyBh) {
-        this.companyBh = companyBh;
-    }
-
-    public String getCompanyName() {
-        return companyName;
-    }
-
-    public void setCompanyName(String companyName) {
-        this.companyName = companyName;
-    }
-
-    public String getManagePointId() {
-        return managePointId;
-    }
-
-    public void setManagePointId(String managePointId) {
-        this.managePointId = managePointId;
-    }
-
-    public String getManagePointName() {
-        return managePointName;
-    }
-
-    public void setManagePointName(String managePointName) {
-        this.managePointName = managePointName;
-    }
-
     public String getCreateUser() {
         return createUser;
     }
@@ -421,6 +465,38 @@ public class AssetsInfo {
         this.updateTime = updateTime;
     }
 
+    public String getrVTime() {
+        return rVTime;
+    }
+
+    public void setrVTime(String rVTime) {
+        this.rVTime = rVTime;
+    }
+
+    public String getZtBz() {
+        return ztBz;
+    }
+
+    public void setZtBz(String ztBz) {
+        this.ztBz = ztBz;
+    }
+
+    public int getCustomCardNumber() {
+        return customCardNumber;
+    }
+
+    public void setCustomCardNumber(int customCardNumber) {
+        this.customCardNumber = customCardNumber;
+    }
+
+    public Double getCountRomms() {
+        return countRomms;
+    }
+
+    public void setCountRomms(Double countRomms) {
+        this.countRomms = countRomms;
+    }
+
     public String getBz() {
         return bz;
     }
@@ -428,52 +504,5 @@ public class AssetsInfo {
     public void setBz(String bz) {
         this.bz = bz;
     }
-
-    public String getAssetUnit() {
-        return assetUnit;
-    }
-
-    public Double getTotalLayers() {
-        return totalLayers;
-    }
-
-    public void setTotalLayers(Double totalLayers) {
-        this.totalLayers = totalLayers;
-    }
-
-    public Double getUsedLayers() {
-        return usedLayers;
-    }
-
-    public void setUsedLayers(Double usedLayers) {
-        this.usedLayers = usedLayers;
-    }
-
-    public Double getUsedRooms() {
-        return usedRooms;
-    }
-
-    public void setUsedRooms(Double usedRooms) {
-        this.usedRooms = usedRooms;
-    }
-
-    public String getDeptId() {
-        return deptId;
-    }
-
-    public void setDeptId(String deptId) {
-        this.deptId = deptId;
-    }
-
-    public void setAssetUnit(String assetUnit) {
-        this.assetUnit = assetUnit;
-    }
-
-
-    public AssetsInfo() {
-        super();
-    }
-
-
 
 }

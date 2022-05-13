@@ -1,6 +1,7 @@
 package com.shags.lodge.service.primary;
 
 import com.shags.lodge.dto.ManagePointDto;
+import com.shags.lodge.dto.TreeJson;
 import com.shags.lodge.dto.User;
 import com.shags.lodge.dto.business.ManagePointListDto;
 import com.shags.lodge.primary.entity.ManagePoint;
@@ -101,6 +102,9 @@ public interface IManagePointService {
      * @return
      */
     List<ManagePointListDto> listManagePointListDto(String bookSet,String keyword, String ztbz,String userBalanceDept);
+
+
+    List<TreeJson> getClientManagePointToTreeJson(String bookSet,String keyword,  String ztbz,String userManageDept);
 
 
 

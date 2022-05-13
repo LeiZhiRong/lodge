@@ -46,7 +46,7 @@
             toolbar: '#deptInfo-toolbar',
             footer:'#deptInfo-ftools',
             fit: true,
-            //scrollbarSize:0,
+            scrollbarSize:0,
             onLoadSuccess: function () {
                 if(deptInfoParent_id.length>0) {
                     $('#deptInfoUpPageBtn').linkbutton('enable');
@@ -62,7 +62,7 @@
                       return "<div style='padding-left: 10px;'>"+value+"</div>"
                     }
                 },
-                {field: 'handle', title: '选择', align:'right', width: 80 }
+                {field: 'handle', title: '选择', align:'center', width: 100 }
             ]]
         }).datagrid('getPanel').addClass("lines-no");
     })

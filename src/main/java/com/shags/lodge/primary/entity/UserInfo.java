@@ -98,6 +98,11 @@ public class UserInfo {
     @HeaderEnum(field = "handle", title = "关联操作", width = 150, sortable = false)
     private String handle;
 
+    /**
+     * 导航方式(collapse,expand)
+     */
+    private String collapsed;
+
 
     public UserInfo() {
         super();
@@ -225,5 +230,13 @@ public class UserInfo {
 
     public void setStation(String station) {
         this.station = station;
+    }
+
+    public String getCollapsed() {
+        return collapsed;
+    }
+
+    public void setCollapsed(String collapsed) {
+        this.collapsed = collapsed;
     }
 }

@@ -89,6 +89,11 @@ public class User {
     private String corpName;
 
     /**
+     * 导航方式
+     */
+    private String collapsed;
+
+    /**
      * 菜单IDS
      */
     @JsonIgnore
@@ -234,6 +239,13 @@ public class User {
         this.menuIds = menuIds;
     }
 
+    public String getCollapsed() {
+        return collapsed;
+    }
+
+    public void setCollapsed(String collapsed) {
+        this.collapsed = collapsed;
+    }
 
     public User(String password, HttpSession session) throws Exception {
         try {

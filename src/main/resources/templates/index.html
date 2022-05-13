@@ -33,69 +33,80 @@
 </head>
 <body>
 <div id="main" class="easyui-layout" fit="true">
-<div class="c9" data-options="region:'north',border:0" style="overflow-y:hidden;">
-    <div class="c9 panel-header" style="height:63px;">
-        <div id="m-toolbar">
-            <div class="m-left">
+    <div class="c9" data-options="region:'north',border:0" style="overflow-y:hidden;">
+        <div class="c9 panel-header" style="height:63px;">
+            <div id="m-toolbar">
+                <div class="m-left">
                         <span>
                             <img th:src="@{/static/images/logo3.png}"/>
                         </span>
-            </div>
-            <div class="m-right">
-                <div style="height: 65px">
-                    <button style="margin-right: 10px;"
-                            class="easyui-menubutton c9" th:text="'&nbsp;欢迎您：'+${session.user.userName}"
-                            data-options="height:64,menu:'#menu',hasDownArrow:false,plain:true,iconCls:'fa fa-user-circle fa-2x',size:'large',iconAlign:'left'"></button>
+                </div>
+                <div class="m-right">
+                    <div style="height: 65px">
+                        <button style="margin-right: 10px;"
+                                class="easyui-menubutton c9" th:text="'&nbsp;欢迎您：'+${session.user.userName}"
+                                data-options="height:64,menu:'#menu',hasDownArrow:false,plain:true,iconCls:'fa fa-user-circle fa-2x',size:'large',iconAlign:'left'"></button>
+                    </div>
+                </div>
+                <div id="menu" style="display: none;">
+                    <!--                <div data-options="iconCls:'e-icon1 fa fa-user-o'" onclick="f_getUserInfo()">用户信息</div>-->
+                    <div data-options="iconCls:'e-icon1 fa fa-key'" onclick="f_updateUserPwd()">密码重置</div>
+                    <div class="menu-sep"></div>
+                    <div data-options="iconCls:'e-icon1 fa fa-sign-out'" onclick="logout()">退出系统</div>
                 </div>
             </div>
-            <div id="menu" style="display: none;">
-<!--                <div data-options="iconCls:'e-icon1 fa fa-user-o'" onclick="f_getUserInfo()">用户信息</div>-->
-                <div data-options="iconCls:'e-icon1 fa fa-key'" onclick="f_updateUserPwd()">密码重置</div>
-                <div class="menu-sep"></div>
-                <div data-options="iconCls:'e-icon1 fa fa-sign-out'" onclick="logout()">退出系统</div>
+        </div>
+    </div>
+    <div id="west" data-options="region:'west',split:false,width:45,border:false"
+         style="position: relative; overflow-y:hidden;overflow: hidden;padding: 0;">
+        <header style="height: 35px;">
+            <div class="m-toolbar">
+                <div class="m-left" style="width: 120px;text-align: left;color: #777">&nbsp;<a href="javascript:void(0)"
+                                                                                               onclick="toggle(true)"
+                                                                                               style="color: #777 "><i
+                        class="fa fa-bars fa-lg fa-fw blue" aria-hidden="true"></i></a>&nbsp;&nbsp;MENU
+                </div>
+            </div>
+        </header>
+        <div id="sm" class="easyui-sidemenu"
+             data-options="data:menu,collapsed:'collapse',multiple:false,width:45,border:false,floatMenuWidth:150,onSelect: onSideMenuSelect"></div>
+    </div>
+    <div id="mainPanle" data-options="region:'center',border:true" style="overflow-y:hidden">
+        <div id="wu-tabs" class="easyui-tabs" style="position: relative; overflow: hidden;"
+             data-options="border:false,fit:true,tools:'#tabs_menu'">
+            <div title="首页" data-options="closable:false,iconCls:'e-icon2 fa fa-home red'"
+                 style="overflow:hidden;padding:5px">
+                <iframe scrolling="auto" frameborder="0" th:src="@{/home/index}"
+                        style="width:100%;height:100%"></iframe>
             </div>
         </div>
-    </div>
-</div>
-<div id="west" data-options="region:'west',split:false,width:45,border:false"
-     style="position: relative; overflow-y:hidden;overflow: hidden;padding: 0;">
-    <header style="height: 35px;">
-        <div class="m-toolbar" >
-            <div class="m-left" style="width: 120px;text-align: left;color: #777">&nbsp;<a href="javascript:void(0)" onclick="toggle()" style="color: #777 " ><i class="fa fa-bars fa-lg fa-fw"  aria-hidden="true"></i></a>&nbsp;&nbsp;MENU</div>
+        <div class="m-right" id="tabs_menu">
+            <a href="javascript:void(0)" class="easyui-menubutton"
+               data-options="menu:'#tb_menu',plain:true,border:false,top:0,iconCls:'e-icon fa fa-ellipsis-h',hasDownArrow:false"></a>
         </div>
-    </header>
-    <div id="sm" class="easyui-sidemenu"
-         data-options="data:menu,collapsed:'collapse',multiple:false,width:45,border:false,floatMenuWidth:150,onSelect: onSideMenuSelect"></div>
-</div>
-<div id="mainPanle" data-options="region:'center',border:true" style="overflow-y:hidden">
-    <div id="wu-tabs" class="easyui-tabs" style="position: relative; overflow: hidden;"
-         data-options="border:false,fit:true,tools:'#tabs_menu'">
-        <div title="首页" data-options="closable:false,iconCls:'e-icon2 fa fa-home red'" style="overflow:hidden;padding:5px">
-            <iframe scrolling="auto" frameborder="0" th:src="@{/home/index}" style="width:100%;height:100%"></iframe>
+        <div id="tb_menu" style="display: none;">
+            <div data-options="iconCls:'e-icon1 fa fa-refresh'" onclick="reloadTab()">刷新当前页</div>
+            <div onclick="closeTab()">关闭当前页</div>
+            <div class="menu-sep"></div>
+            <div onclick="closeOtherTab()">关闭其它页</div>
+            <div data-options="iconCls:'e-icon1 fa fa-close'" onclick="closeAllTab()">关闭所有页</div>
         </div>
     </div>
-    <div class="m-right" id="tabs_menu">
-        <a href="javascript:void(0)" class="easyui-menubutton"
-           data-options="menu:'#tb_menu',plain:true,border:false,top:0,iconCls:'e-icon fa fa-ellipsis-h',hasDownArrow:false"></a>
+    <div data-options="region:'south'" class="" style="height:28px;overflow-y:hidden;color: #0E2D5F;padding: 5px;">
+        <div style="text-align: center">
+            <span>Copyright©2021-<span id="copy"></span>&nbsp;<span th:text="${session.user.corpName}"></span></span>
+        </div>
     </div>
-    <div id="tb_menu" style="display: none;">
-        <div data-options="iconCls:'e-icon1 fa fa-refresh'" onclick="reloadTab()">刷新当前页</div>
-        <div onclick="closeTab()">关闭当前页</div>
-        <div class="menu-sep"></div>
-        <div onclick="closeOtherTab()">关闭其它页</div>
-        <div data-options="iconCls:'e-icon1 fa fa-close'" onclick="closeAllTab()">关闭所有页</div>
-    </div>
-</div>
-<div data-options="region:'south'" class="" style="height:28px;overflow-y:hidden;color: #0E2D5F;padding: 5px;">
-    <div style="text-align: center">
-        <span>Copyright©2021-<span id="copy"></span>&nbsp;<span th:text="${session.user.corpName}"></span></span>
-    </div>
-</div>div
+    div
 </div>
 <script th:inline="javascript">
     var basepath = [[${session.basePath}]];
     var menu = JSON.parse([[${session.menuList}]]);
-    $("#copy").html(new Date().getFullYear());
+    var collapsed= [[${session.user.collapsed}]];
+    $(function () {
+        $('#sm').sidemenu(collapsed);
+        toggle(false);
+    })
     //add tabs
     function onSideMenuSelect(item) {
         var title = item.text;
@@ -112,17 +123,32 @@
             closable: true
         });
     }
-    function toggle(){
-        let opts = $('#sm').sidemenu('options');
-        $('#sm').sidemenu(opts.collapsed ? 'expand' : 'collapse');
-        opts = $('#sm').sidemenu('options');
-        $('#main').layout('panel', 'west').panel('resize',{
-            width: opts.collapsed ? 45 : 120
-        })
-        $('#main').layout("resize");
-        $('#sm').sidemenu('resize', {
-            width: opts.collapsed ? 45 : 120
-        })
+
+    function toggle(coll) {
+        if(coll){
+            let opts = $('#sm').sidemenu('options');
+            let side=opts.collapsed ? 'expand' : 'collapse';
+            $('#sm').sidemenu(side);
+            opts = $('#sm').sidemenu('options');
+            $('#main').layout('panel', 'west').panel('resize', {
+                width: opts.collapsed ? 45 : 120
+            })
+            $('#main').layout("resize");
+            $('#sm').sidemenu('resize', {
+                width: opts.collapsed ? 45 : 120
+            })
+            $.post("updateSidemenu",{collapsed:side});
+        }else{
+            $('#sm').sidemenu(collapsed);
+            let opts = $('#sm').sidemenu('options');
+            $('#main').layout('panel', 'west').panel('resize', {
+                width: opts.collapsed ? 45 : 120
+            })
+            $('#main').layout("resize");
+            $('#sm').sidemenu('resize', {
+                width: opts.collapsed ? 45 : 120
+            })
+        }
 
     }
 </script>

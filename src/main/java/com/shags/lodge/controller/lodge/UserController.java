@@ -196,6 +196,7 @@ public class UserController {
             if (id == null || userInfo.getId().isEmpty()) {
                 //添加
                 userInfo.setId(null);
+                userInfo.setCollapsed("collapse");
                 userInfo.setRegistTime(BeanUtil.strToTimestampTime(CmsUtils.getNowDate()));
                 if (pwd != null && !pwd.isEmpty()) {
                     userInfo.setLoginPassword(new MyJasyptStringEncryptor().encrypt(pwd));
@@ -442,6 +443,7 @@ public class UserController {
                         userInfo.setStatus("T".equals(mast.getStatus()) ? 1 : 0);
                         userInfo.setRegistTime(BeanUtil.strToTimestampTime(CmsUtils.getNowDate()));
                         userInfo.setManager("F");
+                        userInfo.setCollapsed("collapse");
                         if (mast.getPassword() != null && !mast.getPassword().isEmpty()) {
                             userInfo.setLoginPassword(new MyJasyptStringEncryptor().encrypt(mast.getPassword()));
                         } else {

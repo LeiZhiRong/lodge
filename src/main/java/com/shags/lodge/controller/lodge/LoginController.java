@@ -1,19 +1,19 @@
 package com.shags.lodge.controller.lodge;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.shags.lodge.auth.AuthMethod;
+import com.shags.lodge.business.entity.OperationLogDetail;
 import com.shags.lodge.config.JWTConfig;
 import com.shags.lodge.dto.RSAPublicDto;
 import com.shags.lodge.dto.User;
+import com.shags.lodge.exception.exception.JsonException;
 import com.shags.lodge.jwt.util.CookieUtil;
 import com.shags.lodge.jwt.util.JWTTokenUtil;
+import com.shags.lodge.primary.entity.MenuInfo;
+import com.shags.lodge.primary.entity.PermInfo;
 import com.shags.lodge.service.primary.IAccounInfoService;
 import com.shags.lodge.service.primary.IUserService;
-import com.shags.lodge.util.Message;
-import com.shags.lodge.util.RSAUtils;
-import com.shags.lodge.util.SelectJson;
-import com.shags.lodge.exception.exception.JsonException;
 import com.shags.lodge.servlet.CmsSessionContext;
+import com.shags.lodge.util.*;
 import io.jsonwebtoken.Claims;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -164,10 +164,31 @@ public class LoginController {
         return msg;
     }
 
-    @AuthMethod
     @GetMapping("test")
     public ModelAndView list() throws JsonProcessingException {
-        return new ModelAndView("test");
+        System.out.println(new MyJasyptStringEncryptor().encrypt("shgs"));
+        return  null;
+    }
+
+    @GetMapping("test1")
+    public void test1 () throws JsonProcessingException, NoSuchFieldException, ClassNotFoundException, IllegalAccessException {
+        PermInfo test1=new PermInfo();
+        PermInfo test2=new PermInfo();
+        test1.setId("1");
+        test2.setId("1");
+        test1.setRole_id("2");
+        test2.setRole_id("3");
+        MenuInfo m=new MenuInfo();
+        m.setId("sssss");
+        m.setName("bbbbb");
+        test2.setMenuInfo(m);
+        MenuInfo m1=new MenuInfo();
+        m1.setId("11111");
+        m1.setName("22222");
+        test1.setMenuInfo(m1);
+       List<OperationLogDetail> list= CmsUtils.CompareProperties(test1,test2,null);
+
+
     }
 
 }

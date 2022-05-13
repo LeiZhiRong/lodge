@@ -28,20 +28,16 @@
                     <tr>
                         <td class="rightTd" style="width:80px;">管辖部门：</td>
                         <td class="leftTd">
-                            <input id="dept_ID" name="dept_ID" class="easyui-searchbox"
+                            <input id="dept_Name" name="dept_Name" class="easyui-searchbox"
                                    data-options="prompt:'请选择...',editable:false,searcher:_searchDeptID,height:28,width:200">
                         </td>
                     </tr>
                     <td class="rightTd" style="width:80px;">管理处：</td>
                     <td class="leftTd">
-                        <select id="sett_ID" name="sett_ID"
-                                data-options="panelMaxHeight:200,editable:false"
-                                style="width:200px;height:28px;">
-                            <option th:each="item:${managePointList}"
-                                    th:value="${item.name}"
-                                    th:text="${item.name}"></option>
-                        </select>
+                        <input id="managePoint_Name" name="managePoint_Name" class="easyui-searchbox"
+                               data-options="prompt:'请选择...',editable:false,searcher:_searchManagePoint,height:28,width:200">
                     </td>
+
                     <tr>
                         <td class="rightTd" style="width:80px;">坐落位置：</td>
                         <td class="leftTd">
@@ -59,21 +55,21 @@
                     <tr>
                         <td class="rightTd" style="width:80px;">关键字段：</td>
                         <td>
-                             <span><select id="corpCode" name="corpType" class="easyui-combobox"
+                             <span><select id="codeType" name="codeType" class="easyui-combobox"
                                            data-options="panelMaxHeight:200,editable:false"
                                            style="width:120px;height:28px">
-                                <option value="all">--无--</option>
+                                <option value="all">--所有--</option>
                                 <option value="card_Number">卡片编号</option>
                                 <option value="asset_Name">资产名称</option>
                                 <option value="now_Name">现用名称</option>
-                                <option value="housing_Number">攀钢自编名称</option>
+                                <option value="housing_Number">攀钢自编号</option>
                                 <option value="community_Number">社区名称</option>
                                 <option value="propertyCertificate_No">产权证号</option>
                                 <option value="landAsset_No">土地资产编号</option>
                                 <option value="landCertificate_No">土地证号</option>
                             </select></span>
-                            <span><input id="pcode" class="easyui-searchbox"
-                                         data-options="prompt:'请输入关键内容进行查询',searcher:'',height:28,width:200"></span>
+                            <span><input id="codeValue" name="codeValue" data-options="prompt:'请输入关键内容进行查询',height:28,width:200"></span>
+                            <button  class="easyui-linkbutton" onclick="_searcherAssetsInfo();" data-options="iconCls:'icon-search',width:70,height:28">查询</button>
                         </td>
                     </tr>
                 </table>
@@ -86,8 +82,8 @@
         <div class="m-toolbar">
             <div class="m-right">
                 <button id="addAssetsInfoBtn" onclick="addAssetsInfo();" class="easyui-linkbutton "
-                        data-options="plain:true,height:25,iconCls: 'e-icon1 fa fa-plus-square fa-1g'">
-                    添加
+                        data-options="plain:true,height:25,iconCls: 'e-icon1 fa fa-plus-square fa-1g red '">
+                    房产登记
                 </button>
                 <span class="datagrid-btn-separator"
                       style="vertical-align: middle;display:inline-block;float:none"></span>
@@ -98,12 +94,12 @@
                 <span class="datagrid-btn-separator"
                       style="vertical-align: middle;display:inline-block;float:none"></span>
                 <button id="importCorpBtn" onclick="importUpload();" class="easyui-linkbutton "
-                        data-options="plain:true,height:25,iconCls:'e-icon1 fa fa-cloud-upload fa-1g'">导入Excel
+                        data-options="plain:true,height:25,iconCls:'e-icon1 fa fa-cloud-upload fa-1g'">导入房产
                 </button>
                 <span class="datagrid-btn-separator"
                       style="vertical-align: middle;display:inline-block;float:none"></span>
                 <button id="exportDownBtn" onclick="exportDown();" class="easyui-linkbutton "
-                        data-options="plain:true,height:25,iconCls:'e-icon1 fa fa-cloud-download fa-1g'">导出Excel
+                        data-options="plain:true,height:25,iconCls:'e-icon1 fa fa-cloud-download fa-1g'">导出房产
                 </button>
                 <span class="datagrid-btn-separator"
                       style="vertical-align: middle;display:inline-block;float:none"></span>
@@ -118,16 +114,15 @@
     <div id="assetsTypeContent" Style="display: none;"></div>
     <div id="sitDownContent" Style="display: none;"></div>
     <div id="corpInfoContent" Style="display: none;"></div>
+    <div id="managePointContent" Style="display: none;"></div>
     <script type="text/javascript" th:src="@{/static/js/plugins/jqueryform.js}"></script>
     <script type="text/javascript" th:src="@{/static/js/plugins/columns-ext.js}"></script>
     <script type="text/javascript" th:src="@{/static/js/plugins/datagrid-dnd.js}"></script>
     <script type="text/javascript" th:src="@{/static/js/plugins/jquery.datagrid.extend.js}"></script>
     <script type="text/javascript" th:inline="none" th:src="@{/static/js/admin/assetsInfo.js}"></script>
     <script th:inline="javascript">var basepath = [[${session.basePath}]];</script>
-    <script th:inline="javascript">
-
+    <script type="text/javascript" th:inline="none">
         $(function () {
-
             $("#assetsTypeId").combotree({
                 multiple: true,
                 checkbox: true,
@@ -137,66 +132,12 @@
                     $(".tree-icon,.tree-folder").removeClass("tree-icon tree-folder tree-folder-open tree-folder-closed");
                 }
             })
-            //管理处复选框事件
-            $("#sett_ID").combobox({
-                multiple: true,
-                prompt: '请选择...',
-                formatter: function (row) {
-                    let opts = $(this).combobox('options');
-                    return '<input type="checkbox" class="combobox-checkbox">&nbsp;' + row[opts.textField];
-                },
-                onLoadSuccess: function () {
-                    $(this).combobox('setValues', "");
-                    let opts = $(this).combobox('options');
-                    let target = this;
-                    let values = $(target).combobox('getValues');
-                    $.map(values, function (value) {
-                        let el = opts.finder.getEl(target, value);
-                        el.find('input.combobox-checkbox')._propAttr('checked', true);
-                    })
-                    $(this).combobox("panel").parent("div").append("<div style='border-width: 1px; border-style: solid; border-top: transparent;border-left-color:#d4d4d4;border-right-color:#d4d4d4;border-bottom-color:#d4d4d4;background: #F5F5F5;height: 35px;padding: 5px;text-align: center'><button class='c8' style='border: 0;width: 60px;height: 25px;margin-right: 3px;' id='combox_select'>正选</button><button  class='c8' style='border: 0;width: 60px;height: 25px' id='combox_close'>确定</button></div>");
-                },
-                onSelect: function (row) {
-                    let opts = $(this).combobox('options');
-                    let el = opts.finder.getEl(this, row[opts.valueField]);
-                    el.find('input.combobox-checkbox')._propAttr('checked', true);
-                },
-                onUnselect: function (row) {
-                    let opts = $(this).combobox('options');
-                    let el = opts.finder.getEl(this, row[opts.valueField]);
-                    el.find('input.combobox-checkbox')._propAttr('checked', false);
+            $('#codeValue').textbox().textbox('addClearBtn', 'icon-clear');
+            $('#codeValue').textbox('textbox').bind('keydown', function (e) {
+                if (e.keyCode == 13) {
+                    _searcherAssetsInfo();
                 }
-            })
-
-            //全选（反选）
-            $("#combox_select").linkbutton({
-                onClick: function () {
-                    let str = $("#combox_select").linkbutton("options").text;
-                    let valueField = $("#sett_ID").combobox("options").valueField;
-                    let data = $("#sett_ID").combobox("getData");
-                    let selectVaues = [];
-                    if (is_eq("正选", str)) {
-                        $('#combox_select').linkbutton({text: '反选'});
-                        data.reduce(function (prev, current, index, array) {
-                            selectVaues.push(current[valueField]);
-                        }, selectVaues);
-
-                    } else {
-                        selectVaues.push(null);
-                        $('#combox_select').linkbutton({text: '正选'});
-                    }
-                    $("#sett_ID").combobox('setValues', selectVaues);
-
-                }
-            })
-            // 关闭下拉框
-            $("#combox_close").linkbutton({
-                onClick: function () {
-                    $('#sett_ID').combobox('hidePanel');
-
-                }
-            })
-
+            });
         })
 
         //管理部门列表
@@ -229,9 +170,9 @@
                         let rows = $('#deptTree').tree('getChecked', ['checked', 'indeterminate']);
                         let ids = $(rows).map(function () {
                             if (is_eq("F", this.arg1))
-                                return this.arg;
+                                return this.text;
                         }).get().join(";");
-                        $("#dept_ID").textbox("setValue", ids);
+                        $("#dept_Name").textbox("setValue", ids);
                         $('#deptContent').dialog('close');
 
                     }
@@ -289,6 +230,7 @@
                 }]
             });
         }
+
         //坐落位置
         function _searchSitDown(value) {
             let assetsTypeParent = $('#sitDownContent').parent();
@@ -329,6 +271,50 @@
                     text: '关闭',
                     handler: function () {
                         $('#sitDownContent').dialog('close');
+                    }
+                }]
+            });
+        }
+        //管理处
+        function _searchManagePoint(value) {
+            let managePointParent = $('#managePointContent').parent();
+            let managePointOwn = $('#managePointContent').clone();
+            managePointOwn.hide();
+            $('#managePointContent').dialog({
+                title: "【管理处】选择器...",
+                loadingMessage: false,
+                modal: true,
+                height: 400,
+                width: 350,
+                top: '10%',
+                left: '35%',
+                border: true,
+                constrain: true,
+                href: 'getManagePointInfo',
+                queryParams: {
+                    keyword: value
+                },
+                onClose: function () {
+                    managePointOwn.appendTo(managePointParent);
+                    $(this).dialog("destroy").remove();
+                },
+                buttons: [{
+                    iconCls: 'e-icon2 fa fa-check red',
+                    text: '选择',
+                    handler: function () {
+                        let rows = $('#managePointTree').tree('getChecked', ['checked', 'indeterminate']);
+                        let ids = $(rows).map(function () {
+                            if (!is_eq("all", this.id))
+                                return this.text;
+                        }).get().join(";");
+                        $("#managePoint_Name").textbox("setValue", ids);
+                        $('#managePointContent').dialog('close');
+                    }
+                }, {
+                    iconCls: 'e-icon2 fa fa-reply',
+                    text: '关闭',
+                    handler: function () {
+                        $('#managePointContent').dialog('close');
                     }
                 }]
             });
@@ -380,6 +366,21 @@
                 }]
             });
         }
+        //查询
+        function _searcherAssetsInfo() {
+            var queryparams={
+                codeValue:$("#codeValue").textbox("getValue"),
+                codeType:$("#codeType").combobox("getValue"),
+                corp_Name:$("#corp_Name").searchbox("getValue"),
+                dept_ID:$("#dept_Name").searchbox("getValue"),
+                managePoint_Name:$("#managePoint_Name").searchbox("getValue"),
+                sitDown_Name:$("#sitDown_Name").searchbox("getValue"),
+                assetsType_Name:$("#assetsType_Name").searchbox("getValue")
+            };
+            $('#assetsInfoGrid').datagrid('options').queryParams = queryparams;
+            $('#assetsInfoGrid').datagrid('reload');
+        }
+
 
     </script>
 

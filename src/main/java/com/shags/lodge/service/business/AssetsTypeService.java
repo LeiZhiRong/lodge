@@ -3,6 +3,7 @@ package com.shags.lodge.service.business;
 import com.shags.lodge.business.dao.IAssetsTypeDao;
 import com.shags.lodge.business.entity.AssetsType;
 import com.shags.lodge.dto.TreeJson;
+import com.shags.lodge.dto.business.AssetsTypeListDto;
 import com.shags.lodge.dto.business.AssetsTypePage;
 import com.shags.lodge.util.CmsUtils;
 import com.shags.lodge.util.Message;
@@ -245,6 +246,38 @@ public class AssetsTypeService implements IAssetsTypeService {
             });
         }
         return TreeJson.getfatherNode(cts);
+    }
+
+    @Override
+    @Transactional(value = "businessTransactionManager", readOnly = true)
+    public List<AssetsTypeListDto> listAssetsTypeListDto(String bookSet, String pid, String value, String ztBz) {
+        pid = "all".equals(pid) ? null : pid;
+        List<AssetsTypeListDto> arrayList = new ArrayList<>();
+        StringBuilder jpql = new StringBuilder();
+        Map<String, Object> alias = new HashMap<>();
+        jpql.append("from AssetsType m where m.bookSet =:bookSet ");
+        alias.put("bookSet",bookSet);
+        if(StringUtils.isNotEmpty(ztBz)) {
+            jpql.append(" and m.ztBz =:ztBz ");
+            alias.put("ztBz", ztBz);
+        }
+        if (pid != null && !pid.isEmpty()) {
+            jpql.append("and m.parent.id =:pid ");
+            alias.put("pid", pid);
+        } else if (value == null || value.isEmpty()) {
+            jpql.append("and m.parent is null ");
+        }
+
+        if (value != null && !value.isEmpty()) {
+            jpql.append(" and ( m.name  like:value or m.bh like:value ) ");
+            alias.put("value", value + "%");
+        }
+        jpql.append(" order by m.bh ");
+        List<AssetsType> dptInfoPager = assetsTypeDao.listByAlias(jpql.toString(), alias);
+        if (dptInfoPager != null && dptInfoPager.size() > 0) {
+            arrayList = new AssetsTypeListDto().listAssetsTypeListDto(dptInfoPager);
+        }
+        return arrayList;
     }
 
     @Override

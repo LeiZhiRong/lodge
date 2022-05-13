@@ -1,6 +1,7 @@
 package com.shags.lodge.service.business;
 
 import com.shags.lodge.business.entity.AssetsInfo;
+import com.shags.lodge.dto.User;
 import com.shags.lodge.dto.business.AssetsInfoDto;
 import com.shags.lodge.util.Message;
 import com.shags.lodge.util.Pager;
@@ -17,10 +18,9 @@ public interface IAssetsInfoService {
     /**
      * 添加楼栋信息
      * @param assetsInfo 楼栋实体类
-     * @param assetsTypeId 楼栋类型ID
      * @return
      */
-    Message addAssetsInfo(AssetsInfo assetsInfo,String assetsTypeId);
+    Message addAssetsInfo(AssetsInfo assetsInfo);
 
     /**
      * 批量添加
@@ -31,10 +31,9 @@ public interface IAssetsInfoService {
     /**
      * 更新
      * @param assetsInfo 楼栋实体类
-     * @param assetsTypeId 楼栋类型ID
      * @return
      */
-    Message updateAssetsInfo(AssetsInfo assetsInfo,String assetsTypeId);
+    Message updateAssetsInfo(AssetsInfo assetsInfo);
 
     /**
      * 按ID删除
@@ -51,10 +50,12 @@ public interface IAssetsInfoService {
     AssetsInfo queryAssetsInfo(String id);
 
     /**
-     * 获取分页数据
-     * @param dto 查询实体类
-     * @return
+     * @description: 分页查询
+     * @param: [codeType, codeValue, corp_Name, dept_ID, managePoint_Name, sitDown_Name, assetsType_Name, user]
+     * @author: ygLei
+     * @return: {@link Pager< AssetsInfoDto>}
+     * @date: 2022-01-18 15:44
      */
-    Pager<AssetsInfoDto> getAssetsInfoDto( AssetsInfoDto dto,boolean isAdmin );
+    Pager<AssetsInfoDto> listAssetsInfoDto(String codeType, String codeValue, String corp_Name, String dept_ID, String managePoint_Name, String sitDown_Name, String assetsType_Name, User user);
 
 }

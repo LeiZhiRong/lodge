@@ -106,7 +106,7 @@ public class AssetsInfoForm {
     /**
      * 总层数
      */
-     private Double totalLayers;
+    private Double totalLayers;
 
     /**
      * 使用层数
@@ -405,14 +405,10 @@ public class AssetsInfoForm {
             this.setCompanyBh(info.getCompanyBh());
             this.setCompanyId(info.getCompanyId());
             this.setCompanyName(info.getCompanyName());
-            if (info.getAssetsType() != null) {
-                this.setAssetsTypeId(info.getAssetsType().getId());
-                this.setAssetsTypeName(info.getAssetsType().getName());
-            }
-            if(info.getSitDown()!=null){
-                this.setSitDownId(info.getSitDown().getId());
-                this.setSitDownName(info.getSitDown().getName());
-            }
+            this.setAssetsTypeId(info.getAssetsTypeId());
+            this.setAssetsTypeName(info.getAssetsTypeName());
+            this.setSitDownId(info.getSitDownId());
+            this.setSitDownName(info.getSitDownName());
             this.setManagePointId(info.getManagePointId());
             this.setManagePointName(info.getManagePointName());
             this.setAssetName(info.getAssetName());
@@ -429,15 +425,16 @@ public class AssetsInfoForm {
             this.setUsedLayers(info.getUsedLayers());
             this.setUsedRooms(info.getUsedRooms());
             this.setTotalLayers(info.getTotalLayers());
-
         }
+
     }
 
     public AssetsInfo getAssetsInfo(AssetsInfoForm info) {
         AssetsInfo temp = new AssetsInfo();
         if (info != null) {
-            temp.setId(StringUtils.isNotEmpty(info.getId())?info.getId():null);
+            temp.setId(StringUtils.isNotEmpty(info.getId()) ? info.getId() : null);
             temp.setDeptBh(info.getDeptBh());
+            temp.setDeptId(info.getDeptId());
             temp.setDeptName(info.getDeptName());
             temp.setCardNumber(info.getCardNumber());
             temp.setCompanyBh(info.getCompanyBh());
@@ -459,6 +456,11 @@ public class AssetsInfoForm {
             temp.setTotalLayers(info.getTotalLayers());
             temp.setUsedRooms(info.getUsedRooms());
             temp.setUsedLayers(info.getUsedLayers());
+            temp.setAssetsTypeId(info.getAssetsTypeId());
+            temp.setAssetsTypeName(info.getAssetsTypeName());
+            temp.setSitDownId(info.getSitDownId());
+            temp.setSitDownName(info.getSitDownName());
+            temp.setHousingNumber(info.getHousingNumber());
         }
         return temp;
     }

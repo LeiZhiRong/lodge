@@ -39,6 +39,7 @@
             toolbar: '#managePointInfoToolbar',
             footer: '#managePointInfoFtools',
             fit: true,
+            scrollbarSize:0,
             columns: [[
                 {
                     field: 'name', title: '管理处', width: 250,
@@ -46,7 +47,7 @@
                         return "<div style='padding-left: 10px;'>" + value + "</div>"
                     }
                 },
-                {field: 'handle', title: '选择', align: 'right', width: 80}
+                {field: 'handle', title: '选择', align: 'center', width: 100}
             ]]
         }).datagrid('getPanel').addClass("lines-no");
     })
